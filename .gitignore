@@ -1,0 +1,22 @@
+# Environment variables - NEVER push this
+.env
+*.env
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Testing
+.pytest_cache/
+.coverage
+
+# Mac
+.DS_Store
