@@ -20,3 +20,6 @@ env/
 
 # Mac
 .DS_Store
+backend/.env
+.DS_Store
+**/.DS_Store
