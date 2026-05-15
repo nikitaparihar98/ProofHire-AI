@@ -1,4 +1,5 @@
 from backend.models.models import Candidate
+from backend.services.decision_service import is_hidden_talent
 
 def compare_candidates(candidate_1: Candidate, candidate_2: Candidate):
     """
@@ -9,7 +10,16 @@ def compare_candidates(candidate_1: Candidate, candidate_2: Candidate):
     score1 = candidate_1.overall_score
     score2 = candidate_2.overall_score
     
-    if score1 > score2:
+    c1_hidden_talent = is_hidden_talent(candidate_1)
+    c2_hidden_talent = is_hidden_talent(candidate_2)
+
+    if c1_hidden_talent and not c2_hidden_talent and score1 >= score2 - 5:
+        stronger_id = candidate_1.id
+        reasoning = f"{candidate_1.name} is the stronger hidden-talent pick: similar task performance with weaker resume signals but stronger demonstrated execution."
+    elif c2_hidden_talent and not c1_hidden_talent and score2 >= score1 - 5:
+        stronger_id = candidate_2.id
+        reasoning = f"{candidate_2.name} is the stronger hidden-talent pick: similar task performance with weaker resume signals but stronger demonstrated execution."
+    elif score1 > score2:
         stronger_id = candidate_1.id
         reasoning = f"{candidate_1.name} has a higher overall score ({score1} vs {score2}) and better aligned strengths for the role."
     elif score2 > score1:

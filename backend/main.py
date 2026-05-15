@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from backend.core.database import Base, engine
+from backend.models import models
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
@@ -24,11 +25,27 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-from backend.routers import candidates, evaluate, live_sessions, analytics, notifications, interviews, messages
+from backend.routers import (
+    analytics,
+    auth,
+    candidate_portal,
+    candidates,
+    evaluate,
+    interviews,
+    live_sessions,
+    messages,
+    notifications,
+    submissions,
+    tasks,
+)
 
 # Include routers
 app.include_router(candidates.router)
 app.include_router(evaluate.router)
+app.include_router(submissions.router)
+app.include_router(tasks.router)
+app.include_router(auth.router)
+app.include_router(candidate_portal.router)
 app.include_router(live_sessions.router)
 app.include_router(analytics.router)
 app.include_router(notifications.router)

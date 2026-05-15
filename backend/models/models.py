@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, Text, JSON
+from sqlalchemy import Column, Integer, String, Float, Text, JSON, ForeignKey
 from backend.core.database import Base
 
 class Candidate(Base):
@@ -68,3 +68,24 @@ class Message(Base):
     sender_id = Column(String)
     content = Column(Text)
     timestamp = Column(String)
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
+    email = Column(String, unique=True, index=True)
+    password_hash = Column(String)
+    role = Column(String, index=True) # "recruiter" or "candidate"
+    candidate_id = Column(Integer, ForeignKey("candidates.id"), nullable=True)
+    created_at = Column(String)
+
+class TaskAssignment(Base):
+    __tablename__ = "task_assignments"
+
+    id = Column(Integer, primary_key=True, index=True)
+    candidate_id = Column(Integer, ForeignKey("candidates.id"), index=True)
+    task_id = Column(String, index=True)
+    status = Column(String, default="Assigned") # Assigned, In Progress, Submitted, Evaluated
+    assigned_at = Column(String)
+    submitted_at = Column(String, nullable=True)
