@@ -7,12 +7,16 @@ import InterviewSchedule from './pages/InterviewSchedule'
 import RecruitAiLandingPage from './pages/RecruitAiLandingPage'
 import ResumeVerification from './pages/ResumeVerification'
 import TasksManagement from './pages/TasksManagement'
+import LoginPage from './pages/LoginPage'
+import RecruiterSignupPage from './pages/RecruiterSignupPage'
 
 export default function App() {
   return (
     <div className="font-body-md text-on-surface flex flex-col min-h-screen">
       <Routes>
         <Route path="/" element={<RecruitAiLandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/recruiter-signup" element={<RecruiterSignupPage />} />
         <Route path="/account-settings" element={<AccountSettings />} />
         <Route path="/assessments-hub" element={<AssessmentsHub />} />
         <Route path="/candidate-dashboard" element={<CandidateDashboard />} />
