@@ -15,7 +15,7 @@ export default function RecruitAiLandingPage() {
 </div>
 </div>
 <div className="flex items-center gap-md">
-<Link to="/candidate-dashboard" className="px-md py-xs text-on-surface-variant font-label-md text-label-md hover:opacity-80 transition-opacity">Login</Link>
+<Link to="/login" className="px-md py-xs text-on-surface-variant font-label-md text-label-md hover:opacity-80 transition-opacity">Login</Link>
 </div>
 </div>
 </nav>
@@ -166,7 +166,7 @@ Platform Demo
                         Scale your team with precision. Access the world's most talented pool and automate your screening process today.
                     </p>
 <div className="flex flex-col w-full max-w-xs gap-sm">
-<Link to="/tasks-management" className="bg-white text-primary py-md rounded-xl font-headline-sm text-headline-sm hover:scale-[0.98] transition-transform text-center inline-block w-full">
+<Link to="/login" className="bg-white text-primary py-md rounded-xl font-headline-sm text-headline-sm hover:scale-[0.98] transition-transform text-center inline-block w-full">
                             Start Hiring
                         </Link>
 <button onClick={() => alert('This feature is coming soon!')} className="text-primary-fixed font-label-md text-label-md hover:underline">
