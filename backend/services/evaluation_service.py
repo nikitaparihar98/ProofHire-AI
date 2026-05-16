@@ -1,4 +1,4 @@
-from backend.models.models import Candidate
+from models.models import Candidate
 
 def compare_candidates(candidate_1: Candidate, candidate_2: Candidate):
     """

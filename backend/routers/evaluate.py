@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from backend.core.database import get_db
-from backend.models import models
-from backend.schemas import schemas
-from backend.services.llama_service import evaluate_candidate_mock
-from backend.routers.notifications import create_notification
+from core.database import get_db
+from models import models
+from schemas import schemas
+from services.llama_service import evaluate_candidate_mock
+from routers.notifications import create_notification
 
 router = APIRouter(
     prefix="/api/evaluate",

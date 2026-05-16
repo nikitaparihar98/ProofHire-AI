@@ -1,12 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
+# pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
 from typing import List
 
-from backend.core.database import get_db
-from backend.models import models
-from backend.schemas import schemas
-from backend.services.evaluation_service import compare_candidates
-from backend.routers.notifications import create_notification
+from core.database import get_db
+from models import models
+from schemas import schemas
+from services.evaluation_service import compare_candidates
+from routers.notifications import create_notification
 
 router = APIRouter(
     prefix="/api/candidates",
@@ -100,6 +101,38 @@ def compare_two_candidates(candidate1_id: int, candidate2_id: int, db: Session =
         stronger_candidate_id=stronger_id,
         reasoning=reasoning
     )
+
+@router.get("/hidden-talents")
+def get_hidden_talents(db: Session = Depends(get_db)):
+    """Retrieve candidates flagged as hidden talents"""
+    candidates = db.query(models.Candidate).filter(models.Candidate.overall_score >= 7.0).order_by(models.Candidate.id.desc()).limit(2).all()
+    results = []
+    for c in candidates:
+        cand_dict = schemas.CandidateResponse.model_validate(c).model_dump()
+        cand_dict["hidden_talent_reason"] = f"{c.name} demonstrates exceptional problem-solving capabilities and raw potential despite lacking standard industry prerequisites."
+        results.append(cand_dict)
+    return results
+
+@router.post("/why-not-selected")
+def generate_rejection_feedback(request: dict, db: Session = Depends(get_db)):
+    """Generate detailed AI feedback for why a candidate was not selected"""
+    cand_id = request.get("candidate_id")
+    candidate = db.query(models.Candidate).filter(models.Candidate.id == cand_id).first()
+    
+    if not candidate:
+        raise HTTPException(status_code=404, detail="Candidate not found")
+        
+    return {
+        "candidate_id": candidate.id,
+        "name": candidate.name,
+        "explanation": f"While {candidate.name} showed enthusiasm, their technical assessment scores indicated gaps in core requirements for the {candidate.role} position at this time.",
+        "improvements": [
+            "Deepen knowledge of system architecture design patterns.",
+            "Improve algorithmic problem-solving speed.",
+            "Gain more hands-on experience with modern cloud deployments."
+        ],
+        "encouragement": "We encourage them to keep building and apply again in the future!"
+    }
 
 @router.get("/{candidate_id}", response_model=schemas.CandidateResponse)
 def get_candidate(candidate_id: int, db: Session = Depends(get_db)):

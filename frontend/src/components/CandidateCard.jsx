@@ -39,7 +39,7 @@ export default function CandidateCard({ candidate }) {
       <div className="flex gap-2">
         <Link
           to={`/candidate/${id}`}
-          className="px-3 py-2 bg-slate-100 rounded-lg text-sm"
+          className="px-4 py-2 bg-slate-900 text-white font-bold rounded-xl text-sm hover:bg-slate-800 transition-all shadow-sm relative z-10 cursor-pointer"
         >
           View Profile
         </Link>

@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from backend.core.database import SessionLocal, engine, Base
-from backend.models import models
+from core.database import SessionLocal, engine, Base
+from models import models
 
 def seed_data():
     Base.metadata.create_all(bind=engine)

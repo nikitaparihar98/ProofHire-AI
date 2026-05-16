@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { getCandidateById, updateCandidateDecision } from '../services/api';
 import ScoreBadge from '../components/ScoreBadge';
+import ScoreChart from '../components/ScoreChart';
 import AuthenticityBadge from '../components/AuthenticityBadge';
 import StrengthWeaknessSection from '../components/StrengthWeaknessSection';
 import ScheduleInterviewModal from '../components/ScheduleInterviewModal';
