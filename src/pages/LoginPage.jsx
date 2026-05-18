@@ -10,8 +10,7 @@ export default function LoginPage() {
     if (role === 'candidate') {
       navigate('/candidate-dashboard');
     } else {
-      // Recruiter login goes to external dashboard, alert for now
-      alert("Recruiter Dashboard is hosted on an external service. Redirecting...");
+      navigate('/recruiter-dashboard');
     }
   };
 

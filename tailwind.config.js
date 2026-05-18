@@ -86,14 +86,14 @@ export default {
       },
       fontSize: {
         "headline-md": ["20px", { lineHeight: "28px", fontWeight: "600" }],
-        "headline-xl": ["36px", { lineHeight: "44px", letterSpacing: "-0.02em", fontWeight: "700" }],
+        "headline-xl": ["64px", { lineHeight: "1.1", letterSpacing: "-0.04em", fontWeight: "900" }],
         "body-sm": ["13px", { lineHeight: "18px", fontWeight: "400" }],
         "label-sm": ["11px", { lineHeight: "14px", fontWeight: "500" }],
         "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }],
         "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "600" }],
-        "body-lg": ["16px", { lineHeight: "26px", fontWeight: "400" }],
-        "headline-lg": ["28px", { lineHeight: "36px", letterSpacing: "-0.01em", fontWeight: "600" }],
-        "headline-sm": ["16px", { lineHeight: "24px", fontWeight: "600" }]
+        "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+        "headline-lg": ["40px", { lineHeight: "1.2", letterSpacing: "-0.02em", fontWeight: "800" }],
+        "headline-sm": ["20px", { lineHeight: "28px", fontWeight: "700" }]
       }
     },
   },
