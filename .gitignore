@@ -1,39 +1,31 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-# Environment variables - NEVER push this
+# Environment variables
 .env
 *.env
+backend/.env
 
-# Python cache
+# Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 .Python
 
-# Virtual environment
+# Virtual environments
 venv/
 env/
 .venv/
+backend/.venv/
+
+# Databases
+*.db
 
 # Testing
 .pytest_cache/
 .coverage
 
+# Node
+node_modules/
+
 # Mac
 .DS_Store
-backend/.env
-.DS_Store
 **/.DS_Store
-=======
-backend/.env
-.env
-__pycache__/
-*.pyc
-*.db
->>>>>>> origin/darshini-frontend
-=======
-node_modules/
-*.db
-.env
->>>>>>> origin/geshna-backend
