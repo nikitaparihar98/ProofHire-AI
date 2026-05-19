@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Environment variables - NEVER push this
 .env
 *.env
@@ -23,3 +24,10 @@ env/
 backend/.env
 .DS_Store
 **/.DS_Store
+=======
+backend/.env
+.env
+__pycache__/
+*.pyc
+*.db
+>>>>>>> origin/darshini-frontend

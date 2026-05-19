@@ -10,6 +10,7 @@ export default function RecruiterDashboard() {
   }, []);
 
  const load = async () => {
+<<<<<<< HEAD
   try {
     const data = await getCandidates();
     setCandidates(Array.isArray(data) ? data : []);
@@ -35,6 +36,15 @@ export default function RecruiterDashboard() {
       }
     ]);
   }
+=======
+  const data = await getCandidates();
+
+  console.log("RAW DATA TYPE:", typeof data);
+  console.log("IS ARRAY:", Array.isArray(data));
+  console.log("DATA:", data);
+
+  setCandidates(Array.isArray(data) ? data : []);
+>>>>>>> origin/darshini-frontend
 };
 
   return (
