@@ -1,6 +1,11 @@
 from sqlalchemy.orm import Session
+<<<<<<< HEAD
 from core.database import SessionLocal, engine, Base
 from models import models
+=======
+from backend.core.database import SessionLocal, engine, Base
+from backend.models import models
+>>>>>>> origin/geshna-backend
 
 def seed_data():
     Base.metadata.create_all(bind=engine)

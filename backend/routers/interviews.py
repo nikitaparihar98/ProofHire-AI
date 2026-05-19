@@ -2,9 +2,15 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from datetime import datetime
+<<<<<<< HEAD
 from core.database import get_db
 from models import models
 from schemas import schemas
+=======
+from backend.core.database import get_db
+from backend.models import models
+from backend.schemas import schemas
+>>>>>>> origin/geshna-backend
 
 router = APIRouter(
     prefix="/api/interviews",

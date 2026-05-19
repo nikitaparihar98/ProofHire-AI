@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 """RecruitAI – FastAPI application entry point."""
 
 import logging
@@ -54,6 +55,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from core.database import Base, engine
 import models.models
+=======
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from backend.core.database import Base, engine
+from backend.models import models
+>>>>>>> origin/geshna-backend
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
@@ -72,12 +79,16 @@ app.add_middleware(
         "http://127.0.0.1:5173",
         "*" # Fallback for other environments
     ], 
+<<<<<<< HEAD
 >>>>>>> origin/darshini-frontend
+=======
+>>>>>>> origin/geshna-backend
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 # ---------------------------------------------------------------------------
@@ -115,10 +126,32 @@ async def health() -> dict:
     return {"status": "ok", "version": app.version}
 =======
 from routers import candidates, evaluate, live_sessions, analytics, notifications, interviews, messages
+=======
+from backend.routers import (
+    analytics,
+    auth,
+    candidate_portal,
+    candidates,
+    evaluate,
+    interviews,
+    live_sessions,
+    messages,
+    notifications,
+    submissions,
+    tasks,
+)
+>>>>>>> origin/geshna-backend
 
 # Include routers
 app.include_router(candidates.router)
 app.include_router(evaluate.router)
+<<<<<<< HEAD
+=======
+app.include_router(submissions.router)
+app.include_router(tasks.router)
+app.include_router(auth.router)
+app.include_router(candidate_portal.router)
+>>>>>>> origin/geshna-backend
 app.include_router(live_sessions.router)
 app.include_router(analytics.router)
 app.include_router(notifications.router)
@@ -132,4 +165,7 @@ def read_root():
 @app.get("/health")
 def health_check():
     return {"status": "ok"}
+<<<<<<< HEAD
 >>>>>>> origin/darshini-frontend
+=======
+>>>>>>> origin/geshna-backend

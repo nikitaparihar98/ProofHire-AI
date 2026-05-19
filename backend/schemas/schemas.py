@@ -8,6 +8,90 @@ class EvaluationRequest(BaseModel):
     role: str
     submission_data: Dict[str, Any]
 
+<<<<<<< HEAD
+=======
+class SubmissionRequest(BaseModel):
+    name: str
+    email: Optional[str] = None
+    role: str
+    submission_data: Dict[str, Any]
+
+class SubmissionResponse(BaseModel):
+    message: str
+    candidate: "CandidateResponse"
+
+class TaskResponse(BaseModel):
+    id: str
+    role: str
+    title: str
+    task_type: str
+    prompt: str
+    evaluation_focus: List[str]
+    time_limit_minutes: int
+
+class TaskAssignRequest(BaseModel):
+    role: str
+
+class CandidateResultSummary(BaseModel):
+    id: int
+    name: str
+    role: str
+    score: float
+    score_out_of_10: float
+    status: str
+    hiring_recommendation: str
+    hidden_talent: bool
+    why_not_selected: str
+
+class CandidateDecisionInsights(BaseModel):
+    candidate_id: int
+    score_out_of_10: float
+    selected: bool
+    hidden_talent: bool
+    hidden_talent_reason: str
+    why_not_selected: str
+    decision_reasoning: str
+
+class SignupRequest(BaseModel):
+    name: str
+    email: str
+    password: str
+    role: str
+    applied_role: Optional[str] = "Backend Engineer"
+
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+class UserResponse(BaseModel):
+    id: int
+    name: str
+    email: str
+    role: str
+    candidate_id: Optional[int] = None
+
+    class Config:
+        from_attributes = True
+
+class AuthResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    user: UserResponse
+
+class CandidateDashboardResponse(BaseModel):
+    user: UserResponse
+    candidate: "CandidateResponse"
+    assigned_task: TaskResponse
+    assignment_id: int
+    submission_status: str
+
+class CandidateSelfSubmitRequest(BaseModel):
+    answer: str
+    resume_score: Optional[float] = None
+    completion_time: Optional[str] = None
+    live_malpractice_flags: Optional[List[str]] = []
+
+>>>>>>> origin/geshna-backend
 # Schema for candidate representation
 class CandidateBase(BaseModel):
     name: str

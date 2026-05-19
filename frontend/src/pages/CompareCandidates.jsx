@@ -19,6 +19,7 @@ export default function CompareCandidatesPage() {
 
   useEffect(() => {
     // Fetch all candidates for the dropdowns
+<<<<<<< HEAD
     getCandidates().then(data => {
       setCandidates(Array.isArray(data) && data.length > 0 ? data : getMockCandidates());
     }).catch(err => {
@@ -32,6 +33,11 @@ export default function CompareCandidatesPage() {
     { id: '2', name: "Bob Smith", role: "Backend Developer", overall_score: 88 }
   ];
 
+=======
+    getCandidates().then(setCandidates).catch(err => console.error(err));
+  }, []);
+
+>>>>>>> origin/geshna-backend
   const handleCompare = async () => {
     if (!selected1 || !selected2) {
       setError("Please select two candidates to compare.");
@@ -48,6 +54,7 @@ export default function CompareCandidatesPage() {
       const data = await compareCandidates(selected1, selected2);
       setComparisonResult(data);
     } catch (err) {
+<<<<<<< HEAD
       console.warn("Backend not connected, using mock comparison result.");
       // Dummy comparison result for UI preview
       const c1 = candidates.find(c => c.id === selected1) || candidates[0];
@@ -83,6 +90,10 @@ export default function CompareCandidatesPage() {
           malpractice_flags: []
         }
       });
+=======
+      setError("Failed to run comparison. Ensure backend is running.");
+      console.error(err);
+>>>>>>> origin/geshna-backend
     } finally {
       setLoading(false);
     }

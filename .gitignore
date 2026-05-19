@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Environment variables - NEVER push this
 .env
 *.env
@@ -31,3 +32,8 @@ __pycache__/
 *.pyc
 *.db
 >>>>>>> origin/darshini-frontend
+=======
+node_modules/
+*.db
+.env
+>>>>>>> origin/geshna-backend

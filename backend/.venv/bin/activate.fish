@@ -1,5 +1,9 @@
 # This file must be used with "source <venv>/bin/activate.fish" *from fish*
+<<<<<<< HEAD
 # (https://fishshell.com/); you cannot run it directly.
+=======
+# (https://fishshell.com/). You cannot run it directly.
+>>>>>>> origin/geshna-backend
 
 function deactivate  -d "Exit virtual environment and return to normal shell environment"
     # reset old environment variables
@@ -13,10 +17,20 @@ function deactivate  -d "Exit virtual environment and return to normal shell env
     end
 
     if test -n "$_OLD_FISH_PROMPT_OVERRIDE"
+<<<<<<< HEAD
         functions -e fish_prompt
         set -e _OLD_FISH_PROMPT_OVERRIDE
         functions -c _old_fish_prompt fish_prompt
         functions -e _old_fish_prompt
+=======
+        set -e _OLD_FISH_PROMPT_OVERRIDE
+        # prevents error when using nested fish instances (Issue #93858)
+        if functions -q _old_fish_prompt
+            functions -e fish_prompt
+            functions -c _old_fish_prompt fish_prompt
+            functions -e _old_fish_prompt
+        end
+>>>>>>> origin/geshna-backend
     end
 
     set -e VIRTUAL_ENV
@@ -30,7 +44,11 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
+<<<<<<< HEAD
 set -gx VIRTUAL_ENV "/Users/avnikalawatia/RecruitAi/backend/.venv"
+=======
+set -gx VIRTUAL_ENV "/Users/geshnaakula/RecruitAi/backend/.venv"
+>>>>>>> origin/geshna-backend
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

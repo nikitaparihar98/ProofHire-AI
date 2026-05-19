@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 #!/Users/avnikalawatia/RecruitAi/backend/.venv/bin/python3
+=======
+#!/Users/geshnaakula/RecruitAi/backend/.venv/bin/python3.12
+>>>>>>> origin/geshna-backend
 # -*- coding: utf-8 -*-
 import re
 import sys

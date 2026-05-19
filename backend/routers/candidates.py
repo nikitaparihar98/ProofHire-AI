@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+<<<<<<< HEAD
 # pyrefly: ignore [missing-import]
 from sqlalchemy.orm import Session
 from typing import List
@@ -8,6 +9,16 @@ from models import models
 from schemas import schemas
 from services.evaluation_service import compare_candidates
 from routers.notifications import create_notification
+=======
+from sqlalchemy.orm import Session
+from typing import List
+
+from backend.core.database import get_db
+from backend.models import models
+from backend.schemas import schemas
+from backend.services.evaluation_service import compare_candidates
+from backend.routers.notifications import create_notification
+>>>>>>> origin/geshna-backend
 
 router = APIRouter(
     prefix="/api/candidates",
@@ -102,6 +113,7 @@ def compare_two_candidates(candidate1_id: int, candidate2_id: int, db: Session =
         reasoning=reasoning
     )
 
+<<<<<<< HEAD
 @router.get("/hidden-talents")
 def get_hidden_talents(db: Session = Depends(get_db)):
     """Retrieve candidates flagged as hidden talents"""
@@ -134,6 +146,8 @@ def generate_rejection_feedback(request: dict, db: Session = Depends(get_db)):
         "encouragement": "We encourage them to keep building and apply again in the future!"
     }
 
+=======
+>>>>>>> origin/geshna-backend
 @router.get("/{candidate_id}", response_model=schemas.CandidateResponse)
 def get_candidate(candidate_id: int, db: Session = Depends(get_db)):
     """Retrieve a single candidate by ID"""

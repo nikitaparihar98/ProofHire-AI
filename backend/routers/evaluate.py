@@ -1,11 +1,17 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
+<<<<<<< HEAD
 from core.database import get_db
 from models import models
 from schemas import schemas
 from services.llama_service import evaluate_candidate_mock
 from routers.notifications import create_notification
+=======
+from backend.core.database import get_db
+from backend.schemas import schemas
+from backend.services.submission_service import evaluate_and_store_submission
+>>>>>>> origin/geshna-backend
 
 router = APIRouter(
     prefix="/api/evaluate",
@@ -17,6 +23,7 @@ def evaluate_candidate(request: schemas.EvaluationRequest, db: Session = Depends
     """
     Submit a candidate's test data, evaluate it via AI, and store the result in the database.
     """
+<<<<<<< HEAD
     
     # 1. Call the AI Evaluation Engine (Mocked for now)
     ai_result = evaluate_candidate_mock(
@@ -89,3 +96,12 @@ def evaluate_candidate(request: schemas.EvaluationRequest, db: Session = Depends
         )
     
     return final_candidate
+=======
+    return evaluate_and_store_submission(
+        db=db,
+        name=request.name,
+        email=request.email,
+        role=request.role,
+        submission_data=request.submission_data,
+    )
+>>>>>>> origin/geshna-backend

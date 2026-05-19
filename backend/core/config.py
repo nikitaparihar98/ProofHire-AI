@@ -9,6 +9,12 @@ class Settings(BaseSettings):
     # Llama API Key
     LLAMA_API_KEY: str = os.getenv("LLAMA_API_KEY", "")
 
+<<<<<<< HEAD
+=======
+    # Local auth token signing secret
+    AUTH_SECRET: str = os.getenv("AUTH_SECRET", "proofhire-local-dev-secret")
+
+>>>>>>> origin/geshna-backend
     class Config:
         env_file = ".env"
 

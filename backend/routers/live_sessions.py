@@ -3,9 +3,15 @@ from sqlalchemy.orm import Session
 from typing import Dict, Any, List
 from datetime import datetime
 import uuid
+<<<<<<< HEAD
 from core.database import get_db
 from models import models
 from routers.notifications import create_notification
+=======
+from backend.core.database import get_db
+from backend.models import models
+from backend.routers.notifications import create_notification
+>>>>>>> origin/geshna-backend
 
 router = APIRouter(
     prefix="/api/live",
