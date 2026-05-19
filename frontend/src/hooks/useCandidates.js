@@ -27,7 +27,6 @@ export default function useCandidates(filterStatus = 'All') {
       console.log(`[useCandidates] Successfully loaded ${data.length} candidates.`);
       setCandidates(data);
     } catch (err) {
-<<<<<<< HEAD
       console.warn("[useCandidates] Backend not connected, using dummy data for preview.", err);
       // Dummy data to ensure UI is visible for review
       setCandidates([
@@ -53,10 +52,6 @@ export default function useCandidates(filterStatus = 'All') {
         }
       ]);
       setError(null); // Clear error to prevent error screen
-=======
-      console.error("[useCandidates] Fetch Error:", err);
-      setError(err.message || "Failed to load candidates");
->>>>>>> origin/darshini-frontend
     } finally {
       setLoading(false);
     }

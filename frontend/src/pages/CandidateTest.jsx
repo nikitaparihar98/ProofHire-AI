@@ -198,11 +198,7 @@ export default function CandidateTest() {
             <div className="inline-flex items-center gap-2 bg-slate-900 text-white px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-4 shadow-xl">
               <Lock size={14} className="text-indigo-400" /> Secure Candidate Portal
             </div>
-<<<<<<< HEAD
             <h1 className="text-5xl font-black text-slate-900 tracking-tight">Recruit AI</h1>
-=======
-            <h1 className="text-5xl font-black text-slate-900 tracking-tight">ProofHire AI</h1>
->>>>>>> origin/darshini-frontend
           </div>
 
           <div className="bg-white rounded-[3rem] shadow-2xl border border-slate-200 overflow-hidden">
@@ -285,11 +281,7 @@ export default function CandidateTest() {
               </form>
             </div>
             <div className="bg-slate-950 py-4 text-center">
-<<<<<<< HEAD
                <p className="text-[10px] text-slate-600 uppercase font-black tracking-[0.4em]">Recruit AI • Authorized Session Host Alpha-9</p>
-=======
-               <p className="text-[10px] text-slate-600 uppercase font-black tracking-[0.4em]">ProofHire AI • Authorized Session Host Alpha-9</p>
->>>>>>> origin/darshini-frontend
             </div>
           </div>
         </div>
