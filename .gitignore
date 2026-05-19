@@ -3,3 +3,5 @@ backend/.env
 __pycache__/
 *.pyc
 *.db
+node_modules/
+frontend/node_modules/
