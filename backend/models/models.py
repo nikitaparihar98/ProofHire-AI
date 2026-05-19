@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-from sqlalchemy import Column, Integer, String, Float, Text, JSON
-from core.database import Base
-=======
 from sqlalchemy import Column, Integer, String, Float, Text, JSON, ForeignKey
 from backend.core.database import Base
->>>>>>> origin/geshna-backend
 
 class Candidate(Base):
     __tablename__ = "candidates"
@@ -51,6 +46,7 @@ class Notification(Base):
     type = Column(String) # "info", "warning", "critical", "success"
     is_read = Column(Integer, default=0) # 0 for False, 1 for True (SQLite compatible)
     created_at = Column(String) # ISO timestamp
+    
 class Interview(Base):
     __tablename__ = "interviews"
 
@@ -73,8 +69,6 @@ class Message(Base):
     sender_id = Column(String)
     content = Column(Text)
     timestamp = Column(String)
-<<<<<<< HEAD
-=======
 
 class User(Base):
     __tablename__ = "users"
@@ -96,4 +90,3 @@ class TaskAssignment(Base):
     status = Column(String, default="Assigned") # Assigned, In Progress, Submitted, Evaluated
     assigned_at = Column(String)
     submitted_at = Column(String, nullable=True)
->>>>>>> origin/geshna-backend

@@ -18,6 +18,7 @@ backend/.venv/
 
 # Databases
 *.db
+proofhire.db
 
 # Testing
 .pytest_cache/

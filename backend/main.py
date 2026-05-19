@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 """RecruitAI – FastAPI application entry point."""
 
 import logging
@@ -10,6 +8,22 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+
+from backend.core.database import Base, engine
+from backend.models import models
+from backend.routers import (
+    analytics,
+    auth,
+    candidate_portal,
+    candidates,
+    evaluate,
+    interviews,
+    live_sessions,
+    messages,
+    notifications,
+    submissions,
+    tasks,
+)
 
 load_dotenv()
 
@@ -32,43 +46,18 @@ async def lifespan(app: FastAPI):
     yield
     logger.info("RecruitAI API shutting down.")
 
+# Create database tables
+Base.metadata.create_all(bind=engine)
 
 # ---------------------------------------------------------------------------
 # App factory
 # ---------------------------------------------------------------------------
 
 app = FastAPI(
-    title="RecruitAI",
-    description="AI-powered recruitment evaluation and candidate comparison API.",
-    version="1.0.0",
-    lifespan=lifespan,
-    docs_url="/docs",
-    redoc_url="/redoc",
-)
-
-# CORS – tighten allowed origins before deploying to production
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=os.getenv("CORS_ORIGINS", "*").split(","),
-=======
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from core.database import Base, engine
-import models.models
-=======
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from backend.core.database import Base, engine
-from backend.models import models
->>>>>>> origin/geshna-backend
-
-# Create database tables
-Base.metadata.create_all(bind=engine)
-
-app = FastAPI(
     title="ProofHire AI API",
     description="API for ProofHire AI candidate evaluation platform",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan = lifespan
 )
 
 # Configure CORS for frontend access
@@ -79,17 +68,10 @@ app.add_middleware(
         "http://127.0.0.1:5173",
         "*" # Fallback for other environments
     ], 
-<<<<<<< HEAD
->>>>>>> origin/darshini-frontend
-=======
->>>>>>> origin/geshna-backend
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 # ---------------------------------------------------------------------------
 # Global exception handler
@@ -104,54 +86,13 @@ async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONR
     )
 
 
-# ---------------------------------------------------------------------------
-# Routers
-# ---------------------------------------------------------------------------
-
-from routes.candidates import router as candidates_router  # noqa: E402
-from routes.evaluate import router as evaluate_router      # noqa: E402
-from routes.compare import router as compare_router        # noqa: E402
-
-app.include_router(candidates_router, prefix="/api/v1")
-app.include_router(evaluate_router,   prefix="/api/v1")
-app.include_router(compare_router,    prefix="/api/v1")
-
-
-# ---------------------------------------------------------------------------
-# Health check
-# ---------------------------------------------------------------------------
-
-@app.get("/health", tags=["Health"], summary="Health check")
-async def health() -> dict:
-    return {"status": "ok", "version": app.version}
-=======
-from routers import candidates, evaluate, live_sessions, analytics, notifications, interviews, messages
-=======
-from backend.routers import (
-    analytics,
-    auth,
-    candidate_portal,
-    candidates,
-    evaluate,
-    interviews,
-    live_sessions,
-    messages,
-    notifications,
-    submissions,
-    tasks,
-)
->>>>>>> origin/geshna-backend
-
 # Include routers
 app.include_router(candidates.router)
 app.include_router(evaluate.router)
-<<<<<<< HEAD
-=======
 app.include_router(submissions.router)
 app.include_router(tasks.router)
 app.include_router(auth.router)
 app.include_router(candidate_portal.router)
->>>>>>> origin/geshna-backend
 app.include_router(live_sessions.router)
 app.include_router(analytics.router)
 app.include_router(notifications.router)
@@ -165,7 +106,4 @@ def read_root():
 @app.get("/health")
 def health_check():
     return {"status": "ok"}
-<<<<<<< HEAD
->>>>>>> origin/darshini-frontend
-=======
->>>>>>> origin/geshna-backend
+

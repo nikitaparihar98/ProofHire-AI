@@ -8,8 +8,6 @@ class EvaluationRequest(BaseModel):
     role: str
     submission_data: Dict[str, Any]
 
-<<<<<<< HEAD
-=======
 class SubmissionRequest(BaseModel):
     name: str
     email: Optional[str] = None
@@ -91,7 +89,6 @@ class CandidateSelfSubmitRequest(BaseModel):
     completion_time: Optional[str] = None
     live_malpractice_flags: Optional[List[str]] = []
 
->>>>>>> origin/geshna-backend
 # Schema for candidate representation
 class CandidateBase(BaseModel):
     name: str
