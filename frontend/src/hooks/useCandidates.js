@@ -27,36 +27,8 @@ export default function useCandidates(filterStatus = 'All') {
       console.log(`[useCandidates] Successfully loaded ${data.length} candidates.`);
       setCandidates(data);
     } catch (err) {
-<<<<<<< HEAD
-      console.warn("[useCandidates] Backend not connected, using dummy data for preview.", err);
-      // Dummy data to ensure UI is visible for review
-      setCandidates([
-        {
-          id: 1,
-          name: "Alice Johnson",
-          email: "alice@example.com",
-          role: "Frontend Engineer",
-          overall_score: 95,
-          status: "Shortlisted",
-          hiring_recommendation: "Strong Hire",
-          skills: { "React": 9, "Tailwind": 8 }
-        },
-        {
-          id: 2,
-          name: "Bob Smith",
-          email: "bob@example.com",
-          role: "Backend Developer",
-          overall_score: 88,
-          status: "Pending",
-          hiring_recommendation: "Hire",
-          skills: { "Node.js": 8, "Python": 9 }
-        }
-      ]);
-      setError(null); // Clear error to prevent error screen
-=======
       console.error("[useCandidates] Fetch Error:", err);
       setError(err.message || "Failed to load candidates");
->>>>>>> origin/geshna-backend
     } finally {
       setLoading(false);
     }

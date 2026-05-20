@@ -49,11 +49,7 @@ export default function Header() {
           >
             <div className="text-right hidden sm:block">
               <p className="text-sm font-bold text-slate-900 leading-none">Hiring Manager</p>
-<<<<<<< HEAD
-              <p className="text-[10px] text-slate-500 mt-1 uppercase font-bold tracking-wider">Recruit AI Recruiter</p>
-=======
               <p className="text-[10px] text-slate-500 mt-1 uppercase font-bold tracking-wider">ProofHire Recruiter</p>
->>>>>>> origin/geshna-backend
             </div>
             <div className={`h-10 w-10 rounded-full bg-slate-100 border-2 transition-all overflow-hidden shadow-sm ${isProfileOpen ? 'border-indigo-500' : 'border-white'}`}>
                <img src="https://ui-avatars.com/api/?name=Hiring+Manager&background=6366f1&color=fff" alt="Profile" />
@@ -65,11 +61,7 @@ export default function Header() {
             <div className="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-slate-100 py-3 animate-in fade-in zoom-in-95 duration-200 z-50">
               <div className="px-4 py-2 border-b border-slate-50 mb-2">
                 <p className="text-sm font-bold text-slate-900">Darshini Sivakumar</p>
-<<<<<<< HEAD
-                <p className="text-xs text-slate-500">darshini@recruit.ai</p>
-=======
                 <p className="text-xs text-slate-500">darshini@proofhire.ai</p>
->>>>>>> origin/geshna-backend
               </div>
               
               <Link 

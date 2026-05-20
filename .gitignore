@@ -26,6 +26,8 @@ proofhire.db
 
 # Node
 node_modules/
+frontend/node_modules/
+frontend/.vite/
 
 # Mac
 .DS_Store

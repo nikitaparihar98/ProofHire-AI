@@ -19,25 +19,9 @@ export default function CompareCandidatesPage() {
 
   useEffect(() => {
     // Fetch all candidates for the dropdowns
-<<<<<<< HEAD
-    getCandidates().then(data => {
-      setCandidates(Array.isArray(data) && data.length > 0 ? data : getMockCandidates());
-    }).catch(err => {
-      console.warn("Backend not connected, using mock candidates.");
-      setCandidates(getMockCandidates());
-    });
-  }, []);
-
-  const getMockCandidates = () => [
-    { id: '1', name: "Alice Johnson", role: "Frontend Engineer", overall_score: 95 },
-    { id: '2', name: "Bob Smith", role: "Backend Developer", overall_score: 88 }
-  ];
-
-=======
     getCandidates().then(setCandidates).catch(err => console.error(err));
   }, []);
 
->>>>>>> origin/geshna-backend
   const handleCompare = async () => {
     if (!selected1 || !selected2) {
       setError("Please select two candidates to compare.");
@@ -54,46 +38,8 @@ export default function CompareCandidatesPage() {
       const data = await compareCandidates(selected1, selected2);
       setComparisonResult(data);
     } catch (err) {
-<<<<<<< HEAD
-      console.warn("Backend not connected, using mock comparison result.");
-      // Dummy comparison result for UI preview
-      const c1 = candidates.find(c => c.id === selected1) || candidates[0];
-      const c2 = candidates.find(c => c.id === selected2) || candidates[1];
-      
-      setComparisonResult({
-        reasoning: `Based on the AI analysis, ${c1.name} shows stronger technical alignment for the required role compared to ${c2.name}.`,
-        stronger_candidate_id: c1.id,
-        candidate_1: {
-          id: c1.id,
-          name: c1.name,
-          role: c1.role,
-          overall_score: c1.overall_score || 95,
-          hiring_recommendation: "Strong Hire",
-          strengths: ["Excellent React knowledge", "Strong problem solving"],
-          weaknesses: ["Less experience with CI/CD"],
-          plagiarism_risk_level: "Low",
-          originality_score: 98,
-          ai_generated_suspicion: 2,
-          malpractice_flags: []
-        },
-        candidate_2: {
-          id: c2.id,
-          name: c2.name,
-          role: c2.role,
-          overall_score: c2.overall_score || 88,
-          hiring_recommendation: "Hire",
-          strengths: ["Solid understanding of APIs", "Good team player"],
-          weaknesses: ["Needs improvement in advanced CSS"],
-          plagiarism_risk_level: "Medium",
-          originality_score: 85,
-          ai_generated_suspicion: 15,
-          malpractice_flags: []
-        }
-      });
-=======
       setError("Failed to run comparison. Ensure backend is running.");
       console.error(err);
->>>>>>> origin/geshna-backend
     } finally {
       setLoading(false);
     }

@@ -23,15 +23,9 @@ export default function Settings() {
 
   const [profileData, setProfileData] = useState({
     name: 'Darshini Sivakumar',
-<<<<<<< HEAD
-    email: 'darshini@recruit.ai',
-    role: 'Senior Hiring Manager',
-    company: 'Recruit AI'
-=======
     email: 'darshini@proofhire.ai',
     role: 'Senior Hiring Manager',
     company: 'ProofHire AI'
->>>>>>> origin/geshna-backend
   });
 
   const [notifications, setNotifications] = useState({
@@ -213,11 +207,7 @@ export default function Settings() {
                  <div className="p-6 bg-slate-900 text-white rounded-2xl border border-slate-800 shadow-xl relative overflow-hidden">
                     <Shield size={80} className="absolute -bottom-4 -right-4 opacity-10" />
                     <h3 className="text-lg font-bold mb-2">Account Security</h3>
-<<<<<<< HEAD
-                    <p className="text-sm text-slate-400 max-w-md">Manage your password, 2FA, and active sessions for the Recruit AI recruiter dashboard.</p>
-=======
                     <p className="text-sm text-slate-400 max-w-md">Manage your password, 2FA, and active sessions for the ProofHire AI recruiter dashboard.</p>
->>>>>>> origin/geshna-backend
                     <button className="mt-6 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-bold hover:bg-indigo-700 transition-colors">
                       Update Password
                     </button>
