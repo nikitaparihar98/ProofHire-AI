@@ -17,13 +17,10 @@ import CandidateCard from '../components/CandidateCard';
 import DashboardAnalytics from '../components/DashboardAnalytics';
 import CandidateUploadModal from '../components/CandidateUploadModal';
 import BulkUploadModal from '../components/BulkUploadModal';
-<<<<<<< HEAD
-=======
 import ScoreCharts from '../components/dashboard/ScoreCharts';
 import CandidateComparison from '../components/dashboard/CandidateComparison';
 import HiddenTalents from '../components/dashboard/HiddenTalents';
 import WhyNotSelected from '../components/dashboard/WhyNotSelected';
->>>>>>> origin/darshini-frontend
 
 export default function Dashboard() {
   const { candidates, loading: candidatesLoading, error: candidatesError, refresh: refreshCandidates } = useCandidates();
@@ -39,8 +36,6 @@ export default function Dashboard() {
   const [recommendationFilter, setRecommendationFilter] = useState('All');
   const [statusFilter, setStatusFilter] = useState('All');
   const [sortBy, setSortBy] = useState('score-desc');
-<<<<<<< HEAD
-=======
   const [activeTab, setActiveTab] = useState('candidates');
 
   const tabs = [
@@ -50,7 +45,6 @@ export default function Dashboard() {
     { id: 'talents', label: '💎 Hidden Talents' },
     { id: 'feedback', label: '💬 Feedback' },
   ];
->>>>>>> origin/darshini-frontend
 
   const fetchActiveData = async () => {
     try {
@@ -89,13 +83,8 @@ export default function Dashboard() {
     if (searchQuery) {
       const lowerQuery = searchQuery.toLowerCase();
       result = result.filter(c => 
-<<<<<<< HEAD
-        c.name.toLowerCase().includes(lowerQuery) || 
-        c.role.toLowerCase().includes(lowerQuery)
-=======
         (c.name || '').toLowerCase().includes(lowerQuery) || 
         (c.role || '').toLowerCase().includes(lowerQuery)
->>>>>>> origin/darshini-frontend
       );
     }
 
@@ -172,9 +161,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-<<<<<<< HEAD
-      <DashboardAnalytics candidates={candidates} loading={loading} />
-=======
       <div className="flex space-x-1 border-b border-slate-200 mb-8 overflow-x-auto hide-scrollbar">
         {tabs.map(tab => (
           <button
@@ -197,7 +183,6 @@ export default function Dashboard() {
       {activeTab === 'candidates' && (
         <div className="space-y-8 animate-in fade-in duration-500">
           <DashboardAnalytics candidates={candidates} loading={loading} />
->>>>>>> origin/darshini-frontend
 
       {/* Active Assessments Section */}
       {activeSessions.length > 0 && (
@@ -335,8 +320,6 @@ export default function Dashboard() {
           </div>
         )}
       </section>
-<<<<<<< HEAD
-=======
       </div>
       )}
 
@@ -344,7 +327,6 @@ export default function Dashboard() {
       {activeTab === 'compare' && <CandidateComparison />}
       {activeTab === 'talents' && <HiddenTalents />}
       {activeTab === 'feedback' && <WhyNotSelected />}
->>>>>>> origin/darshini-frontend
 
       <CandidateUploadModal 
         isOpen={isUploadModalOpen} 

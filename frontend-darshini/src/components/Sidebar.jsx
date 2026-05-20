@@ -18,11 +18,7 @@ import {
 
 export default function Sidebar({ isOpen, toggleSidebar }) {
   const menuItems = [
-<<<<<<< HEAD
-    { name: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/recruiter-dashboard' },
-=======
     { name: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/' },
->>>>>>> origin/darshini-frontend
     { name: 'Active Assessments', icon: <Activity size={20} />, path: '/assessments' },
     { name: 'Candidates', icon: <Users size={20} />, path: '/candidates' },
     { name: 'Compare', icon: <BarChart3 size={20} />, path: '/compare' },
@@ -41,11 +37,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         <div className="bg-indigo-600 p-2 rounded-lg text-white">
           <BrainCircuit size={24} />
         </div>
-<<<<<<< HEAD
-        {isOpen && <span className="text-xl font-bold text-slate-900 tracking-tight">Recruit AI</span>}
-=======
         {isOpen && <span className="text-xl font-bold text-slate-900 tracking-tight">ProofHire AI</span>}
->>>>>>> origin/darshini-frontend
       </div>
 
       <nav className="flex-1 px-4 space-y-1 mt-4">

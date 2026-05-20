@@ -1,99 +1,3 @@
-<<<<<<< HEAD
-import React, { useState, useEffect } from 'react';
-import { compareCandidates, getCandidates } from '../../services/api';
-import { ArrowRightLeft, Trophy, AlertTriangle } from 'lucide-react';
-import SkillReport from './SkillReport';
-
-const CandidateComparison = () => {
-  const [candidates, setCandidates] = useState([]);
-  const [selectedId1, setSelectedId1] = useState('');
-  const [selectedId2, setSelectedId2] = useState('');
-  const [comparisonResult, setComparisonResult] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    // Fetch all candidates to populate the dropdowns
-    getCandidates().then(data => setCandidates(data)).catch(err => console.error(err));
-  }, []);
-
-  const handleCompare = async () => {
-    if (!selectedId1 || !selectedId2) {
-      setError("Please select two candidates to compare.");
-      return;
-    }
-    if (selectedId1 === selectedId2) {
-      setError("Please select different candidates.");
-      return;
-    }
-
-    setLoading(true);
-    setError('');
-    try {
-      const result = await compareCandidates(selectedId1, selectedId2);
-      setComparisonResult(result);
-    } catch (err) {
-      setError("Error comparing candidates. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div className="w-full">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
-        <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-          <ArrowRightLeft className="text-blue-600" />
-          Compare Candidates
-        </h2>
-
-        <div className="flex flex-col md:flex-row gap-6 items-end">
-          <div className="w-full">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Candidate A</label>
-            <select
-              className="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              value={selectedId1}
-              onChange={(e) => setSelectedId1(e.target.value)}
-            >
-              <option value="">Select candidate...</option>
-              {candidates.map(c => (
-                <option key={c.id} value={c.id}>{c.name} ({c.role})</option>
-              ))}
-            </select>
-          </div>
-
-          <div className="hidden md:flex pb-3 items-center justify-center w-12 flex-shrink-0 text-gray-400">
-            VS
-          </div>
-
-          <div className="w-full">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Candidate B</label>
-            <select
-              className="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              value={selectedId2}
-              onChange={(e) => setSelectedId2(e.target.value)}
-            >
-              <option value="">Select candidate...</option>
-              {candidates.map(c => (
-                <option key={c.id} value={c.id}>{c.name} ({c.role})</option>
-              ))}
-            </select>
-          </div>
-
-          <button
-            onClick={handleCompare}
-            disabled={loading}
-            className="w-full md:w-auto px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 disabled:opacity-50 transition-colors"
-          >
-            {loading ? 'Comparing...' : 'Compare'}
-          </button>
-        </div>
-
-        {error && (
-          <div className="mt-4 p-3 bg-red-50 text-red-700 rounded-lg flex items-center gap-2">
-            <AlertTriangle size={18} />
-            {error}
-=======
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { GitCompare, Loader2, AlertCircle, CheckCircle, Trophy, Sparkles, ChevronDown } from "lucide-react";
 
@@ -360,44 +264,10 @@ export default function CandidateComparison() {
         {compareError && (
           <div className="mt-8 flex items-center justify-center gap-3 text-rose-600 bg-rose-50 px-6 py-4 rounded-2xl border border-rose-100 font-medium">
             <AlertCircle size={20} /> {compareError}
->>>>>>> origin/darshini-frontend
           </div>
         )}
       </div>
 
-<<<<<<< HEAD
-      {comparisonResult && (
-        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-          {/* Winner Banner */}
-          <div className="bg-gradient-to-r from-yellow-500 to-amber-600 p-6 rounded-2xl text-white shadow-lg flex items-center gap-6">
-            <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm">
-              <Trophy size={40} className="text-yellow-100" />
-            </div>
-            <div>
-              <h3 className="text-sm uppercase tracking-widest font-semibold text-yellow-100 mb-1">Recommended Choice</h3>
-              <p className="text-xl font-medium leading-relaxed">
-                {comparisonResult.reasoning}
-              </p>
-            </div>
-          </div>
-
-          {/* Side by side comparison */}
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className={`transition-all duration-300 ${comparisonResult.stronger_candidate_id === comparisonResult.candidate_1.id ? 'ring-4 ring-yellow-400 rounded-2xl' : 'opacity-90'}`}>
-              <SkillReport candidate={comparisonResult.candidate_1} />
-            </div>
-            <div className={`transition-all duration-300 ${comparisonResult.stronger_candidate_id === comparisonResult.candidate_2.id ? 'ring-4 ring-yellow-400 rounded-2xl' : 'opacity-90'}`}>
-              <SkillReport candidate={comparisonResult.candidate_2} />
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default CandidateComparison;
-=======
       {/* Comparison Cards Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-stretch relative">
         {renderCard(candidateA, aWins, hasDecision && bWins, "candidate_a_score", "candidate_a")}
@@ -433,4 +303,3 @@ export default CandidateComparison;
     </div>
   );
 }
->>>>>>> origin/darshini-frontend

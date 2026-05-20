@@ -10,33 +10,6 @@ export default function RecruiterDashboard() {
   }, []);
 
  const load = async () => {
-<<<<<<< HEAD
-  try {
-    const data = await getCandidates();
-    setCandidates(Array.isArray(data) ? data : []);
-  } catch (error) {
-    console.warn("Backend not connected. Loading dummy data for Recruiter Dashboard.", error);
-    // Dummy data for testing the UI
-    setCandidates([
-      {
-        id: 1,
-        full_name: "Alice Johnson",
-        email: "alice@example.com",
-        job_role: "Frontend Engineer",
-        ai_score: 95,
-        status: "shortlisted"
-      },
-      {
-        id: 2,
-        full_name: "Bob Smith",
-        email: "bob@example.com",
-        job_role: "Backend Developer",
-        ai_score: 88,
-        status: "pending"
-      }
-    ]);
-  }
-=======
   const data = await getCandidates();
 
   console.log("RAW DATA TYPE:", typeof data);
@@ -44,7 +17,6 @@ export default function RecruiterDashboard() {
   console.log("DATA:", data);
 
   setCandidates(Array.isArray(data) ? data : []);
->>>>>>> origin/darshini-frontend
 };
 
   return (

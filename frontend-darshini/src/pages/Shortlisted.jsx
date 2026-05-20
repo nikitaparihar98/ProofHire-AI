@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { CheckCircle, Users, Search, Mail, Calendar } from 'lucide-react';
-<<<<<<< HEAD
-import useCandidates from '../hooks/useCandidates';
-import CandidateCard from '../components/CandidateCard';
-
-export default function Shortlisted() {
-  const { filteredCandidates: candidates, loading, error } = useCandidates('Shortlisted');
-=======
 import { Link } from 'react-router-dom';
 import useCandidates from '../hooks/useCandidates';
 import CandidateCard from '../components/CandidateCard';
@@ -15,7 +8,6 @@ import ScheduleInterviewModal from '../components/ScheduleInterviewModal';
 export default function Shortlisted() {
   const { filteredCandidates: candidates, loading, error, refresh } = useCandidates('Shortlisted');
   const [selectedCandidate, setSelectedCandidate] = useState(null);
->>>>>>> origin/darshini-frontend
 
   if (loading) return <div className="animate-pulse space-y-4">{[...Array(3)].map((_, i) => <div key={i} className="h-40 bg-white rounded-2xl border border-slate-100"></div>)}</div>;
 
@@ -39,14 +31,6 @@ export default function Shortlisted() {
             <div key={candidate.id} className="relative group">
                <CandidateCard candidate={candidate} />
                <div className="mt-3 flex gap-2">
-<<<<<<< HEAD
-                  <button className="flex-1 py-2 bg-indigo-50 text-indigo-600 rounded-lg text-xs font-bold hover:bg-indigo-100 transition-colors flex items-center justify-center gap-1.5">
-                     <Calendar size={14} /> Schedule
-                  </button>
-                  <button className="flex-1 py-2 bg-slate-50 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-100 transition-colors flex items-center justify-center gap-1.5">
-                     <Mail size={14} /> Message
-                  </button>
-=======
                   <button 
                     onClick={() => setSelectedCandidate(candidate)}
                     className="flex-1 py-2 bg-indigo-50 text-indigo-600 rounded-lg text-xs font-bold hover:bg-indigo-100 transition-colors flex items-center justify-center gap-1.5 cursor-pointer relative z-10">
@@ -57,7 +41,6 @@ export default function Shortlisted() {
                     className="flex-1 py-2 bg-slate-50 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-100 transition-colors flex items-center justify-center gap-1.5 cursor-pointer relative z-10">
                      <Mail size={14} /> Message
                   </Link>
->>>>>>> origin/darshini-frontend
                </div>
             </div>
           ))}
@@ -73,8 +56,6 @@ export default function Shortlisted() {
           </p>
         </div>
       )}
-<<<<<<< HEAD
-=======
       
       {selectedCandidate && (
         <ScheduleInterviewModal 
@@ -87,7 +68,6 @@ export default function Shortlisted() {
           }}
         />
       )}
->>>>>>> origin/darshini-frontend
     </div>
   );
 }
