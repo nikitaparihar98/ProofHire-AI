@@ -1,7 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function RecruitAiLandingPage() {
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    return document.documentElement.classList.contains('dark') || localStorage.getItem('theme') === 'dark';
+  });
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [isDarkMode]);
+
   return (
     <div className="font-body-md text-on-surface">
       {/* TopNavBar */}
@@ -15,6 +29,15 @@ export default function RecruitAiLandingPage() {
           </div>
           <div className="flex items-center gap-md">
             <Link to="/login" className="px-md py-xs text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors">Login</Link>
+            <button
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className="w-10 h-10 rounded-full flex items-center justify-center border border-outline-variant/30 text-on-surface-variant hover:text-primary hover:bg-surface-container-high dark:hover:bg-slate-800 transition-all focus:outline-none"
+              aria-label="Toggle Theme"
+            >
+              <span className="material-symbols-outlined text-[20px] select-none">
+                {isDarkMode ? 'light_mode' : 'dark_mode'}
+              </span>
+            </button>
           </div>
         </div>
       </nav>

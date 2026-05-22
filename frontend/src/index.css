@@ -393,3 +393,24 @@ html.dark .focus\:border-primary:focus {
   border-color: #818cf8 !important;
 }
 
+/* Dark mode mesh gradient for immersive hero section */
+html.dark .mesh-gradient {
+  background: radial-gradient(at 0% 0%, hsla(222, 50%, 12%, 1) 0, transparent 50%),
+              radial-gradient(at 50% 0%, hsla(210, 50%, 8%, 1) 0, transparent 50%),
+              radial-gradient(at 100% 0%, hsla(240, 50%, 12%, 1) 0, transparent 50%) !important;
+}
+
+/* Glass header override in dark mode */
+html.dark .glass {
+  background: rgba(15, 23, 42, 0.8) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Landing Page Token Adjustments */
+html.dark .bg-surface-container-low {
+  background-color: #1e293b !important;
+}
+html.dark .bg-surface-container-lowest {
+  background-color: #0f172a !important;
+}
+
