@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Bell, AlertTriangle, CheckCircle, Info, X } from 'lucide-react';
-import axios from 'axios';
+import { getNotifications, markNotificationRead, clearAllNotifications } from '../services/api';
 
 export default function NotificationCenter() {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,10 +9,9 @@ export default function NotificationCenter() {
 
   const fetchNotifications = async () => {
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
-      const res = await axios.get(`${API_URL}/notifications/`);
-      setNotifications(res.data);
-      setUnreadCount(res.data.filter(n => n.is_read === 0).length);
+      const data = await getNotifications();
+      setNotifications(data);
+      setUnreadCount(data.filter(n => n.is_read === 0).length);
     } catch (err) {
       console.error("Failed to fetch notifications", err);
     }
@@ -26,21 +25,25 @@ export default function NotificationCenter() {
 
   const markAsRead = async (id) => {
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
-      await axios.post(`${API_URL}/notifications/read/${id}`);
+      await markNotificationRead(id);
       fetchNotifications();
     } catch (err) {
-      console.error(err);
+      console.error("Failed to mark notification as read:", err);
     }
   };
 
-  const clearAll = async () => {
+  const clearAll = async (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
-      await axios.post(`${API_URL}/notifications/clear-all`);
-      fetchNotifications();
+      setNotifications([]);
+      setUnreadCount(0);
+      await clearAllNotifications();
     } catch (err) {
-      console.error(err);
+      console.error("Failed to clear notifications:", err);
+      fetchNotifications();
     }
   };
 

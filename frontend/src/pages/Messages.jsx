@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { MessageSquare, Search, User, Clock } from 'lucide-react';
-import { getConversations } from '../services/api';
+import React, { useState, useEffect, useRef } from 'react';
+import { MessageSquare, Search, User, Clock, Plus } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
+import { getConversations, getCandidateById, getCandidates } from '../services/api';
 import CandidateMessages from '../components/CandidateMessages';
 
 export default function Messages() {
@@ -8,13 +9,54 @@ export default function Messages() {
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchParams] = useSearchParams();
+  const candidateIdParam = searchParams.get('candidateId');
+
+  // New Chat States
+  const [allCandidates, setAllCandidates] = useState([]);
+  const [showNewChatDropdown, setShowNewChatDropdown] = useState(false);
+  const newChatRef = useRef(null);
 
   const fetchConversations = async () => {
     try {
       setLoading(true);
       const data = await getConversations();
+      
+      // Load all candidates for the "New Chat" selector
+      try {
+        const candidatesList = await getCandidates();
+        setAllCandidates(candidatesList);
+      } catch (e) {
+        console.error("Failed to fetch all candidates for messaging dropdown", e);
+      }
+      
+      let targetConv = candidateIdParam
+        ? data.find(c => String(c.id) === String(candidateIdParam))
+        : null;
+        
+      if (!targetConv && candidateIdParam) {
+        try {
+          const candidate = await getCandidateById(candidateIdParam);
+          if (candidate) {
+            targetConv = {
+              id: candidate.id,
+              name: candidate.name,
+              role: candidate.role,
+              last_message: "Start the conversation!",
+              timestamp: new Date().toISOString()
+            };
+            data.unshift(targetConv);
+          }
+        } catch (e) {
+          console.error("Failed to fetch candidate details for message start", e);
+        }
+      }
+      
       setConversations(data);
-      if (data.length > 0 && !selectedCandidate) {
+      
+      if (targetConv) {
+        setSelectedCandidate(targetConv);
+      } else if (data.length > 0 && !selectedCandidate) {
         setSelectedCandidate(data[0]);
       }
     } catch (err) {
@@ -28,6 +70,16 @@ export default function Messages() {
     fetchConversations();
   }, []);
 
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (newChatRef.current && !newChatRef.current.contains(event.target)) {
+        setShowNewChatDropdown(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const filteredConversations = conversations.filter(c => 
     c.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
     c.role.toLowerCase().includes(searchQuery.toLowerCase())
@@ -37,10 +89,63 @@ export default function Messages() {
     <div className="flex h-[calc(100vh-120px)] bg-white rounded-[2.5rem] border border-slate-200 overflow-hidden shadow-sm">
       {/* Sidebar */}
       <div className="w-80 border-r border-slate-100 flex flex-col bg-slate-50/30">
-        <div className="p-6 border-b border-slate-100">
-          <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-            <MessageSquare className="text-indigo-600" size={20} /> Messages
-          </h2>
+        <div className="p-6 border-b border-slate-100 relative">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+              <MessageSquare className="text-indigo-600" size={20} /> Messages
+            </h2>
+            <div className="relative" ref={newChatRef}>
+              <button 
+                onClick={() => setShowNewChatDropdown(!showNewChatDropdown)}
+                className="p-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg transition-colors flex items-center justify-center font-bold text-xs gap-1"
+                title="Start a new chat"
+              >
+                <Plus size={16} /> New Chat
+              </button>
+              
+              {showNewChatDropdown && (
+                <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-2xl rounded-2xl overflow-hidden z-50 max-h-60 overflow-y-auto py-2">
+                  <div className="px-3 py-1.5 border-b border-slate-50 dark:border-slate-700 mb-1">
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Select candidate</p>
+                  </div>
+                  {allCandidates.length === 0 ? (
+                    <div className="p-4 text-center text-xs text-slate-400 italic">No candidates found</div>
+                  ) : (
+                    allCandidates.map(candidate => (
+                      <button
+                        key={candidate.id}
+                        onClick={() => {
+                          // Check if candidate already has a conversation
+                          let existing = conversations.find(c => String(c.id) === String(candidate.id));
+                          if (!existing) {
+                            existing = {
+                              id: candidate.id,
+                              name: candidate.name,
+                              role: candidate.role,
+                              last_message: "Start the conversation!",
+                              timestamp: new Date().toISOString()
+                            };
+                            setConversations(prev => [existing, ...prev]);
+                          }
+                          setSelectedCandidate(existing);
+                          setShowNewChatDropdown(false);
+                        }}
+                        className="w-full text-left px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-2 border-b border-slate-50/55 dark:border-slate-700/50 last:border-0"
+                      >
+                        <div className="w-6 h-6 rounded-md bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-[10px]">
+                          {candidate.name.charAt(0)}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-slate-900 dark:text-slate-100">{candidate.name}</p>
+                          <p className="truncate text-[10px] text-slate-400 font-medium">{candidate.role}</p>
+                        </div>
+                      </button>
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
             <input 
@@ -105,7 +210,7 @@ export default function Messages() {
                   </div>
                </div>
             </div>
-            <div className="flex-1">
+            <div className="flex-1 flex flex-col min-h-0">
                <CandidateMessages candidateId={selectedCandidate.id} />
             </div>
           </div>

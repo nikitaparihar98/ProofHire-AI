@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, User, Bot, Clock, RefreshCw } from 'lucide-react';
+import { Send, User, Bot, RefreshCw } from 'lucide-react';
 import { sendMessage, getMessages } from '../services/api';
 
 export default function CandidateMessages({ candidateId }) {
@@ -42,7 +42,7 @@ export default function CandidateMessages({ candidateId }) {
     setSending(true);
     try {
       await sendMessage({
-        candidate_id: candidateId,
+        candidate_id: Number(candidateId),
         sender_type: 'recruiter',
         sender_id: 'REC-001',
         content: newMessage
@@ -58,24 +58,11 @@ export default function CandidateMessages({ candidateId }) {
   };
 
   return (
-    <div className="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden flex flex-col h-[500px]">
-      <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-        <div className="flex items-center gap-2">
-          <Send className="w-5 h-5 text-indigo-600" />
-          <h3 className="font-bold text-slate-900 tracking-tight">Candidate Conversation</h3>
-        </div>
-        <button 
-          onClick={fetchMessages}
-          className="p-2 hover:bg-white rounded-lg transition-colors text-slate-400 hover:text-indigo-600"
-          title="Refresh messages"
-        >
-          <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
-        </button>
-      </div>
-
-      <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-slate-50/30">
+    <div className="flex flex-col h-full">
+      {/* Scrollable Message History */}
+      <div className="flex-grow overflow-y-auto p-6 space-y-4 bg-slate-50/30">
         {messages.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-center space-y-3">
+          <div className="flex flex-col items-center justify-center h-full text-center space-y-3 py-10">
              <div className="p-4 bg-white rounded-full shadow-sm">
                 <Send className="w-8 h-8 text-slate-200" />
              </div>
@@ -87,11 +74,11 @@ export default function CandidateMessages({ candidateId }) {
               key={msg.id} 
               className={`flex ${msg.sender_type === 'recruiter' ? 'justify-end' : 'justify-start'}`}
             >
-              <div className={`max-w-[80%] space-y-1`}>
+              <div className="max-w-[75%] space-y-1">
                 <div className={`p-4 rounded-2xl text-sm shadow-sm ${
                   msg.sender_type === 'recruiter' 
                     ? 'bg-indigo-600 text-white rounded-tr-none' 
-                    : 'bg-white text-slate-700 border border-slate-100 rounded-tl-none'
+                    : 'bg-white text-slate-700 border border-slate-100 rounded-tl-none dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200'
                 }`}>
                   {msg.content}
                 </div>
@@ -108,13 +95,14 @@ export default function CandidateMessages({ candidateId }) {
         <div ref={messagesEndRef} />
       </div>
 
-      <form onSubmit={handleSendMessage} className="p-4 bg-white border-t border-slate-100 flex gap-2">
+      {/* Input Message Box */}
+      <form onSubmit={handleSendMessage} className="p-4 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 flex gap-2">
         <input
           type="text"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Type your message..."
-          className="flex-1 px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all"
+          className="flex-grow px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all dark:bg-slate-800 dark:border-slate-700 dark:text-white"
           disabled={sending}
         />
         <button

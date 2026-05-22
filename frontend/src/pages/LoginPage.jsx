@@ -10,6 +10,42 @@ export default function LoginPage() {
     if (role === 'candidate') {
       navigate('/candidate-dashboard');
     } else {
+      const rawEmail = e.target.querySelector('input[type="email"]')?.value || 'anusha@hindustanelectronics.com';
+      const emailInput = rawEmail.trim();
+      const emailKey = emailInput.toLowerCase();
+      
+      let name = 'Anusha Agarwal';
+      let company = 'Hindustan Electronics';
+      
+      // Look up if this recruiter signed up / registered previously
+      const registeredUserStr = localStorage.getItem('recruiter_' + emailKey);
+      if (registeredUserStr) {
+        try {
+          const regUser = JSON.parse(registeredUserStr);
+          name = regUser.name || name;
+          company = regUser.company || company;
+        } catch (err) {
+          console.error("Failed to parse registered recruiter data", err);
+        }
+      } else {
+        // Attempt to extract name/company from email if possible, or use standard defaults
+        if (emailKey.includes('darshini')) {
+          name = 'Darshini Sivakumar';
+          company = 'ProofHire';
+        }
+      }
+      
+      // Look up and restore any previously saved profile picture for this email
+      const storedAvatar = localStorage.getItem('avatar_' + emailKey) || '';
+      
+      localStorage.setItem('user', JSON.stringify({
+        name: name,
+        email: emailInput,
+        company: company,
+        role: 'Recruiter',
+        avatar: storedAvatar
+      }));
+      
       navigate('/recruiter-dashboard');
     }
   };

@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { CheckCircle, Users, Search, Mail, Calendar } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import useCandidates from '../hooks/useCandidates';
 import CandidateCard from '../components/CandidateCard';
+import ScheduleInterviewModal from '../components/ScheduleInterviewModal';
 
 export default function Shortlisted() {
   const { filteredCandidates: candidates, loading, error } = useCandidates('Shortlisted');
+  const navigate = useNavigate();
+  const [selectedCandidate, setSelectedCandidate] = useState(null);
+  const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
+
+  const handleScheduleClick = (candidate) => {
+    setSelectedCandidate(candidate);
+    setIsScheduleModalOpen(true);
+  };
 
   if (loading) return <div className="animate-pulse space-y-4">{[...Array(3)].map((_, i) => <div key={i} className="h-40 bg-white rounded-2xl border border-slate-100"></div>)}</div>;
 
@@ -28,10 +38,16 @@ export default function Shortlisted() {
             <div key={candidate.id} className="relative group">
                <CandidateCard candidate={candidate} />
                <div className="mt-3 flex gap-2">
-                  <button className="flex-1 py-2 bg-indigo-50 text-indigo-600 rounded-lg text-xs font-bold hover:bg-indigo-100 transition-colors flex items-center justify-center gap-1.5">
+                  <button 
+                    onClick={() => handleScheduleClick(candidate)}
+                    className="flex-1 py-2 bg-indigo-50 text-indigo-600 rounded-lg text-xs font-bold hover:bg-indigo-100 transition-colors flex items-center justify-center gap-1.5"
+                  >
                      <Calendar size={14} /> Schedule
                   </button>
-                  <button className="flex-1 py-2 bg-slate-50 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-100 transition-colors flex items-center justify-center gap-1.5">
+                  <button 
+                    onClick={() => navigate(`/messages?candidateId=${candidate.id}`)}
+                    className="flex-1 py-2 bg-slate-50 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-100 transition-colors flex items-center justify-center gap-1.5"
+                  >
                      <Mail size={14} /> Message
                   </button>
                </div>
@@ -49,6 +65,16 @@ export default function Shortlisted() {
           </p>
         </div>
       )}
+
+      <ScheduleInterviewModal 
+        isOpen={isScheduleModalOpen}
+        onClose={() => {
+          setIsScheduleModalOpen(false);
+          setSelectedCandidate(null);
+        }}
+        candidate={selectedCandidate}
+        onScheduled={() => {}}
+      />
     </div>
   );
 }

@@ -19,11 +19,7 @@ export default function Navbar() {
                 <Users className="w-5 h-5 text-white" />
               </div>
               <span className="font-bold text-xl tracking-tight text-slate-900">
-<<<<<<< HEAD
-                Recruit <span className="text-indigo-600">AI</span>
-=======
                 ProofHire <span className="text-indigo-600">AI</span>
->>>>>>> origin/geshna-backend
               </span>
             </Link>
           </div>

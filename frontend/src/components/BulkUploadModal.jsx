@@ -108,11 +108,11 @@ export default function BulkUploadModal({ isOpen, onClose, onRefresh }) {
             </div>
           )}
 
-          <div className="bg-indigo-50/50 p-6 rounded-3xl border border-indigo-100/50 flex items-start gap-4">
-             <div className="p-2 bg-white rounded-xl text-indigo-600 shadow-sm">
+          <div className="bg-indigo-50/50 dark:bg-indigo-950/20 p-6 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 flex items-start gap-4">
+             <div className="p-2 bg-white dark:bg-slate-900 rounded-xl text-indigo-600 dark:text-indigo-400 shadow-sm animate-pulse">
                 <CheckCircle size={16} />
              </div>
-             <p className="text-xs text-slate-600 leading-relaxed font-medium">
+             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                All candidates will be added in <b>"Not Attended"</b> state. Ensure your JSON follows the required schema: <b>name, email, role, experience_level, assessment_type</b>.
              </p>
           </div>

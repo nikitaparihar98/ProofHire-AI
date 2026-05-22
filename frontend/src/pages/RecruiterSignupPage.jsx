@@ -6,6 +6,24 @@ export default function RecruiterSignupPage() {
 
   const handleSignup = (e) => {
     e.preventDefault();
+    const firstName = e.target.querySelector('input[placeholder="John"]')?.value || 'Anusha';
+    const lastName = e.target.querySelector('input[placeholder="Doe"]')?.value || 'Agarwal';
+    const companyName = e.target.querySelector('input[placeholder="Acme Corp"]')?.value || 'Hindustan Electronics';
+    const rawEmail = e.target.querySelector('input[type="email"]')?.value || 'anusha@hindustanelectronics.com';
+    const email = rawEmail.trim();
+    const emailKey = email.toLowerCase();
+    
+    const newUser = {
+      name: `${firstName} ${lastName}`,
+      email: email,
+      company: companyName,
+      role: 'Recruiter',
+      avatar: ''
+    };
+    
+    localStorage.setItem('user', JSON.stringify(newUser));
+    localStorage.setItem('recruiter_' + emailKey, JSON.stringify(newUser));
+    
     alert("Signup successful! You can now log in.");
     navigate('/login');
   };

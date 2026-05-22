@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { getCandidateById, updateCandidateDecision } from '../services/api';
 import ScoreBadge from '../components/ScoreBadge';
+import ScoreChart from '../components/ScoreChart';
 import AuthenticityBadge from '../components/AuthenticityBadge';
 import StrengthWeaknessSection from '../components/StrengthWeaknessSection';
 import ScheduleInterviewModal from '../components/ScheduleInterviewModal';
@@ -239,7 +240,7 @@ export default function CandidateDetails() {
                 <p className="text-sm text-slate-500 leading-relaxed mb-6">Coordinate interviews and message this candidate in the dedicated modules.</p>
                 <div className="grid grid-cols-1 gap-3">
                   <Link 
-                    to="/messages"
+                    to={`/messages?candidateId=${candidate.id}`}
                     className="block w-full py-4 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100"
                   >
                     Go to Chat

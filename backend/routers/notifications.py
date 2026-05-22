@@ -25,7 +25,7 @@ def mark_as_read(notif_id: int, db: Session = Depends(get_db)):
 
 @router.post("/clear-all")
 def clear_all_notifications(db: Session = Depends(get_db)):
-    db.query(models.Notification).update({models.Notification.is_read: 1})
+    db.query(models.Notification).delete()
     db.commit()
     return {"status": "success"}
 

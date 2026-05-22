@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { X, UserPlus, Upload, Briefcase, Mail, Send, Award, FileText, Loader2 } from 'lucide-react';
 import { createCandidate } from '../services/api';
 import Toast from './ui/Toast';
@@ -13,6 +13,14 @@ export default function CandidateUploadModal({ isOpen, onClose, onRefresh }) {
   });
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const fileInputRef = useRef(null);
+
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedFile(e.target.files[0]);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,6 +28,7 @@ export default function CandidateUploadModal({ isOpen, onClose, onRefresh }) {
     try {
       await createCandidate({
         ...formData,
+        resume_url: selectedFile ? `/uploads/resumes/${selectedFile.name}` : null,
         status: "Not Attended"
       });
       setToast({ message: "Candidate added successfully!", type: "success" });
@@ -34,6 +43,7 @@ export default function CandidateUploadModal({ isOpen, onClose, onRefresh }) {
             experience_level: 'Junior',
             assessment_type: 'Technical Assignment',
         });
+        setSelectedFile(null);
       }, 1500);
     } catch (err) {
       console.error(err);
@@ -165,19 +175,46 @@ export default function CandidateUploadModal({ isOpen, onClose, onRefresh }) {
                 <label className="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2.5 ml-1">
                   Resume (Optional)
                 </label>
-                <div className="w-full px-4 py-4 bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center text-slate-400 hover:border-indigo-300 hover:bg-indigo-50 transition-all cursor-pointer group">
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  onChange={handleFileChange} 
+                  accept=".pdf,.doc,.docx" 
+                  className="hidden" 
+                />
+                <div 
+                  onClick={() => fileInputRef.current?.click()}
+                  className="w-full px-4 py-4 bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center text-slate-400 hover:border-indigo-300 hover:bg-indigo-50 transition-all cursor-pointer group"
+                >
                   <Upload size={20} className="mb-2 group-hover:text-indigo-500 transition-colors" />
-                  <span className="text-[10px] font-bold uppercase tracking-wider">Click to upload PDF</span>
+                  {selectedFile ? (
+                    <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                      <span className="text-xs font-bold text-indigo-600 truncate max-w-[150px]">{selectedFile.name}</span>
+                      <button 
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedFile(null);
+                          if (fileInputRef.current) fileInputRef.current.value = '';
+                        }}
+                        className="text-rose-500 hover:text-rose-700 p-0.5 rounded transition-all"
+                      >
+                        <X size={12} />
+                      </button>
+                    </div>
+                  ) : (
+                    <span className="text-[10px] font-bold uppercase tracking-wider">Click to upload PDF</span>
+                  )}
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="bg-indigo-50/50 p-6 rounded-3xl border border-indigo-100/50 flex items-start gap-4">
-             <div className="p-2 bg-white rounded-xl text-indigo-600 shadow-sm">
+          <div className="bg-indigo-50/50 dark:bg-indigo-950/20 p-6 rounded-3xl border border-indigo-100/50 dark:border-indigo-900/30 flex items-start gap-4">
+             <div className="p-2 bg-white dark:bg-slate-900 rounded-xl text-indigo-600 dark:text-indigo-400 shadow-sm animate-pulse">
                 <Send size={16} />
              </div>
-             <p className="text-xs text-slate-600 leading-relaxed font-medium">
+             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-medium">
                Candidate will be added to the <b>Not Attended</b> pipeline stage. You can then launch or send the assessment invitation from the dashboard.
              </p>
           </div>

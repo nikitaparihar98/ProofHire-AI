@@ -119,10 +119,7 @@ export default function Interviews() {
 
               <div className="flex items-center gap-3">
                 <Link 
-                  to={`/candidate/$<div className="flex flex-col">
-                <h3 className="font-bold text-slate-900">{interview.candidate_name || 'Unknown Candidate'}</h3>
-                <p className="text-sm text-slate-500">{interview.candidate_role || 'Role not set'}</p>
-              </div>`}
+                  to={`/candidate/${interview.candidate_id}`}
                   className="p-4 bg-slate-100 text-slate-600 rounded-2xl hover:bg-slate-200 transition-all flex flex-col items-center gap-1 min-w-[80px]"
                   title="View Profile"
                 >
