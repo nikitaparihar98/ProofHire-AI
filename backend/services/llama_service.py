@@ -55,7 +55,15 @@ def _score_submission(role: str, answer: str, flags: list) -> float:
 
     if "frontend" in role.lower() and any(term in answer for term in ["react", "component", "state"]):
         score += 8
+    if "full stack" in role.lower() and any(term in answer for term in ["frontend", "backend", "api", "database"]):
+        score += 8
+    if "backend" in role.lower() and any(term in answer for term in ["auth", "transaction", "endpoint", "database"]):
+        score += 8
     if "data" in role.lower() and any(term in answer for term in ["metric", "trend", "insight"]):
+        score += 8
+    if any(term in role.lower() for term in ["ai/ml", "machine learning", "ml engineer"]) and any(term in answer for term in ["model", "evaluation", "bias", "experiment"]):
+        score += 8
+    if any(term in role.lower() for term in ["ui/ux", "designer"]) and any(term in answer for term in ["accessibility", "journey", "prototype", "user"]):
         score += 8
     if "product" in role.lower() and any(term in answer for term in ["priority", "user", "impact"]):
         score += 8
@@ -79,6 +87,14 @@ def _build_strengths(role: str, answer: str) -> list:
         strengths.append("Good reliability and error handling")
     if "frontend" in role.lower() and "react" in answer:
         strengths.append("Relevant React implementation thinking")
+    if "backend" in role.lower() and any(term in answer for term in ["auth", "database", "endpoint"]):
+        strengths.append("Relevant backend architecture thinking")
+    if "data" in role.lower() and any(term in answer for term in ["metric", "insight", "sql"]):
+        strengths.append("Strong analytical framing")
+    if any(term in role.lower() for term in ["ai/ml", "machine learning"]) and any(term in answer for term in ["model", "evaluation", "bias"]):
+        strengths.append("Thoughtful model evaluation approach")
+    if any(term in role.lower() for term in ["ui/ux", "designer"]) and any(term in answer for term in ["accessibility", "user", "journey"]):
+        strengths.append("User-centered design reasoning")
 
     if not strengths:
         strengths.append("Understands the task objective")

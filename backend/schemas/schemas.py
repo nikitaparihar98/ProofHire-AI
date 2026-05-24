@@ -104,6 +104,10 @@ class CandidateCreate(CandidateBase):
     weaknesses: Optional[List[str]] = []
     hiring_recommendation: Optional[str] = "Pending"
     ai_feedback: Optional[str] = "Awaiting evaluation."
+    technical_score: Optional[float] = 0.0
+    communication_score: Optional[float] = 0.0
+    problem_solving_score: Optional[float] = 0.0
+    recruiter_summary: Optional[str] = ""
     submission_data: Optional[Dict[str, Any]] = {}
     plagiarism_score: Optional[float] = 0.0
     originality_score: Optional[float] = 100.0
@@ -205,3 +209,28 @@ class ConversationPreview(BaseModel):
     role: str
     last_message: str
     timestamp: str
+
+class SaveDraftRequest(BaseModel):
+    draft_answer: str
+    time_left_seconds: int
+    malpractice_log: Optional[List[Any]] = []
+
+class AssessmentSubmitRequest(BaseModel):
+    final_answer: str
+
+class RecruiterTaskAssignRequest(BaseModel):
+    task_id: str
+    difficulty: str = "Medium"
+    duration: int = 60
+    custom_prompt: Optional[str] = None
+    custom_title: Optional[str] = None
+    deadline: Optional[str] = None
+    evaluation_criteria: Optional[str] = None
+
+class TaskGenerateRequest(BaseModel):
+    role: str
+    difficulty: str = "Medium"
+    tech_stack: str = "General"
+
+
+

@@ -1,12 +1,62 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api';
+const API_BASE_URL = 'http://localhost:8080/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
+  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
+});
+
+const getStoredToken = () => {
+  const directToken =
+    localStorage.getItem('access_token') ||
+    localStorage.getItem('authToken') ||
+    localStorage.getItem('token');
+
+  if (directToken) return directToken;
+
+  try {
+    const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+    return storedUser.access_token || storedUser.token || null;
+  } catch {
+    return null;
+  }
+};
+
+const getFullRequestUrl = (config = {}) => {
+  if (!config.url) return config.baseURL || API_BASE_URL;
+  if (/^https?:\/\//i.test(config.url)) return config.url;
+  return `${(config.baseURL || API_BASE_URL).replace(/\/$/, '')}/${config.url.replace(/^\//, '')}`;
+};
+
+
+export const getApiErrorMessage = (error, fallback = 'Failed to load dashboard data') => {
+  if (error?.response) {
+    const detail = error.response.data?.detail || error.response.data?.message || error.response.statusText;
+    return `${fallback}: ${error.response.status} ${detail}`;
+  }
+
+  const requestUrl = getFullRequestUrl(error?.config);
+  if (error?.code === 'ECONNABORTED') {
+    return `${fallback}: request timed out while contacting ${requestUrl}`;
+  }
+
+  if (error?.request) {
+    return `${fallback}: could not reach backend at ${requestUrl}. Confirm FastAPI is running and CORS allows this frontend origin.`;
+  }
+
+  return `${fallback}: ${error?.message || 'Unknown error'}`;
+};
+
+api.interceptors.request.use((config) => {
+  const token = getStoredToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
 });
 
 // Robust health check - ensures we can reach the backend
@@ -23,16 +73,15 @@ export const getHealth = async () => {
   }
 };
 
-// Add a response interceptor for debugging
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
     console.error('API Error:', {
-      url: error.config?.url,
+      url: getFullRequestUrl(error.config),
       method: error.config?.method,
       status: error.response?.status,
       data: error.response?.data,
-      message: error.message
+      message: getApiErrorMessage(error)
     });
     return Promise.reject(error);
   }
@@ -76,6 +125,72 @@ export const updateCandidateDecision = async (id, decisionData) => {
 
 export const evaluateCandidate = async (data) => {
   const response = await api.post('/evaluate/', data);
+  return response.data;
+};
+
+// Auth APIs
+export const signup = async (data) => {
+  const response = await api.post('/auth/signup', data);
+  return response.data;
+};
+
+export const login = async (data) => {
+  const response = await api.post('/auth/login', data);
+  return response.data;
+};
+
+export const getCurrentUser = async () => {
+  const response = await api.get('/auth/me');
+  return response.data;
+};
+
+// Candidate Portal APIs
+export const getAssessment = async (assessmentId) => {
+  const response = await api.get(`/candidate/assessments/${assessmentId}`);
+  return response.data;
+};
+
+export const saveAssessmentDraft = async (assessmentId, data) => {
+  const response = await api.post(`/candidate/assessments/${assessmentId}/save`, data);
+  return response.data;
+};
+
+export const submitAssessment = async (assessmentId, data) => {
+  const response = await api.post(`/candidate/assessments/${assessmentId}/submit`, data);
+  return response.data;
+};
+export const getCandidateDashboard = async () => {
+  const response = await api.get('/candidate/me/dashboard');
+  return response.data;
+};
+
+export const submitCandidateAssessment = async (data) => {
+  const response = await api.post('/candidate/me/submit', data);
+  return response.data;
+};
+
+export const getTasksForRole = async (role) => {
+  const response = await api.get(`/tasks/${encodeURIComponent(role)}`);
+  return response.data;
+};
+
+export const getAllTasks = async () => {
+  const response = await api.get('/tasks/');
+  return response.data;
+};
+
+export const getCandidateAssessments = async () => {
+  const response = await api.get('/candidate/assessments/');
+  return response.data;
+};
+
+export const assignTaskToCandidate = async (candidateId, data) => {
+  const response = await api.post(`/candidates/${candidateId}/assign-task`, data);
+  return response.data;
+};
+
+export const generateAiTask = async (data) => {
+  const response = await api.post('/tasks/generate-ai', data);
   return response.data;
 };
 

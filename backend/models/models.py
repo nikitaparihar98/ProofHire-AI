@@ -20,6 +20,10 @@ class Candidate(Base):
     
     hiring_recommendation = Column(String, default="Pending") # "Hire", "Strong Hire", "No Hire"
     ai_feedback = Column(Text, default="")
+    technical_score = Column(Float, default=0.0)
+    communication_score = Column(Float, default=0.0)
+    problem_solving_score = Column(Float, default=0.0)
+    recruiter_summary = Column(Text, default="")
     
     # Optional: store full raw submission data if needed
     submission_data = Column(JSON, default=dict)
@@ -56,7 +60,8 @@ class Interview(Base):
     interview_title = Column(String, default="Technical Interview")
     scheduled_time = Column(String, nullable=True) # ISO Datetime
     mode = Column(String, default="Online") # "Online" or "Offline"
-    status = Column(String, default="Scheduled") # "Scheduled", "Completed", "Cancelled"
+    meeting_link = Column(String, default="https://meet.google.com/ph-interview-room")
+    status = Column(String, default="Scheduled") # "Scheduled", "Upcoming", "Completed", "Cancelled", "Missed"
     notes = Column(Text, nullable=True)
     created_at = Column(String)
 
@@ -87,6 +92,13 @@ class TaskAssignment(Base):
     id = Column(Integer, primary_key=True, index=True)
     candidate_id = Column(Integer, ForeignKey("candidates.id"), index=True)
     task_id = Column(String, index=True)
-    status = Column(String, default="Assigned") # Assigned, In Progress, Submitted, Evaluated
+    status = Column(String, default="ASSIGNED") # ASSIGNED, IN_PROGRESS, SUBMITTED, EVALUATING, EVALUATED
+    difficulty = Column(String, default="Medium")
+    duration = Column(Integer, default=60) # minutes
+    custom_prompt = Column(Text, nullable=True)
+    custom_title = Column(String, nullable=True)
+    draft_answer = Column(Text, default="")
+    time_left_seconds = Column(Integer, nullable=True)
+    malpractice_log = Column(JSON, default=list)
     assigned_at = Column(String)
     submitted_at = Column(String, nullable=True)

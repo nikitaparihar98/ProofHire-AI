@@ -25,10 +25,23 @@ def get_candidate_dashboard(
     candidate = _get_candidate_for_user(current_user, db)
     assignment = _get_or_create_assignment(candidate, db)
 
+    if assignment.custom_title or assignment.custom_prompt:
+        assigned_task = {
+            "id": assignment.task_id or "custom",
+            "role": candidate.role or "Candidate",
+            "title": assignment.custom_title or "Custom Task",
+            "task_type": "coding",
+            "prompt": assignment.custom_prompt or "",
+            "evaluation_focus": ["Recruiter Requirements", "Task Completion"],
+            "time_limit_minutes": assignment.duration or 60,
+        }
+    else:
+        assigned_task = get_task_by_id(assignment.task_id)
+
     return {
         "user": current_user,
         "candidate": candidate,
-        "assigned_task": get_task_by_id(assignment.task_id),
+        "assigned_task": assigned_task,
         "assignment_id": assignment.id,
         "submission_status": assignment.status,
     }
@@ -110,3 +123,218 @@ def _get_or_create_assignment(
     db.commit()
     db.refresh(assignment)
     return assignment
+
+
+# ---------------------------------------------------------------------------
+# Candidate Assessments Router (Issue 2)
+# ---------------------------------------------------------------------------
+from typing import List, Any
+
+assessments_router = APIRouter(
+    prefix="/api/candidate/assessments",
+    tags=["candidate-assessments"],
+)
+
+@assessments_router.get("/", response_model=List[Any])
+def get_candidate_assessments(
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    require_role(current_user, "candidate")
+    candidate = _get_candidate_for_user(current_user, db)
+    assignments = db.query(models.TaskAssignment).filter(
+        models.TaskAssignment.candidate_id == candidate.id
+    ).order_by(models.TaskAssignment.id.desc()).all()
+    
+    results = []
+    for assignment in assignments:
+        if assignment.custom_title or assignment.custom_prompt:
+            task_details = {
+                "id": assignment.task_id or "custom",
+                "role": candidate.role,
+                "title": assignment.custom_title or "Custom Task",
+                "task_type": "coding",
+                "prompt": assignment.custom_prompt or "",
+                "evaluation_focus": ["Recruiter Requirements"],
+                "time_limit_minutes": assignment.duration or 60,
+            }
+        else:
+            task_details = get_task_by_id(assignment.task_id)
+            
+        results.append({
+            "id": assignment.id,
+            "candidate_id": assignment.candidate_id,
+            "task_id": assignment.task_id,
+            "status": assignment.status,
+            "difficulty": assignment.difficulty,
+            "duration": assignment.duration,
+            "custom_prompt": assignment.custom_prompt,
+            "custom_title": assignment.custom_title,
+            "draft_answer": assignment.draft_answer,
+            "time_left_seconds": assignment.time_left_seconds,
+            "assigned_at": assignment.assigned_at,
+            "submitted_at": assignment.submitted_at,
+            "task": task_details,
+            "candidate": {
+                "id": candidate.id,
+                "name": candidate.name,
+                "role": candidate.role,
+                "status": candidate.status,
+                "overall_score": candidate.overall_score,
+            }
+        })
+    return results
+
+@assessments_router.get("/{id}")
+def get_candidate_assessment_by_id(
+    id: int,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    require_role(current_user, "candidate")
+    candidate = _get_candidate_for_user(current_user, db)
+    assignment = db.query(models.TaskAssignment).filter(
+        models.TaskAssignment.id == id,
+        models.TaskAssignment.candidate_id == candidate.id
+    ).first()
+    
+    if not assignment:
+        raise HTTPException(status_code=404, detail="Assessment not found")
+        
+    if assignment.custom_title or assignment.custom_prompt:
+        task_details = {
+            "id": assignment.task_id or "custom",
+            "role": candidate.role,
+            "title": assignment.custom_title or "Custom Task",
+            "task_type": "coding",
+            "prompt": assignment.custom_prompt or "",
+            "evaluation_focus": ["Recruiter Requirements"],
+            "time_limit_minutes": assignment.duration or 60,
+        }
+    else:
+        task_details = get_task_by_id(assignment.task_id)
+        
+    return {
+        "id": assignment.id,
+        "candidate_id": assignment.candidate_id,
+        "task_id": assignment.task_id,
+        "status": assignment.status,
+        "difficulty": assignment.difficulty,
+        "duration": assignment.duration,
+        "custom_prompt": assignment.custom_prompt,
+        "custom_title": assignment.custom_title,
+        "draft_answer": assignment.draft_answer,
+        "time_left_seconds": assignment.time_left_seconds,
+        "assigned_at": assignment.assigned_at,
+        "submitted_at": assignment.submitted_at,
+        "task": task_details,
+        "candidate": {
+            "id": candidate.id,
+            "name": candidate.name,
+            "role": candidate.role,
+            "status": candidate.status,
+            "overall_score": candidate.overall_score,
+            "strengths": candidate.strengths,
+            "weaknesses": candidate.weaknesses,
+            "ai_feedback": candidate.ai_feedback,
+            "technical_score": candidate.technical_score,
+            "communication_score": candidate.communication_score,
+            "problem_solving_score": candidate.problem_solving_score,
+            "recruiter_summary": candidate.recruiter_summary,
+        }
+    }
+
+@assessments_router.post("/{id}/save")
+def save_candidate_assessment_draft(
+    id: int,
+    request: schemas.SaveDraftRequest,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    require_role(current_user, "candidate")
+    candidate = _get_candidate_for_user(current_user, db)
+    assignment = db.query(models.TaskAssignment).filter(
+        models.TaskAssignment.id == id,
+        models.TaskAssignment.candidate_id == candidate.id
+    ).first()
+    
+    if not assignment:
+        raise HTTPException(status_code=404, detail="Assessment not found")
+        
+    assignment.draft_answer = request.draft_answer
+    assignment.time_left_seconds = request.time_left_seconds
+    assignment.status = "IN_PROGRESS"
+    if request.malpractice_log:
+        assignment.malpractice_log = request.malpractice_log
+        
+    db.commit()
+    return {"message": "Draft saved successfully"}
+
+@assessments_router.post("/{id}/submit")
+def submit_candidate_assessment(
+    id: int,
+    request: schemas.AssessmentSubmitRequest,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    require_role(current_user, "candidate")
+    candidate = _get_candidate_for_user(current_user, db)
+    assignment = db.query(models.TaskAssignment).filter(
+        models.TaskAssignment.id == id,
+        models.TaskAssignment.candidate_id == candidate.id
+    ).first()
+    
+    if not assignment:
+        raise HTTPException(status_code=404, detail="Assessment not found")
+        
+    task_title = assignment.custom_title or (get_task_by_id(assignment.task_id).get("title") if assignment.task_id else "Assessment")
+    submission_data = {
+        "task_id": assignment.task_id or "custom",
+        "task_title": task_title,
+        "answer": request.final_answer,
+        "resume_score": 80.0,
+        "completion_time": "Completed",
+        "live_malpractice_flags": assignment.malpractice_log or [],
+    }
+    
+    from backend.services.llama_service import evaluate_candidate_mock
+    ai_result = evaluate_candidate_mock(
+        name=candidate.name,
+        role=candidate.role,
+        submission_data=submission_data,
+    )
+    
+    candidate.overall_score = ai_result.get("overall_score", 0.0)
+    candidate.strengths = ai_result.get("strengths", [])
+    candidate.weaknesses = ai_result.get("weaknesses", [])
+    candidate.hiring_recommendation = ai_result.get("hiring_recommendation", "Pending")
+    candidate.ai_feedback = ai_result.get("ai_feedback", "")
+    candidate.submission_data = submission_data
+    candidate.status = "Evaluated"
+    
+    # Structured breakdown scores
+    candidate.technical_score = round(candidate.overall_score * 0.95, 1)
+    candidate.communication_score = round(candidate.overall_score * 0.92, 1)
+    candidate.problem_solving_score = round(candidate.overall_score * 0.97, 1)
+    candidate.recruiter_summary = (
+        f"Automated AI Evaluation for {candidate.name} in role {candidate.role}.\n"
+        f"Key Strengths: {', '.join(candidate.strengths)}.\n"
+        f"Areas of improvement: {', '.join(candidate.weaknesses)}.\n"
+        f"Overall Recommendation: {candidate.hiring_recommendation}."
+    )
+    
+    assignment.draft_answer = request.final_answer
+    assignment.status = "Evaluated"
+    import datetime
+    assignment.submitted_at = datetime.datetime.utcnow().isoformat()
+    
+    db.commit()
+    db.refresh(candidate)
+    db.refresh(assignment)
+    
+    return {
+        "message": "Assessment submitted and evaluated successfully",
+        "candidate_id": candidate.id,
+        "assignment_id": assignment.id,
+    }
+

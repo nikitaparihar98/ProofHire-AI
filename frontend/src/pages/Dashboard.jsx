@@ -10,7 +10,7 @@ import {
   FilterX,
   Upload
 } from 'lucide-react';
-import { getActiveSessions, getHealth } from '../services/api';
+import { getActiveSessions, getApiErrorMessage } from '../services/api';
 import { Link } from 'react-router-dom';
 import useCandidates from '../hooks/useCandidates';
 import CandidateCard from '../components/CandidateCard';
@@ -40,7 +40,7 @@ export default function Dashboard() {
       setActiveError(null);
     } catch (err) {
       console.error("Active Sessions Fetch Error:", err);
-      setActiveError("Failed to fetch live assessment data.");
+      setActiveError(getApiErrorMessage(err, "Failed to fetch live assessment data"));
     } finally {
       setLoadingActive(false);
     }

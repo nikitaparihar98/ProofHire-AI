@@ -1,53 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 export default function InterviewSchedule() {
+  const { user } = useAuth();
   return (
     <>
       
-<aside className="fixed left-0 top-0 h-full w-[260px] bg-surface-container-lowest border-r border-outline-variant flex flex-col py-lg px-md space-y-base z-50">
-<div className="flex items-center px-sm mb-xl">
-<span className="text-headline-md font-headline-md font-bold text-primary mr-base">Recruit AI</span>
-</div>
-<nav className="flex-1 space-y-xs">
-<Link className="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all font-label-md text-label-md rounded-lg" to="/candidate-dashboard">
-<span className="material-symbols-outlined" data-icon="dashboard">dashboard</span>
-                Dashboard
-            </Link>
-<Link className="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all font-label-md text-label-md rounded-lg" to="/assessments-hub">
-<span className="material-symbols-outlined" data-icon="assignment">assignment</span>
-                Assessments
-            </Link>
-<Link className="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all font-label-md text-label-md rounded-lg" to="/tasks-management">
-<span className="material-symbols-outlined" data-icon="checklist">checklist</span>
-                Tasks
-            </Link>
-<Link className="flex items-center gap-md px-md py-sm bg-secondary-container text-on-secondary-container font-bold rounded-lg scale-[0.98] transition-transform duration-150 font-label-md text-label-md" to="/interview-schedule">
-<span className="material-symbols-outlined" data-icon="video_call" style={{"fontVariationSettings":"'FILL' 1"}}>video_call</span>
-                Interviews
-            </Link>
-<Link className="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all font-label-md text-label-md rounded-lg" to="/account-settings">
-<span className="material-symbols-outlined" data-icon="settings">settings</span>
-                Settings
-            </Link>
-</nav>
-<div className="pt-base border-t border-outline-variant">
-<Link className="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-all font-label-md text-label-md rounded-lg" to="#">
-<span className="material-symbols-outlined" data-icon="help">help</span>
-                Help Center
-            </Link>
-<div className="flex items-center gap-md px-md py-lg mt-base">
-<div className="w-8 h-8 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-bold text-label-sm">
-                    AJ
-                </div>
-<div className="flex flex-col">
-<span className="font-label-md text-label-md text-on-surface">Alex Johnson</span>
-<span className="font-body-sm text-body-sm text-on-surface-variant">Candidate Portal</span>
-</div>
-</div>
-</div>
-</aside>
-<main className="ml-[260px] min-h-screen p-margin-desktop max-w-[1440px]">
+<div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-5xl">
 <header className="mb-xl flex justify-between items-end">
 <div>
 <h1 className="font-headline-xl text-headline-xl text-primary tracking-tight">Interviews</h1>
@@ -191,15 +151,7 @@ export default function InterviewSchedule() {
                 </button>
 </div>
 </section>
-<footer className="w-full py-xl border-t border-outline-variant flex flex-col md:flex-row justify-between items-center mt-xl">
-<p className="font-label-sm text-label-sm text-on-surface-variant mb-md md:mb-0">© 2024 Recruit AI. All rights reserved.</p>
-<div className="flex gap-lg">
-<Link className="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors" to="#">Privacy Policy</Link>
-<Link className="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors" to="#">Terms of Service</Link>
-<Link className="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors" to="#">Contact Us</Link>
 </div>
-</footer>
-</main>
 
     </>
   );

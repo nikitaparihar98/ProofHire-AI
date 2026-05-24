@@ -211,7 +211,7 @@ export default function Messages() {
                </div>
             </div>
             <div className="flex-1 flex flex-col min-h-0">
-               <CandidateMessages candidateId={selectedCandidate.id} />
+               <CandidateMessages candidateId={selectedCandidate.id} onSent={fetchConversations} />
             </div>
           </div>
         ) : (

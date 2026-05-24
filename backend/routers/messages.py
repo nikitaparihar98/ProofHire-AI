@@ -13,6 +13,11 @@ router = APIRouter(
 
 @router.post("/send", response_model=schemas.MessageResponse)
 def send_message(request: schemas.MessageSendRequest, db: Session = Depends(get_db)):
+    if request.sender_type not in {"recruiter", "candidate"}:
+        raise HTTPException(status_code=422, detail="sender_type must be recruiter or candidate")
+    if not request.content.strip():
+        raise HTTPException(status_code=422, detail="Message content is required")
+
     # Verify candidate exists
     candidate = db.query(models.Candidate).filter(models.Candidate.id == request.candidate_id).first()
     if not candidate:
@@ -22,7 +27,7 @@ def send_message(request: schemas.MessageSendRequest, db: Session = Depends(get_
         candidate_id=request.candidate_id,
         sender_type=request.sender_type,
         sender_id=request.sender_id,
-        content=request.content,
+        content=request.content.strip(),
         timestamp=datetime.now().isoformat()
     )
     db.add(new_message)

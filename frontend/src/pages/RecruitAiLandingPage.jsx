@@ -22,7 +22,7 @@ export default function RecruitAiLandingPage() {
       <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-outline-variant/30">
         <div className="flex justify-between items-center w-full px-margin-desktop h-20 max-w-[1440px] mx-auto">
           <div className="flex items-center gap-xl">
-            <span className="font-headline-lg text-headline-sm md:text-headline-sm font-black text-primary tracking-tighter">RECRUIT AI</span>
+            <span className="font-headline-lg text-headline-sm md:text-headline-sm font-black text-primary tracking-tighter">ProofHire AI</span>
             <div className="hidden md:flex gap-lg">
               <Link className="text-secondary font-bold border-b-2 border-secondary pb-1 font-label-md text-label-md" to="#">About</Link>
             </div>
@@ -56,7 +56,7 @@ export default function RecruitAiLandingPage() {
                 Intelligence <span className="text-secondary">Redefined</span> for Modern Teams.
               </h1>
               <p className="font-body-lg text-on-surface-variant mb-xl max-w-xl leading-relaxed">
-                Recruit AI leverages advanced neural processing to bridge the gap between world-class talent and high-growth enterprises. Precision-engineered for efficiency, speed, and undeniable scale.
+                ProofHire AI leverages advanced neural processing to bridge the gap between world-class talent and high-growth enterprises. Precision-engineered for efficiency, speed, and undeniable scale.
               </p>
               {/* New Storytelling Snippet to fill gap */}
               <div className="flex items-start gap-md pt-8 border-t border-outline-variant/30">
@@ -73,7 +73,7 @@ export default function RecruitAiLandingPage() {
               <div className="relative w-full aspect-square md:aspect-video lg:aspect-square">
                 {/* Platform Preview Mockup */}
                 <div className="absolute inset-0 bg-gradient-to-br from-secondary/5 to-primary/5 rounded-[3rem] border border-white/50 backdrop-blur-sm overflow-hidden shadow-2xl animate-float">
-                  <img alt="Recruit AI Platform Interface" className="w-full h-full object-cover opacity-90 mix-blend-overlay" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDulBTcoHCbNpL_yx62ykmnf5Hw9SZifabqGC4qdHu_1QcgjZeyGckdAwVzHhYgQanmyWn5ueKCwnlQnL0ofqRhzWzkMUMV0DxvYn0bLE0LRV0A6E3Uvl7ELSuckfSmQxiJ7LH12g-IOXOjQ2b6rFvZ_skoI5ZvORNl5k066BwTOR8amiClKJx1imOii9Oaj4faPKsWx6kjWS5BmUBrXH4m-0Sgyeayw3yrIyLzchUmB6jB0h3c2t5xCjAcqQm8VMqaa24Qd4zg0sM"/>
+                  <img alt="ProofHire AI Platform Interface" className="w-full h-full object-cover opacity-90 mix-blend-overlay" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDulBTcoHCbNpL_yx62ykmnf5Hw9SZifabqGC4qdHu_1QcgjZeyGckdAwVzHhYgQanmyWn5ueKCwnlQnL0ofqRhzWzkMUMV0DxvYn0bLE0LRV0A6E3Uvl7ELSuckfSmQxiJ7LH12g-IOXOjQ2b6rFvZ_skoI5ZvORNl5k066BwTOR8amiClKJx1imOii9Oaj4faPKsWx6kjWS5BmUBrXH4m-0Sgyeayw3yrIyLzchUmB6jB0h3c2t5xCjAcqQm8VMqaa24Qd4zg0sM"/>
                   {/* Internal Floating Elements */}
                   <div className="absolute top-12 left-12 glass p-6 rounded-2xl shadow-xl max-w-[200px] border border-white/40">
                     <div className="flex items-center gap-2 mb-2">
@@ -114,7 +114,7 @@ export default function RecruitAiLandingPage() {
             <span className="text-secondary font-black tracking-[0.2em] text-label-md mb-4 block uppercase">Our Mission</span>
             <h2 className="font-headline-lg text-primary mb-8">Building the connective tissue of the global workforce.</h2>
             <p className="font-body-lg text-on-surface-variant leading-relaxed mb-12">
-              Recruit AI was born from a simple observation: the brightest minds and the most impactful projects are often ships passing in the night. We use artificial intelligence not to replace human judgment, but to supercharge it, ensuring that every hire is a milestone in human potential.
+              ProofHire AI was born from a simple observation: the brightest minds and the most impactful projects are often ships passing in the night. We use artificial intelligence not to replace human judgment, but to supercharge it, ensuring that every hire is a milestone in human potential.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-xl text-left">
               <div className="p-6 rounded-2xl border border-outline-variant/30 hover:border-secondary transition-colors">
@@ -260,7 +260,7 @@ export default function RecruitAiLandingPage() {
         <div className="max-w-[1440px] mx-auto px-margin-desktop">
           <div className="flex flex-col md:flex-row justify-between items-start gap-xl pb-20">
             <div className="flex flex-col gap-md max-w-xs">
-              <span className="font-headline-sm text-headline-sm font-black text-primary tracking-tighter">RECRUIT AI</span>
+              <span className="font-headline-sm text-headline-sm font-black text-primary tracking-tighter">ProofHire AI</span>
               <p className="font-body-sm text-on-surface-variant leading-relaxed">
                 Precision engineering for the global talent economy. We believe in a world where the right talent always finds the right opportunity.
               </p>
@@ -295,7 +295,7 @@ export default function RecruitAiLandingPage() {
             </div>
           </div>
           <div className="pt-10 border-t border-outline-variant/30 flex flex-col md:flex-row justify-between items-center gap-md">
-            <span className="font-body-sm text-on-surface-variant/50">© 2024 Recruit AI Inc. Built for the future of work.</span>
+            <span className="font-body-sm text-on-surface-variant/50">© 2024 ProofHire AI Inc. Built for the future of work.</span>
             <div className="flex gap-lg">
               <Link className="text-[11px] font-bold text-on-surface-variant/60 hover:text-primary transition-colors uppercase tracking-widest" to="#">System Normal</Link>
               <Link className="text-[11px] font-bold text-on-surface-variant/60 hover:text-primary transition-colors uppercase tracking-widest" to="#">Security Certs</Link>

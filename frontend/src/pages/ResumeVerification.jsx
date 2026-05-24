@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 export default function ResumeVerification() {
+  const { user } = useAuth();
   const [step, setStep] = useState(1);
   const navigate = useNavigate();
 
@@ -66,7 +68,7 @@ export default function ResumeVerification() {
             <div className="space-y-lg mb-xl">
               <div>
                 <label className="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Full Name</label>
-                <input type="text" defaultValue="Alex Johnson" className="w-full p-md border border-outline-variant rounded-lg font-body-md bg-surface-container-lowest" />
+                <input type="text" defaultValue={user?.name || ''} className="w-full p-md border border-outline-variant rounded-lg font-body-md bg-surface-container-lowest" />
               </div>
 
               <div>

@@ -66,8 +66,9 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",
         "http://127.0.0.1:5173",
-        "*" # Fallback for other environments
-    ], 
+        "http://localhost:5175",
+        "http://127.0.0.1:5175",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -93,6 +94,7 @@ app.include_router(submissions.router)
 app.include_router(tasks.router)
 app.include_router(auth.router)
 app.include_router(candidate_portal.router)
+app.include_router(candidate_portal.assessments_router)
 app.include_router(live_sessions.router)
 app.include_router(analytics.router)
 app.include_router(notifications.router)
@@ -105,5 +107,9 @@ def read_root():
 
 @app.get("/health")
 def health_check():
+    return {"status": "ok"}
+
+@app.get("/api/health")
+def api_health_check():
     return {"status": "ok"}
 

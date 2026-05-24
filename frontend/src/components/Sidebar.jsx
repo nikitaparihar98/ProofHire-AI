@@ -13,13 +13,15 @@ import {
   ChevronRight,
   BrainCircuit,
   Calendar,
-  MessageSquare
+  MessageSquare,
+  ClipboardList
 } from 'lucide-react';
 
 export default function Sidebar({ isOpen, toggleSidebar }) {
   const menuItems = [
     { name: 'Dashboard', icon: <LayoutDashboard size={20} />, path: '/recruiter-dashboard' },
     { name: 'Active Assessments', icon: <Activity size={20} />, path: '/assessments' },
+    { name: 'Assign Tasks', icon: <ClipboardList size={20} />, path: '/assign-tasks' },
     { name: 'Candidates', icon: <Users size={20} />, path: '/candidates' },
     { name: 'Compare', icon: <BarChart3 size={20} />, path: '/compare' },
     { name: 'Interviews', icon: <Calendar size={20} />, path: '/interviews' },

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Camera, AlertTriangle, Send, Clock, Eye, ShieldCheck, Info, Loader2, BrainCircuit, Lock } from 'lucide-react';
 import { startLiveSession, completeLiveSession, evaluateCandidate } from '../services/api';
 import useLiveAssessment from '../hooks/useLiveAssessment';
+import { useAuth } from '../context/AuthContext';
 
 /**
  * CandidateTest Component
@@ -9,9 +10,16 @@ import useLiveAssessment from '../hooks/useLiveAssessment';
  * Features: Secure test portal, webcam proctoring, malpractice logging, auto-submission.
  */
 export default function CandidateTest() {
+  const { user } = useAuth();
   const [step, setStep] = useState('setup'); // setup, active, completed
-  const [formData, setFormData] = useState({ name: '', role: 'Frontend Developer' });
+  const [formData, setFormData] = useState({ name: user?.name || '', email: user?.email || '', role: user?.role || 'Frontend Developer' });
   const [taskData, setTaskData] = useState('');
+
+  useEffect(() => {
+    if (user) {
+      setFormData(prev => ({ ...prev, name: user.name || prev.name, email: user.email || prev.email, role: user.role || prev.role }));
+    }
+  }, [user]);
   const [sessionId, setSessionId] = useState(null);
   
   const [timeLeft, setTimeLeft] = useState(3600); // 60 mins
@@ -233,7 +241,7 @@ export default function CandidateTest() {
                         required
                         disabled={isInitializing}
                         type="text" 
-                        placeholder="e.g. Alexander Knight"
+                        placeholder="e.g. Jane Doe"
                         className="w-full px-6 py-4.5 bg-slate-50 border border-slate-200 rounded-[1.5rem] text-slate-900 font-bold focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-300"
                         value={formData.name}
                         onChange={e => setFormData({...formData, name: e.target.value})}
@@ -245,7 +253,7 @@ export default function CandidateTest() {
                         required
                         disabled={isInitializing}
                         type="email" 
-                        placeholder="alex.knight@example.com"
+                        placeholder="jane.doe@example.com"
                         className="w-full px-6 py-4.5 bg-slate-50 border border-slate-200 rounded-[1.5rem] text-slate-900 font-bold focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-300"
                         value={formData.email}
                         onChange={e => setFormData({...formData, email: e.target.value})}

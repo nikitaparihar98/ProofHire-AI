@@ -133,6 +133,65 @@ def generate_rejection_feedback(request: dict, db: Session = Depends(get_db)):
         "encouragement": "We encourage them to keep building and apply again in the future!"
     }
 
+@router.post("/{candidate_id}/assign-task")
+def assign_task_to_candidate(
+    candidate_id: int,
+    request: schemas.RecruiterTaskAssignRequest,
+    db: Session = Depends(get_db)
+):
+    candidate = db.query(models.Candidate).filter(models.Candidate.id == candidate_id).first()
+    if not candidate:
+        raise HTTPException(status_code=404, detail="Candidate not found")
+        
+    # Create TaskAssignment
+    import datetime
+    db_assignment = models.TaskAssignment(
+        candidate_id=candidate_id,
+        task_id=request.task_id,
+        status="ASSIGNED",
+        difficulty=request.difficulty,
+        duration=request.duration,
+        custom_prompt=request.custom_prompt,
+        custom_title=request.custom_title,
+        assigned_at=datetime.datetime.utcnow().isoformat(),
+    )
+    db.add(db_assignment)
+    
+    # Update candidate status to Not Attended so dashboard registers it
+    candidate.status = "Not Attended"
+    
+    # Create recruiter notification
+    create_notification(
+        db,
+        "Task Assigned",
+        f"Assigned task '{request.custom_title or request.task_id}' to {candidate.name}.",
+        "info"
+    )
+    
+    # Create Recruiter Chat Message
+    chat_msg = models.Message(
+        candidate_id=candidate_id,
+        sender_type="recruiter",
+        sender_id="REC-001",
+        content=(
+            f"Hello {candidate.name}, I have assigned a new technical assessment for you: "
+            f"'{request.custom_title or request.task_id}' ({request.difficulty}, {request.duration} mins). "
+            f"Please complete it using the 'Start Assessment' button in your candidate dashboard."
+        ),
+        timestamp=datetime.datetime.utcnow().isoformat()
+    )
+    db.add(chat_msg)
+    
+    db.commit()
+    db.refresh(db_assignment)
+    db.refresh(candidate)
+    
+    return {
+        "message": "Task assigned successfully",
+        "assignment_id": db_assignment.id,
+        "candidate": candidate
+    }
+
 @router.get("/{candidate_id}", response_model=schemas.CandidateResponse)
 def get_candidate(candidate_id: int, db: Session = Depends(get_db)):
     """Retrieve a single candidate by ID"""
@@ -140,3 +199,4 @@ def get_candidate(candidate_id: int, db: Session = Depends(get_db)):
     if not candidate:
         raise HTTPException(status_code=404, detail="Candidate not found")
     return candidate
+

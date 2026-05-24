@@ -4,7 +4,7 @@ from typing import Dict, List
 TASK_BANK: List[Dict] = [
     {
         "id": "backend-api-001",
-        "role": "Backend Engineer",
+        "role": "Backend Developer",
         "title": "Build a Candidate Submission API",
         "task_type": "coding",
         "prompt": (
@@ -19,6 +19,24 @@ TASK_BANK: List[Dict] = [
             "response clarity",
         ],
         "time_limit_minutes": 60,
+    },
+    {
+        "id": "backend-auth-002",
+        "role": "Backend Developer",
+        "title": "Design Authenticated Recruiter Endpoints",
+        "task_type": "system-design",
+        "prompt": (
+            "Design protected API routes for recruiters to list candidates, review reports, "
+            "and update decisions. Include token validation, role checks, and database error handling."
+        ),
+        "evaluation_focus": [
+            "authentication",
+            "authorization",
+            "API contracts",
+            "database transactions",
+            "failure handling",
+        ],
+        "time_limit_minutes": 75,
     },
     {
         "id": "frontend-ui-001",
@@ -38,6 +56,24 @@ TASK_BANK: List[Dict] = [
         "time_limit_minutes": 60,
     },
     {
+        "id": "fullstack-workflow-001",
+        "role": "Full Stack Developer",
+        "title": "Implement an End-to-End Assessment Flow",
+        "task_type": "coding",
+        "prompt": (
+            "Build a small full-stack workflow where a candidate receives an assessment, "
+            "submits an answer, and a recruiter can view the evaluated result."
+        ),
+        "evaluation_focus": [
+            "frontend state",
+            "backend API design",
+            "database persistence",
+            "auth-aware UX",
+            "integration quality",
+        ],
+        "time_limit_minutes": 90,
+    },
+    {
         "id": "data-analyst-001",
         "role": "Data Analyst",
         "title": "Analyze Hiring Funnel Drop-Off",
@@ -53,6 +89,42 @@ TASK_BANK: List[Dict] = [
             "recommendation quality",
         ],
         "time_limit_minutes": 45,
+    },
+    {
+        "id": "aiml-eval-001",
+        "role": "AI/ML Engineer",
+        "title": "Evaluate an AI Screening Model",
+        "task_type": "analysis",
+        "prompt": (
+            "Given a model used to screen candidates, identify useful evaluation metrics, "
+            "fairness risks, failure cases, and an experiment plan to improve reliability."
+        ),
+        "evaluation_focus": [
+            "model evaluation",
+            "bias and fairness",
+            "experiment design",
+            "technical depth",
+            "communication",
+        ],
+        "time_limit_minutes": 75,
+    },
+    {
+        "id": "uiux-design-001",
+        "role": "UI/UX Designer",
+        "title": "Design a Candidate Assessment Experience",
+        "task_type": "design",
+        "prompt": (
+            "Propose a candidate assessment flow that reduces anxiety while preserving test integrity. "
+            "Describe screens, interaction states, accessibility considerations, and success metrics."
+        ),
+        "evaluation_focus": [
+            "user empathy",
+            "interaction design",
+            "accessibility",
+            "trade-off reasoning",
+            "measurement",
+        ],
+        "time_limit_minutes": 60,
     },
     {
         "id": "product-manager-001",
@@ -80,6 +152,13 @@ def get_all_tasks() -> List[Dict]:
 
 def get_tasks_for_role(role: str) -> List[Dict]:
     normalized_role = role.strip().lower()
+    aliases = {
+        "backend engineer": "backend developer",
+        "frontend engineer": "frontend developer",
+        "machine learning engineer": "ai/ml engineer",
+        "ml engineer": "ai/ml engineer",
+    }
+    normalized_role = aliases.get(normalized_role, normalized_role)
     matching_tasks = [
         task for task in TASK_BANK
         if task["role"].lower() == normalized_role

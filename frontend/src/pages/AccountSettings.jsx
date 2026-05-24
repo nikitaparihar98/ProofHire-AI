@@ -1,14 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 export default function AccountSettings() {
+  const { user } = useAuth();
   return (
     <>
       
 {/* SideNavBar (Authority: JSON) */}
 <nav className="bg-surface-container-lowest dark:bg-surface-container-low fixed left-0 top-0 h-full w-[260px] border-r border-outline-variant dark:border-outline flex flex-col py-lg px-md space-y-base z-40">
 <div className="mb-xl px-xs">
-<h1 className="text-headline-md font-headline-md font-bold text-primary dark:text-on-primary-fixed">Recruit AI</h1>
+<h1 className="text-headline-md font-headline-md font-bold text-primary dark:text-on-primary-fixed">ProofHire AI</h1>
 <p className="font-body-sm text-body-sm text-on-surface-variant">Candidate Portal</p>
 </div>
 <div className="flex-1 space-y-xs">
@@ -37,7 +39,7 @@ export default function AccountSettings() {
 <Link className="flex items-center gap-md p-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" to="#">
 <span className="material-symbols-outlined" data-icon="account_circle">account_circle</span>
 <div className="flex flex-col">
-<span className="font-label-md text-label-md">Alex Johnson</span>
+<span className="font-label-md text-label-md">{user?.name}</span>
 <span className="font-body-sm text-body-sm opacity-70">View Profile</span>
 </div>
 </Link>
@@ -89,16 +91,16 @@ export default function AccountSettings() {
 <div className="flex flex-col md:flex-row gap-lg">
 <div className="flex-1 space-y-xs">
 <label className="font-label-md text-label-md text-on-surface-variant">Full Name</label>
-<input className="w-full p-sm border border-outline-variant rounded bg-white font-body-md text-body-md" type="text" value="Alex Johnson"/>
+<input className="w-full p-sm border border-outline-variant rounded bg-white font-body-md text-body-md" type="text" defaultValue={user?.name || ''}/>
 </div>
 <div className="flex-1 space-y-xs">
 <label className="font-label-md text-label-md text-on-surface-variant">Preferred Name</label>
-<input className="w-full p-sm border border-outline-variant rounded bg-white font-body-md text-body-md" placeholder="Alex" type="text"/>
+<input className="w-full p-sm border border-outline-variant rounded bg-white font-body-md text-body-md" placeholder={user?.name?.split(' ')[0] || ''} type="text"/>
 </div>
 </div>
 <div className="space-y-xs">
 <label className="font-label-md text-label-md text-on-surface-variant">Email Address</label>
-<input className="w-full p-sm border border-outline-variant rounded bg-white font-body-md text-body-md" type="email" value="alex.johnson@example.com"/>
+<input className="w-full p-sm border border-outline-variant rounded bg-white font-body-md text-body-md" type="email" defaultValue={user?.email || ''}/>
 </div>
 <div className="pt-md flex justify-end">
 <button onClick={() => alert('This feature is coming soon!')} className="px-xl py-sm bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:opacity-90 transition-opacity">Save Changes</button>
@@ -199,7 +201,7 @@ export default function AccountSettings() {
 </div>
 {/* Footer (Authority: JSON) */}
 <footer className="w-full py-xl px-margin-desktop flex flex-col md:flex-row justify-between items-center max-w-[1440px] mx-auto bg-surface-container-low dark:bg-surface-container-lowest border-t border-outline-variant dark:border-outline mt-auto">
-<p className="font-label-sm text-label-sm text-on-surface-variant dark:text-outline mb-md md:mb-0">© 2024 Recruit AI. All rights reserved.</p>
+<p className="font-label-sm text-label-sm text-on-surface-variant dark:text-outline mb-md md:mb-0">© 2024 ProofHire AI. All rights reserved.</p>
 <div className="flex gap-lg">
 <Link className="font-label-sm text-label-sm text-on-surface-variant dark:text-outline hover:text-secondary transition-colors" to="#">Privacy Policy</Link>
 <Link className="font-label-sm text-label-sm text-on-surface-variant dark:text-outline hover:text-secondary transition-colors" to="#">Terms of Service</Link>

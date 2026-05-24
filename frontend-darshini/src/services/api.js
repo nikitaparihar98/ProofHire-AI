@@ -1,12 +1,71 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api';
+const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api').replace(/\/$/, '');
 
 const api = axios.create({
   baseURL: API_BASE_URL,
+  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
+});
+
+const getStoredToken = () => {
+  const directToken =
+    localStorage.getItem('access_token') ||
+    localStorage.getItem('authToken') ||
+    localStorage.getItem('token');
+
+  if (directToken) return directToken;
+
+  try {
+    const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+    return storedUser.access_token || storedUser.token || null;
+  } catch {
+    return null;
+  }
+};
+
+const getFullRequestUrl = (config = {}) => {
+  if (!config.url) return config.baseURL || API_BASE_URL;
+  if (/^https?:\/\//i.test(config.url)) return config.url;
+  return `${(config.baseURL || API_BASE_URL).replace(/\/$/, '')}/${config.url.replace(/^\//, '')}`;
+};
+
+const getLoopbackFallbackBaseUrl = (baseUrl = API_BASE_URL) => {
+  if (baseUrl.includes('://localhost')) {
+    return baseUrl.replace('://localhost', '://127.0.0.1');
+  }
+  if (baseUrl.includes('://127.0.0.1')) {
+    return baseUrl.replace('://127.0.0.1', '://localhost');
+  }
+  return null;
+};
+
+export const getApiErrorMessage = (error, fallback = 'Failed to load dashboard data') => {
+  if (error?.response) {
+    const detail = error.response.data?.detail || error.response.data?.message || error.response.statusText;
+    return `${fallback}: ${error.response.status} ${detail}`;
+  }
+
+  const requestUrl = getFullRequestUrl(error?.config);
+  if (error?.code === 'ECONNABORTED') {
+    return `${fallback}: request timed out while contacting ${requestUrl}`;
+  }
+
+  if (error?.request) {
+    return `${fallback}: could not reach backend at ${requestUrl}. Confirm FastAPI is running and CORS allows this frontend origin.`;
+  }
+
+  return `${fallback}: ${error?.message || 'Unknown error'}`;
+};
+
+api.interceptors.request.use((config) => {
+  const token = getStoredToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
 });
 
 // Robust health check - ensures we can reach the backend
@@ -26,13 +85,27 @@ export const getHealth = async () => {
 // Add a response interceptor for debugging
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
+    const fallbackBaseUrl = getLoopbackFallbackBaseUrl(error.config?.baseURL);
+    if (
+      error.code === 'ERR_NETWORK' &&
+      fallbackBaseUrl &&
+      !error.config?._retriedWithLoopbackFallback
+    ) {
+      const retryConfig = {
+        ...error.config,
+        baseURL: fallbackBaseUrl,
+        _retriedWithLoopbackFallback: true,
+      };
+      return api.request(retryConfig);
+    }
+
     console.error('API Error:', {
-      url: error.config?.url,
+      url: getFullRequestUrl(error.config),
       method: error.config?.method,
       status: error.response?.status,
       data: error.response?.data,
-      message: error.message
+      message: getApiErrorMessage(error)
     });
     return Promise.reject(error);
   }

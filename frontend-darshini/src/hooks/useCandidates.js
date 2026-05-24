@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getCandidates } from '../services/api';
+import { getApiErrorMessage, getCandidates } from '../services/api';
 
 /**
  * useCandidates hook - Centralized data fetching for the ATS.
@@ -28,7 +28,7 @@ export default function useCandidates(filterStatus = 'All') {
       setCandidates(data);
     } catch (err) {
       console.error("[useCandidates] Fetch Error:", err);
-      setError(err.message || "Failed to load candidates");
+      setError(getApiErrorMessage(err, "Failed to load candidates"));
     } finally {
       setLoading(false);
     }
