@@ -122,7 +122,7 @@ export default function AssignTasks() {
       }
       payload.task_id = selectedTaskId;
     } else {
-      if (!customTitle.strip() || !customPrompt.strip()) {
+      if (!(customTitle || "").trim() || !(customPrompt || "").trim()) {
         setError('Please generate or enter a custom AI title and prompt.');
         setAssigning(false);
         return;

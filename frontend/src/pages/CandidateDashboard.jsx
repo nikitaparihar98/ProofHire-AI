@@ -163,44 +163,53 @@ export default function CandidateDashboard() {
                     </div>
                   </div>
 
-                  {isEvaluated ? (
-                    <div className="rounded-2xl bg-emerald-50 border border-emerald-100 p-5">
-                      <h4 className="font-bold text-emerald-900">AI Evaluation Complete</h4>
-                      <p className="mt-2 text-sm text-emerald-800">{candidate?.ai_feedback}</p>
-                      <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                        <div>
-                          <p className="font-bold text-emerald-900">Strengths</p>
-                          <ul className="mt-2 list-disc pl-5 text-emerald-800">
-                            {(candidate?.strengths || []).map((item) => <li key={item}>{item}</li>)}
-                          </ul>
-                        </div>
-                        <div>
-                          <p className="font-bold text-emerald-900">Improvements</p>
-                          <ul className="mt-2 list-disc pl-5 text-emerald-800">
-                            {(candidate?.weaknesses || []).map((item) => <li key={item}>{item}</li>)}
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                      <textarea
-                        value={answer}
-                        onChange={(event) => setAnswer(event.target.value)}
-                        rows={10}
-                        className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10"
-                        placeholder="Write your answer, approach, code, SQL, analysis, or design rationale here..."
-                      />
-                      <button
-                        type="submit"
-                        disabled={submitting || answer.trim().length < 20}
-                        className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-indigo-100 disabled:opacity-50"
-                      >
-                        {submitting ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
-                        Submit for AI Evaluation
-                      </button>
-                    </form>
-                  )}
+
+
+{isEvaluated ? (
+  <div className="rounded-2xl bg-emerald-50 border border-emerald-100 p-5">
+    <h4 className="font-bold text-emerald-900">AI Evaluation Complete</h4>
+    <p className="mt-2 text-sm text-emerald-800">{candidate?.ai_feedback}</p>
+    <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+      <div>
+        <p className="font-bold text-emerald-900">Strengths</p>
+        <ul className="mt-2 list-disc pl-5 text-emerald-800">
+          {(candidate?.strengths || []).map((item) => <li key={item}>{item}</li>)}
+        </ul>
+      </div>
+      <div>
+        <p className="font-bold text-emerald-900">Improvements</p>
+        <ul className="mt-2 list-disc pl-5 text-emerald-800">
+          {(candidate?.weaknesses || []).map((item) => <li key={item}>{item}</li>)}
+        </ul>
+      </div>
+    </div>
+  </div>
+) : dashboard?.status === 'in_progress' ? (
+  <form onSubmit={handleSubmit} className="space-y-4">
+    <textarea
+      value={answer}
+      onChange={(event) => setAnswer(event.target.value)}
+      rows={10}
+      className="w-full rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10"
+      placeholder="Write your answer, approach, code, SQL, analysis, or design rationale here..."
+    />
+    <button
+      type="submit"
+      disabled={submitting || answer.trim().length < 20}
+      className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-indigo-100 disabled:opacity-50"
+    >
+      {submitting ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
+      Submit for AI Evaluation
+    </button>
+  </form>
+) : (
+  <button
+    onClick={() => navigate(`/candidate/assessments/${dashboard?.assignment_id}`)}
+    className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white shadow-lg"
+  >
+    Start Assessment
+  </button>
+)}
                 </div>
               </>
             )}

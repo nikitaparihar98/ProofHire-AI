@@ -69,7 +69,7 @@ def get_current_user(
 
 
 def require_role(user: models.User, role: str) -> None:
-    if user.role != role:
+    if user.role.lower() != role.lower():
         raise HTTPException(status_code=403, detail=f"{role.title()} access required")
 
 

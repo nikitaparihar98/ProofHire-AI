@@ -28,9 +28,9 @@ export default function ProtectedRoute({ children, role, allowedRoles = [] }) {
   const roles = allowedRoles.length > 0 ? allowedRoles : role ? [role] : [];
 
   // Role restriction – redirect to appropriate dashboard if role mismatch
-  if (roles.length && !roles.includes(user.role)) {
+  if (roles.length && !roles.map(r => r.toLowerCase()).includes(user.role?.toLowerCase())) {
     const redirectPath =
-      user.role === "recruiter" ? "/recruiter-dashboard" : "/candidate/dashboard";
+      user.role?.toLowerCase() === "recruiter" ? "/recruiter-dashboard" : "/candidate/dashboard";
     return <Navigate to={redirectPath} replace />;
   }
 

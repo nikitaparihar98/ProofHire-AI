@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Camera, AlertTriangle, Send, Clock, Eye, ShieldCheck, Info, Loader2, BrainCircuit, Lock } from 'lucide-react';
-import { startLiveSession, completeLiveSession, evaluateCandidate } from '../services/api';
+import { startLiveSession, completeLiveSession, evaluateCandidate, getLiveSession } from '../services/api';
 import useLiveAssessment from '../hooks/useLiveAssessment';
 import { useAuth } from '../context/AuthContext';
 
@@ -10,17 +11,53 @@ import { useAuth } from '../context/AuthContext';
  * Features: Secure test portal, webcam proctoring, malpractice logging, auto-submission.
  */
 export default function CandidateTest() {
-  const { user } = useAuth();
+  const { sessionId: paramSessionId } = useParams();
+  const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
+  
   const [step, setStep] = useState('setup'); // setup, active, completed
   const [formData, setFormData] = useState({ name: user?.name || '', email: user?.email || '', role: user?.role || 'Frontend Developer' });
   const [taskData, setTaskData] = useState('');
+  const [sessionId, setSessionId] = useState(paramSessionId || null);
+
+  // Authentication and role redirection check
+  useEffect(() => {
+    if (!authLoading) {
+      if (!user) {
+        navigate('/login');
+      } else if (user.role?.toLowerCase() !== 'candidate') {
+        navigate('/recruiter-dashboard');
+      }
+    }
+  }, [user, authLoading, navigate]);
+
+  // Load session from URL parameters if available
+  useEffect(() => {
+    if (paramSessionId) {
+      setSessionId(paramSessionId);
+      getLiveSession(paramSessionId)
+        .then((data) => {
+          if (data && data.status === 'in_progress') {
+            setFormData({
+              name: data.candidate_name,
+              email: user?.email || '',
+              role: data.role
+            });
+            setStep('active');
+            startCamera();
+          }
+        })
+        .catch(err => {
+          console.error("Failed to load live session:", err);
+        });
+    }
+  }, [paramSessionId, user]);
 
   useEffect(() => {
-    if (user) {
+    if (user && step === 'setup') {
       setFormData(prev => ({ ...prev, name: user.name || prev.name, email: user.email || prev.email, role: user.role || prev.role }));
     }
-  }, [user]);
-  const [sessionId, setSessionId] = useState(null);
+  }, [user, step]);
   
   const [timeLeft, setTimeLeft] = useState(3600); // 60 mins
   const [isSubmitting, setIsSubmitting] = useState(false);

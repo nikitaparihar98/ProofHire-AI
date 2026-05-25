@@ -14,8 +14,7 @@ export default function ScoreChart({ score }) {
   const COLORS = [color, '#f1f5f9']; // color and slate-100
 
   return (
-    <div className="relative w-32 h-32 flex items-center justify-center">
-      <ResponsiveContainer width="100%" height="100%">
+<div className="relative w-32 h-32 min-w-[128px] min-h-[128px] flex items-center justify-center">      <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
             data={data}

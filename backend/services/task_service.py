@@ -151,32 +151,36 @@ def get_all_tasks() -> List[Dict]:
 
 
 def get_tasks_for_role(role: str) -> List[Dict]:
-    normalized_role = role.strip().lower()
+    # Accept roles with dashes as substitute for slashes
+    normalized_role = role.replace("-", "/").strip().lower()
+
     aliases = {
         "backend engineer": "backend developer",
         "frontend engineer": "frontend developer",
         "machine learning engineer": "ai/ml engineer",
         "ml engineer": "ai/ml engineer",
     }
+
     normalized_role = aliases.get(normalized_role, normalized_role)
+
     matching_tasks = [
         task for task in TASK_BANK
         if task["role"].lower() == normalized_role
     ]
 
-    if matching_tasks:
-        return matching_tasks
-
-    return [TASK_BANK[0]]
-
-
-def assign_task_for_role(role: str) -> Dict:
-    return get_tasks_for_role(role)[0]
+    return matching_tasks
 
 
 def get_task_by_id(task_id: str) -> Dict:
     for task in TASK_BANK:
         if task["id"] == task_id:
             return task
+
+    return TASK_BANK[0]
+def assign_task_for_role(role: str) -> Dict:
+    tasks = get_tasks_for_role(role)
+
+    if tasks:
+        return tasks[0]
 
     return TASK_BANK[0]

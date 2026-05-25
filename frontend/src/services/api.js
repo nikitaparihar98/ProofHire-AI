@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = 'http://localhost:8000/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -170,7 +170,9 @@ export const submitCandidateAssessment = async (data) => {
 };
 
 export const getTasksForRole = async (role) => {
-  const response = await api.get(`/tasks/${encodeURIComponent(role)}`);
+  // Ensure role does not contain '/' which FastAPI treats as path separator
+  const sanitizedRole = role.replace(/\//g, '-');
+  const response = await api.get(`/tasks/${encodeURIComponent(sanitizedRole)}`);
   return response.data;
 };
 
@@ -241,7 +243,6 @@ export const clearAllNotifications = async () => {
   return response.data;
 };
 
-// Interview APIs
 export const scheduleInterview = async (data) => {
   const response = await api.post('/interviews/schedule', data);
   return response.data;
@@ -253,9 +254,20 @@ export const getInterviews = async () => {
 };
 
 export const updateInterview = async (id, status) => {
-  const response = await api.patch(`/interviews/${id}?status=${status}`);
+  const response = await api.patch(
+    `/interviews/${id}?status=${status}`
+  );
+
   return response.data;
 };
+
+export const getCandidateInterviews = async (candidateId) => {
+  const response = await api.get(`/interviews/${candidateId}`);
+  return response.data;
+};
+
+// Interview APIs
+
 
 // Messaging APIs
 export const sendMessage = async (data) => {

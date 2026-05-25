@@ -152,7 +152,7 @@ export default function CandidateAssessmentPage() {
               : data.malpractice_log;
             setMalpracticeLog(Array.isArray(parsed) ? parsed : []);
           } catch {
-            setMaltrackLog([]);
+            setMalpracticeLog([]);
           }
         }
       } catch (e) {
@@ -355,10 +355,12 @@ export default function CandidateAssessmentPage() {
       <ProctoringOverlay visible={showProctor} onClose={() => setShowProctor(false)} />
       
       {/* Evaluation Process Overlay */}
-      <EvaluationOverlay steps={evalSteps} onFinish={() => {
-        setShowEval(false);
-        navigate(`/candidate/results/${assessmentId}`);
-      }} />
+      {showEval && (
+        <EvaluationOverlay steps={evalSteps} onFinish={() => {
+          setShowEval(false);
+          navigate(`/candidate/results/${assessmentId}`);
+        }} />
+      )}
       
     </div>
   );
