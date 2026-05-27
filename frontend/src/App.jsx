@@ -51,6 +51,7 @@ function AppRoutes() {
       <Route path="/candidate/results/:assessmentId" element={<ProtectedRoute role="candidate"><CandidateLayout><AIResults /></CandidateLayout></ProtectedRoute>} />
       <Route path="/candidate/messages" element={<ProtectedRoute role="candidate"><CandidateLayout><CandidateMessagesPage /></CandidateLayout></ProtectedRoute>} />
       <Route path="/candidate/profile" element={<ProtectedRoute role="candidate"><CandidateLayout><CandidateProfile /></CandidateLayout></ProtectedRoute>} />
+      <Route path="/candidate/settings" element={<ProtectedRoute role="candidate"><CandidateLayout><Settings /></CandidateLayout></ProtectedRoute>} />
 
       <Route path="/candidate-dashboard" element={<Navigate to="/candidate/dashboard" replace />} />
       <Route path="/candidate-profile" element={<Navigate to="/candidate/profile" replace />} />

@@ -3,12 +3,14 @@ import { Bell, Search, User, LogOut, Settings, CreditCard, Shield, Loader } from
 import { Link, useNavigate } from 'react-router-dom';
 import NotificationCenter from './NotificationCenter';
 import { getCandidates } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 export default function Header() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const dropdownRef = useRef(null);
   const searchRef = useRef(null);
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   // Search states
   const [searchQuery, setSearchQuery] = useState('');
@@ -113,10 +115,8 @@ export default function Header() {
   }, [searchQuery, candidates]);
 
   const handleLogout = () => {
-    alert("Logging out...");
-    localStorage.removeItem('user');
-    window.dispatchEvent(new Event('storage'));
-    navigate('/login');
+    logout();
+    navigate('/');
   };
 
   return (

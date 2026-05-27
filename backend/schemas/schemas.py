@@ -188,6 +188,7 @@ class InterviewResponse(BaseModel):
 # Message Schemas
 class MessageSendRequest(BaseModel):
     candidate_id: int
+    recruiter_id: Optional[str] = "REC-001"
     sender_type: str # "recruiter" or "candidate"
     sender_id: str
     content: str
@@ -195,6 +196,7 @@ class MessageSendRequest(BaseModel):
 class MessageResponse(BaseModel):
     id: int
     candidate_id: int
+    recruiter_id: Optional[str] = "REC-001"
     sender_type: str
     sender_id: str
     content: str

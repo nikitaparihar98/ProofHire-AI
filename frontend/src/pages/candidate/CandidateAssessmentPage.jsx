@@ -7,7 +7,7 @@ import { Loader2, Upload, AlertTriangle, Clock, Play, Brain, Check, FileText } f
 
 function RichEditor({ value, onChange, disabled }) {
   return (
-    <div className="relative rounded-[2rem] border border-slate-200 overflow-hidden shadow-inner bg-slate-955">
+    <div className="relative rounded-[2rem] border border-slate-200 overflow-hidden shadow-inner bg-slate-900">
       <div className="flex items-center justify-between px-6 py-3 bg-slate-900 border-b border-slate-800 text-xs font-mono text-slate-400">
         <span>challenges_editor.txt</span>
         <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span> Autosaving</span>
@@ -277,7 +277,7 @@ export default function CandidateAssessmentPage() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-2">
           <div className="flex flex-wrap gap-2">
             {task?.evaluation_focus?.map(focus => (
-              <span key={focus} className="text-[10px] font-black uppercase tracking-wider bg-slate-100 border border-slate-200/60 px-3 py-1 rounded-full text-slate-655">
+              <span key={focus} className="text-[10px] font-black uppercase tracking-wider bg-slate-100 border border-slate-200/60 px-3 py-1 rounded-full text-slate-600">
                 {focus}
               </span>
             ))}
@@ -336,7 +336,7 @@ export default function CandidateAssessmentPage() {
             <div className="grid grid-cols-2 gap-4">
               <button 
                 onClick={() => setConfirmSubmit(false)} 
-                className="py-3 border border-slate-200 rounded-2xl font-bold hover:bg-slate-55 text-slate-600 transition text-sm"
+                className="py-3 border border-slate-200 rounded-2xl font-bold hover:bg-slate-50 text-slate-600 transition text-sm"
               >
                 Cancel
               </button>

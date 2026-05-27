@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { 
   Settings as SettingsIcon, 
   User, 
@@ -19,6 +20,7 @@ import {
 
 export default function Settings() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState(() => {
     return searchParams.get('tab') || 'profile';
   });
@@ -169,7 +171,9 @@ export default function Settings() {
     { id: 'notifications', label: 'Notifications', icon: <Bell size={18} /> },
     { id: 'appearance', label: 'Appearance', icon: <Sun size={18} /> },
     { id: 'security', label: 'Security', icon: <Lock size={18} /> },
-    { id: 'integrations', label: 'Integrations', icon: <Database size={18} /> },
+    ...(user?.role === 'recruiter' || profileData.role === 'recruiter'
+      ? [{ id: 'integrations', label: 'Integrations', icon: <Database size={18} /> }]
+      : []),
   ];
 
   return (
@@ -177,7 +181,11 @@ export default function Settings() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Platform Settings</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1">Configure your workspace and recruiter preferences.</p>
+          <p className="text-slate-500 dark:text-slate-400 mt-1">
+            {user?.role === 'candidate' 
+              ? 'Configure your profile and candidate preferences.' 
+              : 'Configure your workspace and recruiter preferences.'}
+          </p>
         </div>
         
         {showSuccess && (

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -20,10 +20,28 @@ export default function CandidateLayout({ children }) {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [avatar, setAvatar] = useState(() => {
+    const email = user?.email || '';
+    return localStorage.getItem('avatar_' + email.trim().toLowerCase()) || '';
+  });
+
+  useEffect(() => {
+    const syncAvatar = () => {
+      const email = user?.email || '';
+      setAvatar(localStorage.getItem('avatar_' + email.trim().toLowerCase()) || '');
+    };
+    
+    window.addEventListener('candidate-avatar-updated', syncAvatar);
+    window.addEventListener('storage', syncAvatar);
+    return () => {
+      window.removeEventListener('candidate-avatar-updated', syncAvatar);
+      window.removeEventListener('storage', syncAvatar);
+    };
+  }, [user]);
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate('/');
   };
 
   const navItems = [
@@ -73,8 +91,12 @@ export default function CandidateLayout({ children }) {
         {/* User Card */}
         <div className="p-6 border-b border-slate-100">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600 font-bold text-lg border border-indigo-100 uppercase">
-              {user?.name?.[0] || 'U'}
+            <div className="w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600 font-bold text-lg border border-indigo-100 uppercase overflow-hidden shrink-0">
+              {avatar ? (
+                <img src={avatar} alt="Profile" className="h-full w-full object-cover" />
+              ) : (
+                user?.name?.[0] || 'U'
+              )}
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="font-bold text-slate-900 truncate">{user?.name || 'Candidate'}</h3>
@@ -110,13 +132,18 @@ export default function CandidateLayout({ children }) {
 
         {/* Footer Actions */}
         <div className="p-4 border-t border-slate-100 space-y-1">
-          <button 
-            onClick={() => { alert('Settings feature coming soon!'); setIsMobileMenuOpen(false); }}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition-all"
+          <Link 
+            to="/candidate/settings"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${
+              location.pathname === '/candidate/settings'
+                ? 'bg-indigo-50 text-indigo-600'
+                : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+            }`}
           >
-            <Settings size={20} className="text-slate-400" />
+            <Settings size={20} className={location.pathname === '/candidate/settings' ? 'text-indigo-600' : 'text-slate-400'} />
             Settings
-          </button>
+          </Link>
           <button 
             onClick={handleLogout}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-rose-500 hover:bg-rose-50 transition-all"

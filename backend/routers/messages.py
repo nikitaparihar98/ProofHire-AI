@@ -25,6 +25,7 @@ def send_message(request: schemas.MessageSendRequest, db: Session = Depends(get_
     
     new_message = models.Message(
         candidate_id=request.candidate_id,
+        recruiter_id=request.recruiter_id,
         sender_type=request.sender_type,
         sender_id=request.sender_id,
         content=request.content.strip(),
@@ -65,6 +66,51 @@ def get_conversations(db: Session = Depends(get_db)):
     result.sort(key=lambda x: x.timestamp, reverse=True)
     return result
 
+@router.get("/candidate/{candidate_id}/conversations", response_model=List[schemas.ConversationPreview])
+def get_candidate_conversations(candidate_id: int, db: Session = Depends(get_db)):
+    # Find all distinct recruiter IDs who have messages with this candidate
+    recruiter_ids = [r[0] for r in db.query(models.Message.recruiter_id).filter(models.Message.candidate_id == candidate_id).distinct().all()]
+    
+    # Fallback to REC-001 if no threads exist
+    if not recruiter_ids:
+        recruiter_ids = ["REC-001"]
+        
+    result = []
+    for rid in recruiter_ids:
+        last_msg = db.query(models.Message).filter(
+            models.Message.candidate_id == candidate_id,
+            models.Message.recruiter_id == rid
+        ).order_by(models.Message.timestamp.desc()).first()
+        
+        company_name = "Primary Recruiter Team"
+        if rid == "REC-001":
+            company_name = "ProofHire Recruiting Team"
+        elif "@" in rid:
+            email_parts = rid.split("@")
+            if len(email_parts) > 1:
+                domain = email_parts[1].split(".")[0].capitalize()
+                company_name = f"{domain} Talent Acquisition"
+        else:
+            company_name = f"Recruiter ({rid})"
+            
+        result.append(schemas.ConversationPreview(
+            id=candidate_id,
+            name=company_name,
+            role=rid,
+            last_message=last_msg.content if last_msg else "Start a new conversation!",
+            timestamp=last_msg.timestamp if last_msg else datetime.now().isoformat()
+        ))
+        
+    result.sort(key=lambda x: x.timestamp, reverse=True)
+    return result
+
+@router.get("/recruiters", response_model=List[schemas.UserResponse])
+def get_recruiters(db: Session = Depends(get_db)):
+    return db.query(models.User).filter(models.User.role == "recruiter").all()
+
 @router.get("/{candidate_id}", response_model=List[schemas.MessageResponse])
-def get_messages(candidate_id: int, db: Session = Depends(get_db)):
-    return db.query(models.Message).filter(models.Message.candidate_id == candidate_id).order_by(models.Message.timestamp.asc()).all()
+def get_messages(candidate_id: int, recruiter_id: str = None, db: Session = Depends(get_db)):
+    query = db.query(models.Message).filter(models.Message.candidate_id == candidate_id)
+    if recruiter_id:
+        query = query.filter(models.Message.recruiter_id == recruiter_id)
+    return query.order_by(models.Message.timestamp.asc()).all()

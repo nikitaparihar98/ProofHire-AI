@@ -4,6 +4,7 @@ import { getApiErrorMessage, getMessages, sendMessage } from '../services/api';
 
 export default function CandidateMessages({
   candidateId,
+  recruiterId = 'REC-001',
   senderType = 'recruiter',
   senderId = 'REC-001',
   onSent,
@@ -20,7 +21,7 @@ export default function CandidateMessages({
 
     try {
       setLoading(true);
-      const data = await getMessages(candidateId);
+      const data = await getMessages(candidateId, recruiterId);
       setMessages(data);
       setError('');
     } catch (err) {
@@ -35,7 +36,7 @@ export default function CandidateMessages({
     fetchMessages();
     const interval = setInterval(fetchMessages, 4000);
     return () => clearInterval(interval);
-  }, [candidateId]);
+  }, [candidateId, recruiterId]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -51,6 +52,7 @@ export default function CandidateMessages({
     try {
       await sendMessage({
         candidate_id: Number(candidateId),
+        recruiter_id: recruiterId,
         sender_type: senderType,
         sender_id: senderId,
         content: newMessage.trim(),

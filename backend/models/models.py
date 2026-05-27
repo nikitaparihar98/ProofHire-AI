@@ -41,6 +41,8 @@ class Candidate(Base):
     authenticity_summary = Column(Text, default="")
     malpractice_flags = Column(JSON, default=list)
 
+
+
 class Notification(Base):
     __tablename__ = "notifications"
 
@@ -70,6 +72,7 @@ class Message(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     candidate_id = Column(Integer, index=True)
+    recruiter_id = Column(String, index=True, default="REC-001")
     sender_type = Column(String) # "recruiter" or "candidate"
     sender_id = Column(String)
     content = Column(Text)

@@ -275,13 +275,24 @@ export const sendMessage = async (data) => {
   return response.data;
 };
 
-export const getMessages = async (candidateId) => {
-  const response = await api.get(`/messages/${candidateId}`);
+export const getMessages = async (candidateId, recruiterId = null) => {
+  const url = recruiterId ? `/messages/${candidateId}?recruiter_id=${recruiterId}` : `/messages/${candidateId}`;
+  const response = await api.get(url);
   return response.data;
 };
 
 export const getConversations = async () => {
   const response = await api.get('/messages/conversations');
+  return response.data;
+};
+
+export const getCandidateConversations = async (candidateId) => {
+  const response = await api.get(`/messages/candidate/${candidateId}/conversations`);
+  return response.data;
+};
+
+export const getRecruiters = async () => {
+  const response = await api.get('/messages/recruiters');
   return response.data;
 };
 

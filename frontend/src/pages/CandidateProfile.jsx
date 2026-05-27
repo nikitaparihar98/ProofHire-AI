@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Loader2, Mail, ShieldCheck, Target } from 'lucide-react';
+import { ArrowLeft, Loader2, Mail, ShieldCheck, Target, Camera } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { getApiErrorMessage, getCandidateDashboard } from '../services/api';
 
@@ -10,6 +10,24 @@ export default function CandidateProfile() {
   const [dashboard, setDashboard] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [avatar, setAvatar] = useState(() => {
+    const email = user?.email || '';
+    return localStorage.getItem('avatar_' + email.trim().toLowerCase()) || '';
+  });
+
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatar(reader.result);
+        const email = user?.email || '';
+        localStorage.setItem('avatar_' + email.trim().toLowerCase(), reader.result);
+        window.dispatchEvent(new Event('candidate-avatar-updated'));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -46,13 +64,37 @@ export default function CandidateProfile() {
 
         <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
           <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-            <div>
-              <h1 className="text-3xl font-black text-slate-900">{candidate?.name || user?.name}</h1>
-              <p className="mt-2 text-lg font-bold text-indigo-600">{candidate?.role}</p>
-              <div className="mt-4 flex flex-wrap gap-4 text-sm text-slate-500">
-                <span className="inline-flex items-center gap-2"><Mail size={16} /> {candidate?.email || user?.email}</span>
-                <span className="inline-flex items-center gap-2"><Target size={16} /> {candidate?.status}</span>
-                <span className="inline-flex items-center gap-2"><ShieldCheck size={16} /> {candidate?.plagiarism_risk_level || 'Low'} risk</span>
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+              <div className="relative group shrink-0">
+                <div className="h-24 w-24 rounded-full bg-indigo-50 border-4 border-white shadow-lg overflow-hidden flex items-center justify-center text-indigo-600 font-bold text-3xl uppercase">
+                  {avatar ? (
+                    <img src={avatar} alt="Profile" className="h-full w-full object-cover" />
+                  ) : (
+                    candidate?.name?.[0] || user?.name?.[0] || 'C'
+                  )}
+                </div>
+                <input 
+                  type="file" 
+                  id="candidate-avatar-input" 
+                  accept="image/*" 
+                  className="hidden" 
+                  onChange={handleAvatarChange} 
+                />
+                <label 
+                  htmlFor="candidate-avatar-input" 
+                  className="absolute bottom-0 right-0 p-1.5 bg-white rounded-full shadow-md border border-slate-100 text-slate-500 hover:text-indigo-600 transition-colors cursor-pointer"
+                >
+                  <Camera size={14} />
+                </label>
+              </div>
+              <div>
+                <h1 className="text-3xl font-black text-slate-900">{candidate?.name || user?.name}</h1>
+                <p className="mt-2 text-lg font-bold text-indigo-600">{candidate?.role}</p>
+                <div className="mt-4 flex flex-wrap gap-4 text-sm text-slate-500">
+                  <span className="inline-flex items-center gap-2"><Mail size={16} /> {candidate?.email || user?.email}</span>
+                  <span className="inline-flex items-center gap-2"><Target size={16} /> {candidate?.status}</span>
+                  <span className="inline-flex items-center gap-2"><ShieldCheck size={16} /> {candidate?.plagiarism_risk_level || 'Low'} risk</span>
+                </div>
               </div>
             </div>
             <div className="rounded-2xl bg-slate-900 px-6 py-5 text-white">
