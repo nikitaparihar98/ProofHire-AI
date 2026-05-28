@@ -159,12 +159,18 @@ export default function CandidateDetails() {
                  <h3 className="font-bold text-slate-900 tracking-tight">Security & Malpractice Report</h3>
                </div>
                <AuthenticityBadge riskLevel={candidate?.plagiarism_risk_level || "Low"} />
+               {candidate?.has_malpractice && (
+                 <div className="flex items-center gap-2 mt-2 bg-rose-50 text-rose-700 p-2 rounded-xl border border-rose-100">
+                   <AlertTriangle size={14} />
+                   Malpractice Detected
+                 </div>
+               )}
             </div>
             <div className="p-10 grid grid-cols-1 md:grid-cols-2 gap-10">
                <div className="space-y-6">
                   <div>
                     <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Malpractice Events</h4>
-                    {(candidate?.malpractice_flags || []).length > 0 ? (
+                    {(candidate?.has_malpractice) ? (
                       <div className="space-y-2">
                         {candidate.malpractice_flags.map((flag, idx) => (
                           <div key={idx} className="flex items-center gap-2 p-3 bg-rose-50 text-rose-700 text-xs font-bold rounded-xl border border-rose-100 shadow-sm">

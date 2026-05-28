@@ -192,7 +192,11 @@ export default function LiveMonitoring() {
                  <div className="bg-slate-50 p-5 rounded-[1.5rem] border border-slate-100 text-center space-y-1">
                     <ShieldAlert className="w-5 h-5 text-rose-500 mx-auto mb-2" />
                     <span className="block text-[10px] font-black text-slate-400 uppercase tracking-widest">Violations</span>
-                    <span className="text-lg font-black text-rose-600 tabular-nums">{session.malpractice_flags?.length || 0}</span>
+                    <span className="text-lg font-black text-rose-600 tabular-nums">{session.has_malpractice ? (
+                      <span className="text-lg font-black text-rose-600 tabular-nums">Detected</span>
+                    ) : (
+                      <span className="text-lg font-black text-slate-600 tabular-nums">None</span>
+                    )}</span>
                  </div>
               </div>
 

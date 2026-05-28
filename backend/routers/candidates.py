@@ -43,6 +43,7 @@ def normalize_candidate(c):
     if isinstance(c.malpractice_flags, list):
         c.malpractice_flags = [str(x) for x in c.malpractice_flags]
 
+    c.has_malpractice = len(c.malpractice_flags) > 0
     return c
 
 

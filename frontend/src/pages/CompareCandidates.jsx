@@ -170,7 +170,11 @@ export default function CompareCandidatesPage() {
                    <span className="text-slate-500">AI Suspicion</span>
                    <span className="font-medium text-slate-900">{comparisonResult.candidate_1.ai_generated_suspicion}%</span>
                  </div>
-                 {comparisonResult.candidate_1.malpractice_flags?.length > 0 && (
+                                     {comparisonResult.candidate_1.has_malpractice && (
+                      <div className="text-xs text-rose-600 font-medium bg-rose-50 px-2 py-1 rounded">
+                        Malpractice Detected
+                      </div>
+                    )}
                    <div className="text-xs text-rose-600 font-medium bg-rose-50 px-2 py-1 rounded">
                      {comparisonResult.candidate_1.malpractice_flags.length} Flag(s) Detected
                    </div>

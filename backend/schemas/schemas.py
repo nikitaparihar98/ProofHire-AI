@@ -89,6 +89,7 @@ class CandidateCreate(CandidateBase):
 
 class CandidateResponse(CandidateCreate):
     id: int
+    has_malpractice: bool = Field(default=False)
 
     class Config:
         from_attributes = True
