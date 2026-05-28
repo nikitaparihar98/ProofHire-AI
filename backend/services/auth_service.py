@@ -1,9 +1,10 @@
 import base64
+import time
+import logging
 import hashlib
 import hmac
 import json
 import os
-import time
 from typing import Dict
 
 from fastapi import Depends, HTTPException
@@ -25,7 +26,8 @@ def hash_password(password: str) -> str:
         salt,
         100_000,
     )
-    return f"{_b64encode(salt)}:{_b64encode(password_hash)}"
+    result = f"{_b64encode(salt)}:{_b64encode(password_hash)}"
+    return result
 
 
 def verify_password(password: str, stored_hash: str) -> bool:

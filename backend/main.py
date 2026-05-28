@@ -3,11 +3,10 @@
 import logging
 import os
 from contextlib import asynccontextmanager
-
 from dotenv import load_dotenv
-from fastapi import FastAPI, Request
+
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 
 from backend.core.database import Base, engine
 from backend.models import models
@@ -25,7 +24,15 @@ from backend.routers import (
     tasks,
 )
 
+# ---------------------------------------------------------------------
+# Load environment variables
+# ---------------------------------------------------------------------
+
 load_dotenv()
+
+# ---------------------------------------------------------------------
+# Logging
+# ---------------------------------------------------------------------
 
 logging.basicConfig(
     level=logging.INFO,
@@ -33,61 +40,56 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-
-# ---------------------------------------------------------------------------
-# Lifespan: startup / shutdown hooks
-# ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------
+# Lifespan (startup / shutdown)
+# ---------------------------------------------------------------------
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # Startup
     if not os.getenv("OPENAI_API_KEY"):
-        logger.warning("OPENAI_API_KEY is not set – AI endpoints will fail at runtime.")
-    logger.info("RecruitAI API started.")
+        logger.warning("OPENAI_API_KEY is not set – AI endpoints may fail.")
+
+    logger.info("RecruitAI API starting up...")
+
+    # ✅ Safe DB initialization (moved here)
+    Base.metadata.create_all(bind=engine)
+
     yield
-    logger.info("RecruitAI API shutting down.")
 
-# Create database tables
-Base.metadata.create_all(bind=engine)
+    # Shutdown
+    logger.info("RecruitAI API shutting down...")
 
-# ---------------------------------------------------------------------------
-# App factory
-# ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------
+# App
+# ---------------------------------------------------------------------
 
 app = FastAPI(
     title="ProofHire AI API",
     description="API for ProofHire AI candidate evaluation platform",
     version="1.0.0",
-    lifespan = lifespan
+    lifespan=lifespan,
 )
 
-# Configure CORS for frontend access
+# ---------------------------------------------------------------------
+# CORS (FIXED - production safe)
+# ---------------------------------------------------------------------
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
         "http://127.0.0.1:5173",
-        "http://localhost:5175",
-        "http://127.0.0.1:5175",
     ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ---------------------------------------------------------------------------
-# Global exception handler
-# ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------
+# Routers
+# ---------------------------------------------------------------------
 
-@app.exception_handler(Exception)
-async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONResponse:
-    logger.exception("Unhandled exception on %s %s", request.method, request.url)
-    return JSONResponse(
-        status_code=500,
-        content={"detail": "An unexpected error occurred. Please try again later."},
-    )
-
-
-# Include routers
 app.include_router(candidates.router)
 app.include_router(evaluate.router)
 app.include_router(submissions.router)
@@ -101,6 +103,10 @@ app.include_router(notifications.router)
 app.include_router(interviews.router)
 app.include_router(messages.router)
 
+# ---------------------------------------------------------------------
+# Basic routes
+# ---------------------------------------------------------------------
+
 @app.get("/")
 def read_root():
     return {"message": "Welcome to ProofHire AI API"}
@@ -113,3 +119,6 @@ def health_check():
 def api_health_check():
     return {"status": "ok"}
 
+@app.get("/debug")
+def debug():
+    return {"ok": True}

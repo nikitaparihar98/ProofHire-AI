@@ -47,6 +47,29 @@ class Candidate(Base):
     skill_authenticity_score = Column(Float, default=0.0)
     authenticity_gaps = Column(JSON, default=list)
     growth_nudges = Column(JSON, default=list)
+    # Recruiter Intelligence fields
+    honesty_score = Column(Float, default=0.0)
+    skill_mismatch = Column(JSON, default=dict)
+    hidden_talents = Column(JSON, default=dict)
+    malpractice_severity = Column(Float, default=0.0)
+    claimed_skills_json = Column(JSON, default=dict)
+    demonstrated_skills_json = Column(JSON, default=dict)
+    ai_content_score = Column(Float, default=0.0)
+    # Duplicate plagiarism_score removed – column already defined earlier (line 37).
+    # New recruiter intelligence fields
+    resume_honesty_index = Column(Float, default=0.0, nullable=True)
+    overclaim_risk_score = Column(Float, default=0.0, nullable=True)
+    underclaim_score = Column(Float, default=0.0, nullable=True)
+    skill_gap_analysis = Column(JSON, default=dict, nullable=True)
+    red_flag_alerts = Column(JSON, default=list, nullable=True)
+    demonstrated_skills = Column(JSON, default=dict, nullable=True)
+    claimed_skills_analysis = Column(JSON, default=dict, nullable=True)
+    candidate_strength_summary = Column(Text, default="", nullable=True)
+    candidate_weakness_summary = Column(Text, default="", nullable=True)
+    edge_case_score = Column(Float, default=0.0, nullable=True)
+    consistency_score = Column(Float, default=0.0, nullable=True)
+    recruiter_risk_level = Column(String, default="Low")
+    final_recruiter_score = Column(Float, default=0.0)
 
 
 

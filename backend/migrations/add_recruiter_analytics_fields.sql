@@ -1,0 +1,11 @@
+-- Migration: add recruiter analytics fields to candidates table
+ALTER TABLE candidates ADD COLUMN honesty_score FLOAT DEFAULT 0.0;
+ALTER TABLE candidates ADD COLUMN skill_mismatch JSONB DEFAULT '{}';
+ALTER TABLE candidates ADD COLUMN hidden_talents JSONB DEFAULT '[]';
+ALTER TABLE candidates ADD COLUMN malpractice_severity FLOAT DEFAULT 0.0;
+ALTER TABLE candidates ADD COLUMN claimed_skills_json JSONB DEFAULT '{}';
+ALTER TABLE candidates ADD COLUMN demonstrated_skills_json JSONB DEFAULT '{}';
+ALTER TABLE candidates ADD COLUMN ai_content_score FLOAT DEFAULT 0.0;
+ALTER TABLE candidates ADD COLUMN plagiarism_score FLOAT DEFAULT 0.0;
+ALTER TABLE candidates ADD COLUMN recruiter_risk_level VARCHAR(20) DEFAULT 'Low';
+ALTER TABLE candidates ADD COLUMN final_recruiter_score FLOAT DEFAULT 0.0;
