@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends
+from backend.routers.live_ws import publish_event
 from sqlalchemy.orm import Session
 from typing import Dict, Any, List
 from datetime import datetime
@@ -48,7 +49,8 @@ def start_session(data: Dict[str, str], db: Session = Depends(get_db)):
         "status": "in_progress",
         "started_at": datetime.utcnow().isoformat(),
         "events": [],
-        "risk_level": "Low"
+        "risk_level": "Low",
+        "malpractice_score": 0
     }
     return {"session_id": session_id}
 
@@ -63,7 +65,7 @@ def get_session(session_id: str):
     return active_sessions[session_id]
 
 @router.post("/{session_id}/event")
-def log_event(session_id: str, event: Dict[str, Any], db: Session = Depends(get_db)):
+async def log_event(session_id: str, event: Dict[str, Any], db: Session = Depends(get_db)):
     if session_id not in active_sessions:
         raise HTTPException(status_code=404, detail="Session not found")
     
@@ -88,14 +90,67 @@ def log_event(session_id: str, event: Dict[str, Any], db: Session = Depends(get_
     
     active_sessions[session_id]["events"].append(event_data)
     
-    # Update risk level based on events
-    critical_events = sum(1 for e in active_sessions[session_id]["events"] if e["severity"] == "critical")
-    warning_events = sum(1 for e in active_sessions[session_id]["events"] if e["severity"] == "warning")
+    # Smart AI Engine Scoring
+    score_increment = 0
+    if e_severity == "critical":
+        score_increment = 40
+        active_sessions[session_id]["malpractice_score"] += 40
+    elif e_severity == "warning":
+        score_increment = 15
+        active_sessions[session_id]["malpractice_score"] += 15
+        
+    current_score = active_sessions[session_id]["malpractice_score"]
     
-    if critical_events > 0 or warning_events > 3:
+    # Dynamic severity mapping and Auto-disqualification
+    auto_disqualified = False
+    if current_score >= 100 and active_sessions[session_id]["status"] != "terminated":
         active_sessions[session_id]["risk_level"] = "High"
-    elif warning_events > 0:
+        active_sessions[session_id]["status"] = "terminated"
+        auto_disqualified = True
+        
+        auto_disq_event = {
+            "timestamp": datetime.utcnow().isoformat(),
+            "type": "auto_disqualification",
+            "message": f"Auto-disqualified due to severe malpractice (Score: {current_score}).",
+            "severity": "critical"
+        }
+        active_sessions[session_id]["events"].append(auto_disq_event)
+        
+        # Critical Alert to Recruiter
+        create_notification(
+            db,
+            "Candidate Auto-Disqualified",
+            f"Candidate {active_sessions[session_id]['candidate_name']} has been auto-disqualified (Score: {current_score}).",
+            "critical"
+        )
+        
+        # Sync rejection to the database
+        candidate_name = active_sessions[session_id]["candidate_name"]
+        candidate = db.query(models.Candidate).filter(models.Candidate.name == candidate_name).first()
+        if candidate:
+            candidate.status = "Rejected"
+            candidate.hiring_recommendation = "No Hire"
+            candidate.rejection_reason = f"Auto-disqualified due to severe malpractice (Score: {current_score})."
+            db.commit()
+            
+    elif current_score >= 70:
+        active_sessions[session_id]["risk_level"] = "High"
+    elif current_score >= 30:
         active_sessions[session_id]["risk_level"] = "Medium"
+    else:
+        active_sessions[session_id]["risk_level"] = "Low"
+    
+    # Broadcast via WebSocket
+    await publish_event(
+        session_id=session_id,
+        event_type=e_type,
+        message=event.get("message"),
+        severity=active_sessions[session_id]["risk_level"],
+        event_score=score_increment,
+        cumulative_score=current_score,
+        candidate_id=active_sessions[session_id].get("candidate_id", "unknown"),
+        auto_disqualified=auto_disqualified,
+    )
         
     return {"status": "success"}
 

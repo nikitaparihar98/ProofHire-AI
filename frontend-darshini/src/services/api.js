@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://127.0.0.1:8001/api').replace(/\/$/, '');
+// Base URL should point to the FastAPI root, NOT include the /api prefix.
+// Each router already defines its own /api/... prefix.
+const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000').replace(/\/$/, '');
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -60,6 +62,15 @@ export const getApiErrorMessage = (error, fallback = 'Failed to load dashboard d
   return `${fallback}: ${error?.message || 'Unknown error'}`;
 };
 
+api.interceptors.request.use((config) => {
+  // Ensure every request path starts with the required '/api' prefix.
+  if (config.url && !config.url.startsWith('/api')) {
+    config.url = `/api${config.url}`;
+  }
+  return config;
+});
+
+// Existing token interceptor
 api.interceptors.request.use((config) => {
   const token = getStoredToken();
   if (token) {
