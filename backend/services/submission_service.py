@@ -23,13 +23,16 @@ def evaluate_and_store_submission(
     if not submission_data:
         raise HTTPException(status_code=422, detail="Submission data is required")
 
+    existing = _find_existing_candidate(db, name=name, email=email)
+    resume_skills = existing.resume_skills if existing else None
+
     ai_result = evaluate_candidate_mock(
         name=name,
         role=role,
         submission_data=submission_data,
+        resume_skills=resume_skills,
     )
 
-    existing = _find_existing_candidate(db, name=name, email=email)
     candidate = existing or models.Candidate()
 
     candidate.name = name
@@ -47,6 +50,14 @@ def evaluate_and_store_submission(
     candidate.ai_generated_suspicion = ai_result.get("ai_generated_suspicion", 0.0)
     candidate.authenticity_summary = ai_result.get("authenticity_summary", "")
     candidate.malpractice_flags = ai_result.get("malpractice_flags", [])
+    
+    # Save resume claims vs proof columns
+    candidate.resume_skills = ai_result.get("resume_skills", {})
+    candidate.proven_skills = ai_result.get("proven_skills", {})
+    candidate.skill_authenticity_score = ai_result.get("skill_authenticity_score", 0.0)
+    candidate.authenticity_gaps = ai_result.get("authenticity_gaps", [])
+    candidate.growth_nudges = ai_result.get("growth_nudges", [])
+    
     candidate.status = "Evaluated"
 
     try:

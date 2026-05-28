@@ -118,6 +118,13 @@ class CandidateCreate(CandidateBase):
     status: Optional[str] = "Not Attended"
     rejection_reason: Optional[str] = ""
     recruiter_notes: Optional[str] = ""
+    
+    # Resume verification & Gap Analysis fields
+    resume_skills: Optional[Dict[str, str]] = {}
+    proven_skills: Optional[Dict[str, str]] = {}
+    skill_authenticity_score: Optional[float] = 0.0
+    authenticity_gaps: Optional[List[str]] = []
+    growth_nudges: Optional[List[str]] = []
 
 class CandidateResponse(CandidateCreate):
     id: int
@@ -233,6 +240,9 @@ class TaskGenerateRequest(BaseModel):
     role: str
     difficulty: str = "Medium"
     tech_stack: str = "General"
+
+class ResumeSkillsUploadRequest(BaseModel):
+    resume_skills: Dict[str, str]
 
 
 

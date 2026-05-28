@@ -125,6 +125,59 @@ def _get_or_create_assignment(
     return assignment
 
 
+@router.post("/resume", response_model=schemas.CandidateResponse)
+def upload_candidate_resume(
+    request: schemas.ResumeSkillsUploadRequest,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    require_role(current_user, "candidate")
+    candidate = _get_candidate_for_user(current_user, db)
+    
+    # Store resume_skills
+    candidate.resume_skills = request.resume_skills
+    
+    # If the candidate has already submitted their assessment, let's trigger a re-evaluation
+    # so that their authenticity score and gaps are updated instantly!
+    has_answer = False
+    if candidate.submission_data:
+        import json
+        sub_dict = candidate.submission_data
+        if isinstance(sub_dict, str):
+            try:
+                sub_dict = json.loads(sub_dict)
+            except Exception:
+                sub_dict = {}
+        if isinstance(sub_dict, dict) and sub_dict.get("answer"):
+            has_answer = True
+
+    if has_answer:
+        from backend.services.llama_service import evaluate_candidate_mock
+        # Convert string to dict if needed for evaluator call
+        sub_dict = candidate.submission_data
+        if isinstance(sub_dict, str):
+            try:
+                sub_dict = json.loads(sub_dict)
+            except Exception:
+                sub_dict = {}
+                
+        ai_result = evaluate_candidate_mock(
+            name=candidate.name,
+            role=candidate.role,
+            submission_data=sub_dict,
+            resume_skills=candidate.resume_skills,
+        )
+        candidate.resume_skills = ai_result.get("resume_skills", {})
+        candidate.proven_skills = ai_result.get("proven_skills", {})
+        candidate.skill_authenticity_score = ai_result.get("skill_authenticity_score", 0.0)
+        candidate.authenticity_gaps = ai_result.get("authenticity_gaps", [])
+        candidate.growth_nudges = ai_result.get("growth_nudges", [])
+
+    db.commit()
+    db.refresh(candidate)
+    return candidate
+
+
 # ---------------------------------------------------------------------------
 # Candidate Assessments Router (Issue 2)
 # ---------------------------------------------------------------------------
@@ -302,6 +355,7 @@ def submit_candidate_assessment(
         name=candidate.name,
         role=candidate.role,
         submission_data=submission_data,
+        resume_skills=candidate.resume_skills,
     )
     
     candidate.overall_score = ai_result.get("overall_score", 0.0)
@@ -311,6 +365,13 @@ def submit_candidate_assessment(
     candidate.ai_feedback = ai_result.get("ai_feedback", "")
     candidate.submission_data = submission_data
     candidate.status = "Evaluated"
+    
+    # Save resume claims vs proof columns
+    candidate.resume_skills = ai_result.get("resume_skills", {})
+    candidate.proven_skills = ai_result.get("proven_skills", {})
+    candidate.skill_authenticity_score = ai_result.get("skill_authenticity_score", 0.0)
+    candidate.authenticity_gaps = ai_result.get("authenticity_gaps", [])
+    candidate.growth_nudges = ai_result.get("growth_nudges", [])
     
     # Structured breakdown scores
     candidate.technical_score = round(candidate.overall_score * 0.95, 1)

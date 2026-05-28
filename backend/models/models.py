@@ -40,6 +40,13 @@ class Candidate(Base):
     ai_generated_suspicion = Column(Float, default=0.0)
     authenticity_summary = Column(Text, default="")
     malpractice_flags = Column(JSON, default=list)
+    
+    # Resume verification & Gap Analysis metrics
+    resume_skills = Column(JSON, default=dict)
+    proven_skills = Column(JSON, default=dict)
+    skill_authenticity_score = Column(Float, default=0.0)
+    authenticity_gaps = Column(JSON, default=list)
+    growth_nudges = Column(JSON, default=list)
 
 
 

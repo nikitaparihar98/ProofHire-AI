@@ -15,7 +15,10 @@ import {
   AlertCircle,
   Award,
   Info,
-  MessageSquare
+  MessageSquare,
+  Sparkles,
+  Cpu,
+  CheckCircle2
 } from 'lucide-react';
 import { getCandidateById, updateCandidateDecision } from '../services/api';
 import ScoreBadge from '../components/ScoreBadge';
@@ -103,7 +106,21 @@ export default function CandidateDetails() {
                   <User size={40} />
                 </div>
                 <div className="flex-1">
-                  <h1 className="text-4xl font-black text-slate-900 tracking-tight mb-2">{candidate?.name || "Unknown Candidate"}</h1>
+                  <div className="flex flex-wrap items-center gap-3 mb-2">
+                    <h1 className="text-4xl font-black text-slate-900 tracking-tight">{candidate?.name || "Unknown Candidate"}</h1>
+                    {(() => {
+                      const levelVal = { 'Junior': 1, 'Intermediate': 2, 'Advanced': 3 };
+                      const hasHiddenTalent = Object.entries(candidate?.resume_skills || {}).some(([skill, claimedLvl]) => {
+                        const provenLvl = (candidate?.proven_skills || {})[skill] || 'Junior';
+                        return (levelVal[provenLvl] || 2) > (levelVal[claimedLvl] || 2);
+                      });
+                      return hasHiddenTalent && (
+                        <span className="px-3 py-1 bg-emerald-500 text-white rounded-full text-xs font-black uppercase tracking-wider animate-pulse flex items-center gap-1 shadow-lg shadow-emerald-500/20 border border-emerald-400">
+                          <Sparkles size={12} className="animate-spin-slow" /> Hidden Talent Mode Active
+                        </span>
+                      );
+                    })()}
+                  </div>
                   <p className="text-lg font-bold text-slate-400 mb-6">{candidate?.email || "No Email"}</p>
                   <div className="flex flex-wrap items-center gap-4 text-slate-500 mt-2">
                     <div className="flex items-center gap-1.5 text-sm font-bold px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl shadow-sm text-slate-700">
@@ -188,6 +205,149 @@ export default function CandidateDetails() {
                   <p className="text-sm text-slate-600 leading-relaxed">
                     {candidate?.authenticity_summary || "Automated proctoring has not detected any significant anomalies during this session."}
                   </p>
+               </div>
+            </div>
+          </div>
+
+          {/* Recruiter Skill Authenticity Comparison Panel */}
+          <div className="bg-white rounded-[3rem] shadow-sm border border-slate-200 overflow-hidden">
+            <div className="p-8 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50/50">
+               <div className="flex items-center gap-2">
+                 <BrainCircuit className="w-5 h-5 text-indigo-600" />
+                 <div>
+                   <h3 className="font-bold text-slate-900 tracking-tight">Resume Claims vs. Coding Proof</h3>
+                   <p className="text-xs text-slate-500 font-medium">Cross-referencing claimed competencies against technical sandbox outputs.</p>
+                 </div>
+               </div>
+               
+               <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-2xl border border-slate-200 shadow-sm shrink-0">
+                 <div className="relative w-10 h-10 flex items-center justify-center">
+                   <svg className="w-full h-full transform -rotate-90">
+                     <circle cx="20" cy="20" r="17" className="stroke-slate-100 fill-none" strokeWidth="4" />
+                     <circle 
+                       cx="20" 
+                       cy="20" 
+                       r="17" 
+                       className="stroke-indigo-600 fill-none transition-all duration-1000 ease-out" 
+                       strokeWidth="4"
+                       strokeDasharray={106.8}
+                       strokeDashoffset={106.8 - (106.8 * (candidate?.skill_authenticity_score || 0)) / 100}
+                       strokeLinecap="round"
+                     />
+                   </svg>
+                   <span className="absolute text-[10px] font-black text-slate-800">{candidate?.skill_authenticity_score || 0}%</span>
+                 </div>
+                 <div>
+                   <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-0.5">MATCH RATE</p>
+                   <p className="text-xs font-black text-slate-700 leading-none">
+                     {(candidate?.skill_authenticity_score || 0) >= 90 ? 'Excellent' :
+                      (candidate?.skill_authenticity_score || 0) >= 70 ? 'High' : 'Moderate Gaps'}
+                   </p>
+                 </div>
+               </div>
+            </div>
+
+            <div className="p-10 grid grid-cols-1 xl:grid-cols-3 gap-10">
+               <div className="xl:col-span-2 space-y-4">
+                  <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Extracted Skill Matrix</h4>
+                  <div className="border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
+                    <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="bg-slate-50 border-b border-slate-100">
+                          <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Skill</th>
+                          <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Resume Claim</th>
+                          <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Proven Reality</th>
+                          <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Verification</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100">
+                        {Object.entries(candidate?.resume_skills || {}).map(([skill, claimedLvl]) => {
+                          const provenLvl = (candidate?.proven_skills || {})[skill] || 'Junior';
+                          const levelVal = { 'Junior': 1, 'Intermediate': 2, 'Advanced': 3 };
+                          const claimedVal = levelVal[claimedLvl] || 2;
+                          const provenVal = levelVal[provenLvl] || 2;
+
+                          let statusBadge = null;
+                          if (claimedVal === provenVal) {
+                            statusBadge = (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-bold border border-indigo-100">
+                                <CheckCircle2 size={12} /> Verified Match
+                              </span>
+                            );
+                          } else if (claimedVal > provenVal) {
+                            statusBadge = (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-50 text-amber-700 rounded-lg text-xs font-bold border border-amber-100">
+                                <AlertCircle size={12} /> Overclaimed
+                              </span>
+                            );
+                          } else {
+                            statusBadge = (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-lg text-xs font-bold border border-emerald-200 shadow-sm shadow-emerald-100/50 animate-pulse">
+                                <Sparkles size={12} className="text-emerald-500" /> Hidden Talent!
+                              </span>
+                            );
+                          }
+
+                          return (
+                            <tr key={skill} className="hover:bg-slate-50/50 transition-colors">
+                              <td className="p-4 text-sm font-bold text-slate-900">{skill}</td>
+                              <td className="p-4 text-sm font-medium text-slate-500">{claimedLvl}</td>
+                              <td className="p-4 text-sm font-bold text-indigo-600">{provenLvl}</td>
+                              <td className="p-4">{statusBadge}</td>
+                            </tr>
+                          );
+                        })}
+                        {Object.keys(candidate?.resume_skills || {}).length === 0 && (
+                          <tr>
+                            <td colSpan="4" className="p-8 text-center text-sm text-slate-400 italic">No skills uploaded by candidate yet.</td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+               </div>
+
+               <div className="xl:col-span-1 bg-slate-50 rounded-3xl p-6 border border-slate-100 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center gap-2 mb-4">
+                      <Activity className="text-indigo-600" size={18} />
+                      <h4 className="font-bold text-slate-900">Nudges & Guidance</h4>
+                    </div>
+                    {candidate?.growth_nudges?.length > 0 ? (
+                      <div className="space-y-4 overflow-y-auto max-h-[300px]">
+                        {candidate.growth_nudges.map((nudge, idx) => {
+                          const isHiddenTalent = nudge.includes('Hidden Talent');
+                          return (
+                            <div 
+                              key={idx} 
+                              className={`p-3.5 rounded-xl border text-xs font-medium leading-relaxed transition-all shadow-sm ${
+                                isHiddenTalent 
+                                  ? 'bg-emerald-50 border-emerald-100 text-emerald-800' 
+                                  : 'bg-white border-slate-200/60 text-slate-600'
+                              }`}
+                            >
+                              <p className="font-bold mb-1 flex items-center gap-1">
+                                {isHiddenTalent ? (
+                                  <>
+                                    <Sparkles size={12} className="text-emerald-500 animate-pulse" />
+                                    Hidden Talent Detected
+                                  </>
+                                ) : (
+                                  <>
+                                    <Cpu size={12} className="text-indigo-500" />
+                                    Competency Gap
+                                  </>
+                                )}
+                              </p>
+                              {nudge}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <p className="text-xs text-slate-400 italic text-center py-8">No growth suggestions needed. Perfect score alignment.</p>
+                    )}
+                  </div>
                </div>
             </div>
           </div>

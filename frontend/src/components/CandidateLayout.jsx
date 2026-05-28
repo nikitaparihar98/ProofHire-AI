@@ -11,7 +11,8 @@ import {
   Settings, 
   LogOut,
   Menu,
-  X
+  X,
+  UploadCloud
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -46,6 +47,7 @@ export default function CandidateLayout({ children }) {
 
   const navItems = [
     { name: 'Dashboard', path: '/candidate/dashboard', icon: <LayoutDashboard size={20} /> },
+    { name: 'Verify Resume', path: '/resume-verification', icon: <UploadCloud size={20} /> },
     { name: 'My Tasks', path: '/candidate/tasks', icon: <CheckSquare size={20} /> },
     { name: 'Assessments', path: '/candidate/assessments', icon: <FileText size={20} /> },
     { name: 'Interviews', path: '/candidate/interviews', icon: <Video size={20} /> },

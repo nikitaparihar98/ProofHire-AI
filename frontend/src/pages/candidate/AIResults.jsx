@@ -226,6 +226,157 @@ export default function AIResults() {
         </div>
       </div>
 
+      {/* Skill Authenticity & Gaps Panel */}
+      <div className="bg-white rounded-[2.5rem] p-8 sm:p-10 border border-slate-200 shadow-sm hover:border-indigo-100 transition-colors">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-100 pb-6 mb-8">
+          <div>
+            <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+              <span className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                <BrainCircuit size={18} />
+              </span>
+              Resume Claims vs. Coding Proof
+            </h3>
+            <p className="text-sm text-slate-500 mt-1 font-medium font-sans">AI-driven cross-reference of your resume claims against sandbox execution.</p>
+          </div>
+          
+          <div className="flex items-center gap-4 bg-slate-50/50 p-3 rounded-2xl border border-slate-100">
+            {/* SVG Radial Gauge */}
+            <div className="relative w-16 h-16 flex items-center justify-center">
+              <svg className="w-full h-full transform -rotate-90">
+                <circle cx="32" cy="32" r="28" className="stroke-slate-200 fill-none" strokeWidth="6" />
+                <circle 
+                  cx="32" 
+                  cy="32" 
+                  r="28" 
+                  className="stroke-indigo-600 fill-none transition-all duration-1000 ease-out" 
+                  strokeWidth="6"
+                  strokeDasharray={175.9}
+                  strokeDashoffset={175.9 - (175.9 * (candidate?.skill_authenticity_score || 0)) / 100}
+                  strokeLinecap="round"
+                />
+              </svg>
+              <span className="absolute text-sm font-black text-slate-800">{candidate?.skill_authenticity_score || 0}%</span>
+            </div>
+            <div>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Authenticity Match</p>
+              <p className="text-sm font-black text-slate-700">
+                {(candidate?.skill_authenticity_score || 0) >= 90 ? 'Excellent Match' :
+                 (candidate?.skill_authenticity_score || 0) >= 70 ? 'High Authenticity' :
+                 (candidate?.skill_authenticity_score || 0) >= 50 ? 'Moderate Gaps' : 'Significant Gaps'}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Verification Matrix Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 space-y-4">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Claimed Skill vs. Task Reality</h4>
+            
+            <div className="border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-100">
+                    <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Skill</th>
+                    <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Claimed</th>
+                    <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Proven</th>
+                    <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Analysis</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {Object.entries(candidate?.resume_skills || {}).map(([skill, claimedLvl]) => {
+                    const provenLvl = (candidate?.proven_skills || {})[skill] || 'Junior';
+                    const levelVal = { 'Junior': 1, 'Intermediate': 2, 'Advanced': 3 };
+                    const claimedVal = levelVal[claimedLvl] || 2;
+                    const provenVal = levelVal[provenLvl] || 2;
+
+                    let statusBadge = null;
+                    if (claimedVal === provenVal) {
+                      statusBadge = (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-bold border border-indigo-100">
+                          <CheckCircle2 size={12} /> Verified Match
+                        </span>
+                      );
+                    } else if (claimedVal > provenVal) {
+                      statusBadge = (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-50 text-amber-700 rounded-lg text-xs font-bold border border-amber-100">
+                          <AlertCircle size={12} /> Overclaimed
+                        </span>
+                      );
+                    } else {
+                      statusBadge = (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-lg text-xs font-bold border border-emerald-200 shadow-sm shadow-emerald-100/50 animate-pulse">
+                          <Sparkles size={12} className="text-emerald-500" /> Hidden Talent!
+                        </span>
+                      );
+                    }
+
+                    return (
+                      <tr key={skill} className="hover:bg-slate-50/50 transition-colors">
+                        <td className="p-4 text-sm font-bold text-slate-900">{skill}</td>
+                        <td className="p-4 text-sm font-medium text-slate-500">{claimedLvl}</td>
+                        <td className="p-4 text-sm font-bold text-indigo-600">{provenLvl}</td>
+                        <td className="p-4">{statusBadge}</td>
+                      </tr>
+                    );
+                  })}
+                  {Object.keys(candidate?.resume_skills || {}).length === 0 && (
+                    <tr>
+                      <td colSpan="4" className="p-8 text-center text-sm text-slate-400 italic">No skills verified yet. Update your resume to cross-reference coding tasks.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Growth Board Panel */}
+          <div className="lg:col-span-1 bg-slate-50/50 rounded-2xl border border-slate-100 p-6 flex flex-col">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-1.5">
+              <Activity size={14} className="text-indigo-600" /> Growth Board
+            </h4>
+            
+            {candidate?.growth_nudges?.length > 0 ? (
+              <div className="space-y-4 overflow-y-auto max-h-[320px] pr-1">
+                {candidate.growth_nudges.map((nudge, i) => {
+                  const isHiddenTalent = nudge.includes('Hidden Talent');
+                  return (
+                    <div 
+                      key={i} 
+                      className={`p-3.5 rounded-xl border text-xs font-medium leading-relaxed transition-all duration-300 shadow-sm ${
+                        isHiddenTalent 
+                          ? 'bg-emerald-50/40 border-emerald-200/60 text-emerald-800' 
+                          : 'bg-white border-slate-200/60 text-slate-600'
+                      }`}
+                    >
+                      <p className="font-bold mb-1 flex items-center gap-1">
+                        {isHiddenTalent ? (
+                          <>
+                            <Sparkles size={12} className="text-emerald-500 animate-spin-slow" />
+                            Hidden Talent nudge
+                          </>
+                        ) : (
+                          <>
+                            <Cpu size={12} className="text-indigo-500" />
+                            Growth Nudge
+                          </>
+                        )}
+                      </p>
+                      {nudge}
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="flex-1 flex flex-col items-center justify-center py-8 text-center">
+                <span className="material-symbols-outlined text-4xl text-slate-300 mb-2">done_all</span>
+                <p className="text-xs text-slate-400 italic">Perfect alignment! No coding skill gaps or recommendations.</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
       {/* AI Detailed Feedback */}
       <div className="bg-slate-900 rounded-[2.5rem] p-8 sm:p-10 shadow-2xl relative overflow-hidden group">
         <div className="absolute top-0 right-0 p-8 opacity-5 text-indigo-400">

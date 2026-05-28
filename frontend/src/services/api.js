@@ -169,6 +169,11 @@ export const submitCandidateAssessment = async (data) => {
   return response.data;
 };
 
+export const uploadResumeSkills = async (data) => {
+  const response = await api.post('/candidate/me/resume', data);
+  return response.data;
+};
+
 export const getTasksForRole = async (role) => {
   // Ensure role does not contain '/' which FastAPI treats as path separator
   const sanitizedRole = role.replace(/\//g, '-');

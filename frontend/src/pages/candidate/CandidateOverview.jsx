@@ -46,6 +46,56 @@ export default function CandidateOverview() {
         </div>
       )}
 
+      {/* Resume Verification CTA Banner */}
+      {(() => {
+        const hasUploadedResume = candidate?.resume_skills && Object.keys(candidate.resume_skills).length > 0;
+        return !hasUploadedResume ? (
+          <div className="bg-gradient-to-r from-indigo-600 via-indigo-700 to-violet-700 rounded-3xl p-6 text-white flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xl shadow-indigo-600/10 relative overflow-hidden group">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent)]"></div>
+            <div className="relative z-10 space-y-2">
+              <h2 className="text-xl font-bold flex items-center gap-2">
+                <span className="material-symbols-outlined text-indigo-200">upload_file</span>
+                Verify Your Resume Claims Against Code Proof
+              </h2>
+              <p className="text-sm text-indigo-100 max-w-xl font-medium">
+                Upload your resume now to instantly cross-reference self-assessed skill levels against sandbox task realities. Unlock your "Hidden Talent" mode!
+              </p>
+            </div>
+            <Link 
+              to="/resume-verification" 
+              className="shrink-0 px-5 py-3 bg-white text-indigo-700 font-bold rounded-2xl hover:bg-indigo-50 transition-colors shadow-md relative z-10 flex items-center gap-2 text-sm"
+            >
+              Upload & Verify Resume <ArrowRight size={16} />
+            </Link>
+          </div>
+        ) : (
+          <div className="bg-indigo-50 border border-indigo-100 rounded-3xl p-6 text-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-sm relative overflow-hidden">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-indigo-600 text-white rounded-2xl flex items-center justify-center shrink-0 shadow-md">
+                <span className="material-symbols-outlined">verified</span>
+              </div>
+              <div>
+                <h2 className="text-base font-bold text-slate-900 flex items-center gap-1.5">
+                  Resume Verified Successfully
+                  <span className="px-2 py-0.5 bg-emerald-500 text-white rounded-full text-[10px] font-black uppercase tracking-wider animate-pulse">
+                    Active
+                  </span>
+                </h2>
+                <p className="text-xs text-slate-500 font-semibold mt-0.5">
+                  AI has extracted {Object.keys(candidate.resume_skills).length} claimed skills. Sandbox code outputs are being cross-referenced.
+                </p>
+              </div>
+            </div>
+            <Link 
+              to="/resume-verification" 
+              className="shrink-0 px-4 py-2.5 bg-white border border-slate-200 text-slate-700 hover:text-indigo-600 font-bold rounded-xl hover:bg-slate-50 transition-colors shadow-sm text-xs flex items-center gap-1.5"
+            >
+              <span className="material-symbols-outlined text-xs">edit</span> Re-verify Resume
+            </Link>
+          </div>
+        );
+      })()}
+
       {/* Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white p-6 rounded-[2rem] border border-slate-200 shadow-sm flex flex-col justify-between hover:border-indigo-200 transition-colors">
