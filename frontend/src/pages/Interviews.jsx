@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, User, Link as LinkIcon, CheckCircle2, XCircle, RefreshCw, Video, MapPin, Tag } from 'lucide-react';
+import { Calendar, Clock, Link as LinkIcon, CheckCircle2, XCircle, RefreshCw, Video, MapPin, Tag } from 'lucide-react';
 import { getInterviews, updateInterview } from '../services/api';
 import { Link } from 'react-router-dom';
 
@@ -127,6 +127,19 @@ export default function Interviews() {
                   <span className="text-[10px] font-bold uppercase">Profile</span>
                 </Link>
                 
+                {interview.status !== 'Cancelled' && (
+                  <Link
+                    to={`/interviews/${interview.id}/room`}
+                    className="p-4 bg-indigo-600 text-white rounded-2xl hover:bg-indigo-700 transition-all flex flex-col items-center gap-1 min-w-[80px] shadow-lg shadow-indigo-100"
+                    title={interview.status === 'Completed' ? 'Review Interview' : 'Monitor Interview Room'}
+                  >
+                    <Video size={18} />
+                    <span className="text-[10px] font-bold uppercase">
+                      {interview.status === 'Completed' ? 'Review' : 'Monitor'}
+                    </span>
+                  </Link>
+                )}
+
                 {interview.status === 'Scheduled' && (
                   <>
                     <button 

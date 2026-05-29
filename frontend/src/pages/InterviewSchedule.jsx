@@ -1,6 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { getCandidateInterviews } from '../services/api';
+import { Link } from 'react-router-dom';
+
+const getDisplayNotes = (notes) => {
+  if (!notes) return '';
+  try {
+    const parsed = JSON.parse(notes);
+    return parsed?.recruiter_notes || '';
+  } catch {
+    return notes;
+  }
+};
 
 export default function InterviewSchedule() {
   const { user } = useAuth();
@@ -14,9 +25,10 @@ export default function InterviewSchedule() {
 
   const fetchInterviews = async () => {
     try {
-      if (!user?.id) return;
+      const candidateId = user?.candidate_id || user?.id;
+      if (!candidateId) return;
 
-      const data = await getCandidateInterviews(user.id);
+      const data = await getCandidateInterviews(candidateId);
 
       setInterviews(data);
     } catch (err) {
@@ -59,6 +71,9 @@ export default function InterviewSchedule() {
       ) : (
         <div className="grid gap-6">
           {interviews.map((interview) => (
+            (() => {
+              const displayNotes = getDisplayNotes(interview.notes);
+              return (
             <div
               key={interview.id}
               className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm"
@@ -100,25 +115,35 @@ export default function InterviewSchedule() {
                   </p>
                 </div>
 
-                {interview.notes && (
+                {displayNotes && (
                   <div>
                     <span className="font-semibold text-slate-700">
                       Notes:
                     </span>
 
                     <p className="text-slate-600">
-                      {interview.notes}
+                      {displayNotes}
                     </p>
                   </div>
                 )}
               </div>
 
-              {interview.mode === "Online" && (
-                <button className="mt-6 px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition">
-                  Join Meeting
-                </button>
+              {interview.mode === "Online" && interview.status === "Scheduled" && (
+                <Link
+                  to={`/candidate/interviews/${interview.id}/room`}
+                  className="mt-6 inline-flex px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition"
+                >
+                  Join Interview Room
+                </Link>
+              )}
+              {interview.status === "Completed" && (
+                <p className="mt-6 inline-flex rounded-xl bg-emerald-50 px-5 py-3 text-sm font-bold text-emerald-700">
+                  Interview completed. Recruiter review is in progress.
+                </p>
               )}
             </div>
+              );
+            })()
           ))}
         </div>
       )}

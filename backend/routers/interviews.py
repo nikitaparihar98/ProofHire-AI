@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
+import json
 from datetime import datetime
 from backend.core.database import get_db
 from backend.models import models
@@ -83,6 +84,48 @@ def update_interview(id: int, status: str, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(interview)
     
+    response = schemas.InterviewResponse.model_validate(interview)
+    if candidate:
+        response.candidate_name = candidate.name
+        response.candidate_role = candidate.role
+    return response
+
+@router.get("/detail/{interview_id}", response_model=schemas.InterviewResponse)
+def get_interview_by_id(interview_id: int, db: Session = Depends(get_db)):
+    interview = db.query(models.Interview).filter(models.Interview.id == interview_id).first()
+    if not interview:
+        raise HTTPException(status_code=404, detail="Interview not found")
+
+    candidate = db.query(models.Candidate).filter(models.Candidate.id == interview.candidate_id).first()
+    response = schemas.InterviewResponse.model_validate(interview)
+    if candidate:
+        response.candidate_name = candidate.name
+        response.candidate_role = candidate.role
+    return response
+
+@router.patch("/{id}/simulation", response_model=schemas.InterviewResponse)
+def update_interview_simulation(
+    id: int,
+    request: schemas.InterviewSimulationUpdate,
+    db: Session = Depends(get_db),
+):
+    interview = db.query(models.Interview).filter(models.Interview.id == id).first()
+    if not interview:
+        raise HTTPException(status_code=404, detail="Interview not found")
+
+    interview.notes = json.dumps({
+        "recruiter_notes": request.recruiter_notes,
+        "transcript": request.transcript,
+        "scores": request.scores,
+        "simulation_status": request.simulation_status,
+        "active_question": request.active_question,
+        "ai_evaluation": request.ai_evaluation,
+        "malpractice_flags": request.malpractice_flags,
+    })
+    db.commit()
+    db.refresh(interview)
+
+    candidate = db.query(models.Candidate).filter(models.Candidate.id == interview.candidate_id).first()
     response = schemas.InterviewResponse.model_validate(interview)
     if candidate:
         response.candidate_name = candidate.name

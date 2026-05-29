@@ -45,6 +45,10 @@ def get_candidate_dashboard(
         "assigned_task": assigned_task,
         "assignment_id": assignment.id,
         "submission_status": assignment.status,
+        "scheduled_interviews": db.query(models.Interview).filter(
+            models.Interview.candidate_id == candidate.id,
+            models.Interview.status.in_(["Scheduled", "Upcoming"]),
+        ).count(),
     }
 
 

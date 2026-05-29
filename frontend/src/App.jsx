@@ -26,6 +26,7 @@ import Settings from './pages/Settings';
 import CandidateDetails from './pages/CandidateDetails';
 import CompareCandidates from './pages/CompareCandidates';
 import Interviews from './pages/Interviews';
+import InterviewRoom from './pages/InterviewRoom';
 import Messages from './pages/Messages';
 import LiveMonitoring from './pages/LiveMonitoring';
 import CandidateTest from './pages/CandidateTest';
@@ -47,6 +48,7 @@ function AppRoutes() {
       <Route path="/candidate/assessments" element={<ProtectedRoute role="candidate"><CandidateLayout><AssessmentsHub /></CandidateLayout></ProtectedRoute>} />
       <Route path="/candidate/assessments/:assessmentId" element={<ProtectedRoute role="candidate"><CandidateLayout><CandidateAssessmentPage /></CandidateLayout></ProtectedRoute>} />
       <Route path="/candidate/interviews" element={<ProtectedRoute role="candidate"><CandidateLayout><InterviewSchedule /></CandidateLayout></ProtectedRoute>} />
+      <Route path="/candidate/interviews/:interviewId/room" element={<ProtectedRoute role="candidate"><CandidateLayout><InterviewRoom /></CandidateLayout></ProtectedRoute>} />
       <Route path="/candidate/results" element={<ProtectedRoute role="candidate"><CandidateLayout><AIResults /></CandidateLayout></ProtectedRoute>} />
       <Route path="/candidate/results/:assessmentId" element={<ProtectedRoute role="candidate"><CandidateLayout><AIResults /></CandidateLayout></ProtectedRoute>} />
       <Route path="/candidate/messages" element={<ProtectedRoute role="candidate"><CandidateLayout><CandidateMessagesPage /></CandidateLayout></ProtectedRoute>} />
@@ -69,6 +71,7 @@ function AppRoutes() {
       <Route path="/candidate/:id" element={<Layout><CandidateDetails /></Layout>} />
       <Route path="/compare" element={<Layout><CompareCandidates /></Layout>} />
       <Route path="/interviews" element={<Layout><Interviews /></Layout>} />
+      <Route path="/interviews/:interviewId/room" element={<Layout><InterviewRoom /></Layout>} />
       <Route path="/messages" element={<Layout><Messages /></Layout>} />
       <Route path="/monitor/:sessionId" element={<Layout><LiveMonitoring /></Layout>} />
       <Route path="/assign-tasks" element={<ProtectedRoute role="recruiter"><Layout><AssignTasks /></Layout></ProtectedRoute>} />

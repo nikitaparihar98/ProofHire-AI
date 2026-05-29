@@ -257,11 +257,21 @@ export const getInterviews = async () => {
   return response.data;
 };
 
+export const getInterviewById = async (id) => {
+  const response = await api.get(`/interviews/detail/${id}`);
+  return response.data;
+};
+
 export const updateInterview = async (id, status) => {
   const response = await api.patch(
     `/interviews/${id}?status=${status}`
   );
 
+  return response.data;
+};
+
+export const saveInterviewSimulation = async (id, data) => {
+  const response = await api.patch(`/interviews/${id}/simulation`, data);
   return response.data;
 };
 

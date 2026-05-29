@@ -216,6 +216,16 @@ class InterviewResponse(BaseModel):
         from_attributes = True
 
 
+class InterviewSimulationUpdate(BaseModel):
+    transcript: List[Dict[str, str]] = Field(default_factory=list)
+    scores: Dict[str, int] = Field(default_factory=dict)
+    recruiter_notes: str = ""
+    simulation_status: str = "not_started"
+    active_question: int = 0
+    ai_evaluation: Dict[str, Any] = Field(default_factory=dict)
+    malpractice_flags: List[str] = Field(default_factory=list)
+
+
 # =========================
 # MESSAGES
 # =========================
@@ -285,6 +295,7 @@ class CandidateDashboardResponse(BaseModel):
     assigned_task: TaskResponse
     assignment_id: int
     submission_status: str
+    scheduled_interviews: int = 0
 
 
 # =========================

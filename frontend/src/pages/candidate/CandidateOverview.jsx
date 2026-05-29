@@ -32,6 +32,7 @@ export default function CandidateOverview() {
   const task = dashboard?.assigned_task;
   const assignmentId = dashboard?.assignment_id;
   const isEvaluated = dashboard?.submission_status === 'Evaluated' || candidate?.status === 'Evaluated';
+  const scheduledInterviews = dashboard?.scheduled_interviews || 0;
   
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -134,7 +135,9 @@ export default function CandidateOverview() {
           </div>
           <div>
             <p className="text-xs font-black uppercase tracking-wider text-slate-400 mb-1">Interviews</p>
-            <p className="text-lg font-bold text-slate-900">0 Scheduled</p>
+            <p className="text-lg font-bold text-slate-900">
+              {scheduledInterviews} Scheduled
+            </p>
           </div>
         </div>
       </div>
