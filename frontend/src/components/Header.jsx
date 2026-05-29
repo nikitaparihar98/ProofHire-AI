@@ -120,7 +120,7 @@ export default function Header() {
   };
 
   return (
-    <header className="h-20 bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 px-8 flex items-center justify-between">
+    <header className="h-20 bg-bg-main/80 backdrop-blur-md border-b border-subtle sticky top-0 z-40 px-8 flex items-center justify-between">
       <div className="relative w-96 max-w-full hidden md:block" ref={searchRef}>
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           <Search className="h-4 w-4 text-slate-400" />
@@ -130,19 +130,19 @@ export default function Header() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onFocus={handleSearchFocus}
-          className="block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-xl bg-slate-50/50 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all dark:bg-slate-800 dark:border-slate-700 dark:text-white"
+          className="block w-full pl-10 pr-3 py-2 border border-subtle rounded-xl bg-bg-card/50 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:bg-slate-800 dark:border-slate-700 dark:text-white"
           placeholder="Search candidates, reports..."
         />
 
         {showSearchDropdown && (searchQuery.trim() || searchLoading) && (
           <div className="absolute left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-2xl rounded-2xl overflow-hidden z-50 max-h-96 overflow-y-auto py-2">
             {searchLoading ? (
-              <div className="flex items-center justify-center p-6 text-sm text-slate-400 gap-2">
+              <div className="flex items-center justify-center p-6 text-sm text-secondary gap-2">
                 <Loader className="w-4 h-4 animate-spin text-indigo-600" />
                 <span>Loading candidates...</span>
               </div>
             ) : filteredResults.length === 0 ? (
-              <div className="p-4 text-center text-sm text-slate-400 font-medium">
+              <div className="p-4 text-center text-sm text-secondary font-medium">
                 No matching candidates or reports
               </div>
             ) : (
@@ -157,17 +157,17 @@ export default function Header() {
                   className="px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors cursor-pointer flex items-center justify-between border-b border-slate-50 last:border-0 dark:border-slate-700"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-sm">
+                    <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold text-sm">
                       {candidate.name.charAt(0)}
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-slate-900 dark:text-slate-100">{candidate.name}</p>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">{candidate.role}</p>
+                      <p className="text-sm font-bold text-primary">{candidate.name}</p>
+                      <p className="text-[11px] text-secondary font-medium">{candidate.role}</p>
                     </div>
                   </div>
                   <div className="flex flex-col items-end gap-1">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{candidate.status}</span>
-                    <span className="text-xs font-black text-indigo-600 dark:text-indigo-400">{candidate.overall_score}%</span>
+                    <span className="text-[10px] font-bold text-secondary uppercase tracking-wider">{candidate.status}</span>
+                    <span className="text-xs font-black text-accent">{candidate.overall_score}%</span>
                   </div>
                 </div>
               ))
@@ -179,7 +179,7 @@ export default function Header() {
       <div className="flex items-center gap-6">
         <NotificationCenter />
         
-        <div className="h-8 w-px bg-slate-200 mx-1"></div>
+        <div className="h-8 w-px bg-subtle mx-1"></div>
         
         <div className="relative" ref={dropdownRef}>
           <div 

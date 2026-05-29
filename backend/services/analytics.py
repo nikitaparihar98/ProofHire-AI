@@ -177,7 +177,21 @@ def calculate_malpractice_severity(candidate: Candidate) -> float:
         "webcam_incident": 20,
     }
     for flag in flags:
-        severity += weight_map.get(flag.get("type"), 0)
+        if isinstance(flag, dict):
+            severity += weight_map.get(flag.get("type"), 0)
+            continue
+
+        flag_text = str(flag).lower()
+        if "tab" in flag_text:
+            severity += weight_map["tab_switching"]
+        elif "copy" in flag_text or "paste" in flag_text:
+            severity += weight_map["copy_paste"]
+        elif "plagiarism" in flag_text:
+            severity += weight_map["plagiarism"]
+        elif "webcam" in flag_text or "camera" in flag_text:
+            severity += weight_map["webcam_incident"]
+        else:
+            severity += 10
     return min(severity, 100.0)
 
 

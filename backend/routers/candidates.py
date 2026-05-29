@@ -4,6 +4,7 @@ from typing import List
 import datetime
 
 from backend.core.database import get_db
+from backend.services.task_service import get_task_by_id
 from backend.models import models
 from backend.schemas import schemas
 from backend.services.evaluation_service import compare_candidates
@@ -181,3 +182,46 @@ def get_candidate(candidate_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Candidate not found")
 
     return normalize_candidate(candidate)
+
+# -----------------------------
+# ASSIGN TASK TO CANDIDATE
+# -----------------------------
+@router.post("/{candidate_id}/assign-task", response_model=schemas.TaskResponse)
+def assign_task_to_candidate(
+    candidate_id: int,
+    request: schemas.RecruiterTaskAssignRequest,
+    db: Session = Depends(get_db)
+):
+    """Assign a task (predefined or custom) to a candidate.
+
+    Returns the task details (TaskResponse) for the UI.
+    """
+    # Verify candidate exists
+    candidate = db.query(models.Candidate).filter(models.Candidate.id == candidate_id).first()
+    if not candidate:
+        raise HTTPException(status_code=404, detail="Candidate not found")
+
+    # Resolve task definition
+    if request.task_id:
+        task_def = get_task_by_id(request.task_id)
+    else:
+        # fallback to first task if none provided
+        task_def = get_task_by_id("backend-api-001")
+
+    # Record assignment in database
+    task_assignment = models.TaskAssignment(
+        candidate_id=candidate_id,
+        task_id=task_def["id"],
+        difficulty=request.difficulty,
+        duration=request.duration,
+        custom_prompt=request.custom_prompt,
+        custom_title=request.custom_title,
+        status="ASSIGNED",
+        assigned_at=datetime.datetime.utcnow().isoformat()
+    )
+    db.add(task_assignment)
+    db.commit()
+    db.refresh(task_assignment)
+
+    # Return the task definition as TaskResponse schema
+    return schemas.TaskResponse(**task_def)

@@ -63,7 +63,7 @@ export default function TasksManagement() {
               </div>
               <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
                 <span className="text-sm font-bold text-slate-500">{task.time_limit_minutes} minutes</span>
-                <Link to={dashboard?.submission_status === 'Evaluated' ? `/candidate/results/${dashboard?.assignment_id}` : `/candidate/assessments/${dashboard?.assignment_id}`} className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-bold text-white">Open Assessment</Link>
+                <Link to={`/candidate/assessments/${task.id}`} className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-bold text-white">Open Assessment</Link>
               </div>
             </article>
           ))}

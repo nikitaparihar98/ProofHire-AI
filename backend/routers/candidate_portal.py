@@ -9,6 +9,7 @@ from backend.schemas import schemas
 from backend.services.auth_service import get_current_user, require_role
 from backend.services.submission_service import evaluate_and_store_submission
 from backend.services.task_service import assign_task_for_role, get_task_by_id
+from backend.routers.notifications import create_notification
 
 router = APIRouter(
     prefix="/api/candidate/me",
@@ -240,7 +241,7 @@ def get_candidate_assessments(
 
 @assessments_router.get("/{id}")
 def get_candidate_assessment_by_id(
-    id: int,
+    id: str,
     current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
@@ -339,7 +340,12 @@ def submit_candidate_assessment(
     
     if not assignment:
         raise HTTPException(status_code=404, detail="Assessment not found")
-        
+
+    malpractice_flags = _merge_malpractice_logs(
+        assignment.malpractice_log,
+        request.malpractice_log,
+    )
+
     task_title = assignment.custom_title or (get_task_by_id(assignment.task_id).get("title") if assignment.task_id else "Assessment")
     submission_data = {
         "task_id": assignment.task_id or "custom",
@@ -347,7 +353,7 @@ def submit_candidate_assessment(
         "answer": request.final_answer,
         "resume_score": 80.0,
         "completion_time": "Completed",
-        "live_malpractice_flags": assignment.malpractice_log or [],
+        "live_malpractice_flags": malpractice_flags,
     }
     
     from backend.services.llama_service import evaluate_candidate_mock
@@ -364,6 +370,13 @@ def submit_candidate_assessment(
     candidate.hiring_recommendation = ai_result.get("hiring_recommendation", "Pending")
     candidate.ai_feedback = ai_result.get("ai_feedback", "")
     candidate.submission_data = submission_data
+    candidate.plagiarism_score = ai_result.get("plagiarism_score", 0.0)
+    candidate.originality_score = ai_result.get("originality_score", 100.0)
+    candidate.plagiarism_risk_level = ai_result.get("plagiarism_risk_level", "Low")
+    candidate.ai_generated_suspicion = ai_result.get("ai_generated_suspicion", 0.0)
+    candidate.authenticity_summary = ai_result.get("authenticity_summary", "")
+    candidate.malpractice_flags = ai_result.get("malpractice_flags", malpractice_flags)
+    candidate.malpractice_severity = min(len(candidate.malpractice_flags or []) * 20, 100)
     candidate.status = "Evaluated"
     
     # Save resume claims vs proof columns
@@ -385,6 +398,7 @@ def submit_candidate_assessment(
     )
     
     assignment.draft_answer = request.final_answer
+    assignment.malpractice_log = malpractice_flags
     assignment.status = "Evaluated"
     import datetime
     assignment.submitted_at = datetime.datetime.utcnow().isoformat()
@@ -392,10 +406,36 @@ def submit_candidate_assessment(
     db.commit()
     db.refresh(candidate)
     db.refresh(assignment)
+
+    if candidate.malpractice_flags:
+        create_notification(
+            db,
+            "Malpractice Warning",
+            f"{candidate.name} submitted an assessment with {len(candidate.malpractice_flags)} proctoring flag(s).",
+            "critical" if candidate.malpractice_severity >= 60 else "warning",
+        )
     
     return {
         "message": "Assessment submitted and evaluated successfully",
         "candidate_id": candidate.id,
         "assignment_id": assignment.id,
     }
+
+
+def _merge_malpractice_logs(*logs):
+    merged = []
+    seen = set()
+
+    for log in logs:
+        if not log:
+            continue
+        items = log if isinstance(log, list) else [log]
+        for item in items:
+            text = item.get("message") if isinstance(item, dict) else str(item)
+            text = text.strip()
+            if text and text not in seen:
+                merged.append(text)
+                seen.add(text)
+
+    return merged
 

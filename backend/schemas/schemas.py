@@ -268,6 +268,7 @@ class SaveDraftRequest(BaseModel):
 
 class AssessmentSubmitRequest(BaseModel):
     final_answer: str
+    malpractice_log: List[Any] = Field(default_factory=list)
 
 class EvaluationRequest(BaseModel):
     name: str

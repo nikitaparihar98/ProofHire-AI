@@ -33,7 +33,7 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
 
   return (
     <aside 
-      className={`fixed left-0 top-0 h-screen bg-white border-r border-slate-200 transition-all duration-300 z-50 flex flex-col ${isOpen ? 'w-64' : 'w-20'}`}
+      className={`fixed left-0 top-0 h-screen bg-primary border-r border-border-subtle transition-all duration-300 z-50 flex flex-col ${isOpen ? 'w-64' : 'w-20'}`}
     >
       <div className="p-6 flex items-center gap-3">
         <div className="bg-indigo-600 p-2 rounded-lg text-white">
