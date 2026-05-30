@@ -52,7 +52,7 @@ export default function NotificationCenter() {
       case 'warning': return <AlertTriangle className="text-amber-500" size={16} />;
       case 'critical': return <AlertTriangle className="text-rose-500" size={16} />;
       case 'success': return <CheckCircle className="text-emerald-500" size={16} />;
-      default: return <Info className="text-indigo-500" size={16} />;
+      default: return <Info className="text-teal-600" size={16} />;
     }
   };
 
@@ -64,7 +64,7 @@ export default function NotificationCenter() {
       >
         <Bell size={20} />
         {unreadCount > 0 && (
-          <span className="absolute top-1.5 right-1.5 h-4 w-4 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white">
+          <span className="absolute top-1.5 right-1.5 h-4 w-4 bg-rose-500 text-white text-[10px] font-medium rounded-full flex items-center justify-center border-2 border-white">
             {unreadCount}
           </span>
         )}
@@ -78,10 +78,10 @@ export default function NotificationCenter() {
           ></div>
           <div className="absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-xl border border-slate-200 z-20 overflow-hidden">
             <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
-              <h3 className="font-bold text-slate-900">Notifications</h3>
+              <h3 className="font-medium text-slate-900">Notifications</h3>
               <button 
                 onClick={clearAll}
-                className="text-xs text-indigo-600 font-medium hover:underline"
+                className="text-xs text-teal-700 font-medium hover:underline"
               >
                 Clear all
               </button>
@@ -93,11 +93,11 @@ export default function NotificationCenter() {
                   <div 
                     key={notif.id}
                     onClick={() => markAsRead(notif.id)}
-                    className={`p-4 border-b border-slate-50 flex gap-3 hover:bg-slate-50 cursor-pointer transition-colors ${notif.is_read === 0 ? 'bg-indigo-50/30' : ''}`}
+                    className={`p-4 border-b border-slate-50 flex gap-3 hover:bg-slate-50 cursor-pointer transition-colors ${notif.is_read === 0 ? 'bg-teal-50/30' : ''}`}
                   >
                     <div className="mt-0.5">{getIcon(notif.type)}</div>
                     <div className="flex-1">
-                      <p className="text-xs font-bold text-slate-900">{notif.title}</p>
+                      <p className="text-xs font-medium text-slate-900">{notif.title}</p>
                       <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">{notif.message}</p>
                       <p className="text-[10px] text-slate-400 mt-2">
                         {new Date(notif.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

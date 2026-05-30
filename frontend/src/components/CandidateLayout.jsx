@@ -5,7 +5,7 @@ import {
   CheckSquare, 
   FileText, 
   Video, 
-  BrainCircuit, 
+  BrainCircuit,
   MessageSquare, 
   User, 
   Settings, 
@@ -16,20 +16,35 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
+const getStoredAvatar = (email = '') => {
+  try {
+    return window.localStorage?.getItem('avatar_' + email.trim().toLowerCase()) || '';
+  } catch {
+    return '';
+  }
+};
+
 export default function CandidateLayout({ children }) {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [avatar, setAvatar] = useState(() => {
-    const email = user?.email || '';
-    return localStorage.getItem('avatar_' + email.trim().toLowerCase()) || '';
+    return getStoredAvatar(user?.email || '');
   });
 
   useEffect(() => {
+    document.documentElement.classList.remove('dark');
+    try {
+      window.localStorage?.setItem('theme', 'light');
+    } catch {
+      // Rendering should not depend on localStorage.
+    }
+  }, []);
+
+  useEffect(() => {
     const syncAvatar = () => {
-      const email = user?.email || '';
-      setAvatar(localStorage.getItem('avatar_' + email.trim().toLowerCase()) || '');
+      setAvatar(getStoredAvatar(user?.email || ''));
     };
     
     window.addEventListener('candidate-avatar-updated', syncAvatar);
@@ -57,16 +72,14 @@ export default function CandidateLayout({ children }) {
   ];
 
   return (
-    <div className="flex h-screen bg-slate-50 overflow-hidden font-sans">
+    <div className="proofhire-candidate flex h-screen overflow-hidden bg-[#f6f8fb] font-sans text-[#071b3a]">
       {/* Mobile Header */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-slate-200 flex items-center justify-between px-4 z-50">
+      <div className="fixed left-0 right-0 top-0 z-50 flex h-16 items-center justify-between border-b border-slate-200 bg-white px-4 lg:hidden">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-black text-sm">
-            PH
-          </div>
-          <span className="font-black text-slate-900 text-lg">ProofHire AI</span>
+          <span className="h-3 w-3 rounded-full bg-teal-700" />
+          <span className="text-lg font-semibold text-[#071b3a]">ProofHire</span>
         </div>
-        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 text-slate-500 hover:bg-slate-100 rounded-lg">
+        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="rounded-lg p-2 text-slate-500 hover:bg-[#f8faff]">
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
@@ -78,14 +91,12 @@ export default function CandidateLayout({ children }) {
         ${isMobileMenuOpen ? 'translate-x-0 mt-16' : '-translate-x-full lg:translate-x-0 lg:mt-0'}
       `}>
         {/* Brand */}
-        <div className="hidden lg:flex h-20 items-center px-8 border-b border-slate-100">
+        <div className="hidden h-20 items-center border-b border-slate-100 px-8 lg:flex">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-black shadow-lg shadow-indigo-200">
-              PH
-            </div>
+            <span className="h-3 w-3 rounded-full bg-teal-700" />
             <div>
-              <span className="font-black text-slate-900 text-xl block leading-tight">ProofHire AI</span>
-              <span className="text-[10px] font-black text-indigo-500 uppercase tracking-widest">Candidate Portal</span>
+              <span className="block text-xl font-semibold leading-tight text-[#071b3a]">ProofHire</span>
+              <span className="text-[10px] font-semibold uppercase tracking-widest text-teal-800">Candidate workspace</span>
             </div>
           </div>
         </div>
@@ -93,7 +104,7 @@ export default function CandidateLayout({ children }) {
         {/* User Card */}
         <div className="p-6 border-b border-slate-100">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600 font-bold text-lg border border-indigo-100 uppercase overflow-hidden shrink-0">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border border-teal-100 bg-teal-50 text-lg font-semibold uppercase text-teal-800">
               {avatar ? (
                 <img src={avatar} alt="Profile" className="h-full w-full object-cover" />
               ) : (
@@ -101,7 +112,7 @@ export default function CandidateLayout({ children }) {
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-slate-900 truncate">{user?.name || 'Candidate'}</h3>
+              <h3 className="truncate font-semibold text-[#071b3a]">{user?.name || 'Candidate'}</h3>
               <p className="text-xs text-slate-500 truncate">{user?.role || 'Applicant'}</p>
             </div>
           </div>
@@ -117,13 +128,13 @@ export default function CandidateLayout({ children }) {
                 to={item.path}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`
-                  flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all
+                  flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all
                   ${isActive 
-                    ? 'bg-indigo-50 text-indigo-600' 
-                    : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'}
+                    ? 'bg-teal-50 text-teal-800'
+                    : 'text-slate-500 hover:bg-[#f8faff] hover:text-[#071b3a]'}
                 `}
               >
-                <div className={`${isActive ? 'text-indigo-600' : 'text-slate-400'}`}>
+                <div className={`${isActive ? 'text-teal-800' : 'text-slate-400'}`}>
                   {item.icon}
                 </div>
                 {item.name}
@@ -137,18 +148,18 @@ export default function CandidateLayout({ children }) {
           <Link 
             to="/candidate/settings"
             onClick={() => setIsMobileMenuOpen(false)}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${
+            className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all ${
               location.pathname === '/candidate/settings'
-                ? 'bg-indigo-50 text-indigo-600'
-                : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+                ? 'bg-teal-50 text-teal-800'
+                : 'text-slate-500 hover:bg-[#f8faff] hover:text-[#071b3a]'
             }`}
           >
-            <Settings size={20} className={location.pathname === '/candidate/settings' ? 'text-indigo-600' : 'text-slate-400'} />
+            <Settings size={20} className={location.pathname === '/candidate/settings' ? 'text-teal-800' : 'text-slate-400'} />
             Settings
           </Link>
           <button 
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold text-rose-500 hover:bg-rose-50 transition-all"
+            className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-rose-500 transition-all hover:bg-rose-50"
           >
             <LogOut size={20} />
             Sign Out
@@ -157,8 +168,8 @@ export default function CandidateLayout({ children }) {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 h-full overflow-y-auto bg-slate-50/50 lg:p-8 p-4 pt-20 lg:pt-8 custom-scrollbar relative">
-        <div className="max-w-6xl mx-auto h-full flex flex-col">
+      <main className="custom-scrollbar relative h-full flex-1 overflow-y-auto bg-[#f6f8fb] p-4 pt-20 lg:p-8 lg:pt-8">
+        <div className="mx-auto flex h-full max-w-6xl flex-col">
            {children}
         </div>
       </main>
@@ -166,7 +177,7 @@ export default function CandidateLayout({ children }) {
       {/* Overlay for mobile */}
       {isMobileMenuOpen && (
         <div 
-          className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-30 lg:hidden"
+          className="fixed inset-0 z-30 bg-[#071b3a]/20 backdrop-blur-sm lg:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}

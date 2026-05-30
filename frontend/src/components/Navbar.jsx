@@ -6,7 +6,7 @@ export default function Navbar() {
   const location = useLocation();
 
   const isActive = (path) => {
-    return location.pathname === path ? 'text-indigo-600 bg-indigo-50 border-indigo-100' : 'text-slate-600 hover:text-indigo-600 hover:bg-slate-50';
+    return location.pathname === path ? 'text-teal-600 bg-teal-50 border-teal-100' : 'text-slate-600 hover:text-teal-600 hover:bg-slate-50';
   };
 
   return (
@@ -15,11 +15,11 @@ export default function Navbar() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex items-center gap-2 group">
-              <div className="bg-indigo-600 p-2 rounded-xl group-hover:bg-indigo-700 transition-colors shadow-inner">
+              <div className="bg-teal-600 p-2 rounded-xl group-hover:bg-teal-700 transition-colors shadow-inner">
                 <Users className="w-5 h-5 text-white" />
               </div>
-              <span className="font-bold text-xl tracking-tight text-slate-900">
-                ProofHire <span className="text-indigo-600">AI</span>
+              <span className="font-medium text-xl tracking-tight text-slate-900">
+                ProofHire <span className="text-teal-600">AI</span>
               </span>
             </Link>
           </div>

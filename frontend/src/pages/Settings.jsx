@@ -169,7 +169,7 @@ export default function Settings() {
   const tabs = [
     { id: 'profile', label: 'Profile', icon: <User size={18} /> },
     { id: 'notifications', label: 'Notifications', icon: <Bell size={18} /> },
-    { id: 'appearance', label: 'Appearance', icon: <Sun size={18} /> },
+    
     { id: 'security', label: 'Security', icon: <Lock size={18} /> },
     ...(user?.role === 'recruiter' || profileData.role === 'recruiter'
       ? [{ id: 'integrations', label: 'Integrations', icon: <Database size={18} /> }]
@@ -180,8 +180,9 @@ export default function Settings() {
     <div className="max-w-5xl animate-in fade-in duration-500">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Platform Settings</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-teal-800">Workspace settings</p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-[#071b3a]">Platform settings</h1>
+          <p className="mt-1 text-slate-500">
             {user?.role === 'candidate' 
               ? 'Configure your profile and candidate preferences.' 
               : 'Configure your workspace and recruiter preferences.'}
@@ -189,17 +190,17 @@ export default function Settings() {
         </div>
         
         {showSuccess && (
-          <div className="flex items-center gap-2 bg-emerald-50 text-emerald-600 px-4 py-2 rounded-xl text-sm font-bold border border-emerald-100 animate-in slide-in-from-right-4">
+          <div className="flex items-center gap-2 rounded-xl border border-teal-100 bg-teal-50 px-4 py-2 text-sm font-semibold text-teal-800 animate-in slide-in-from-right-4">
             <CheckCircle2 size={16} /> Changes saved successfully!
           </div>
         )}
         {securitySuccess && (
-          <div className="flex items-center gap-2 bg-emerald-50 text-emerald-600 px-4 py-2 rounded-xl text-sm font-bold border border-emerald-100 animate-in slide-in-from-right-4">
+          <div className="flex items-center gap-2 rounded-xl border border-teal-100 bg-teal-50 px-4 py-2 text-sm font-semibold text-teal-800 animate-in slide-in-from-right-4">
             <CheckCircle2 size={16} /> Password reset link sent!
           </div>
         )}
         {integrationSuccess && (
-          <div className="flex items-center gap-2 bg-emerald-50 text-emerald-600 px-4 py-2 rounded-xl text-sm font-bold border border-emerald-100 animate-in slide-in-from-right-4">
+          <div className="flex items-center gap-2 rounded-xl border border-teal-100 bg-teal-50 px-4 py-2 text-sm font-semibold text-teal-800 animate-in slide-in-from-right-4">
             <CheckCircle2 size={16} /> Early access requested!
           </div>
         )}
@@ -215,10 +216,10 @@ export default function Settings() {
                 setActiveTab(tab.id);
                 setSearchParams({ tab: tab.id });
               }}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${
+              className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all ${
                 activeTab === tab.id 
-                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100 dark:shadow-none' 
-                : 'text-slate-500 hover:bg-white dark:hover:bg-slate-800 dark:hover:text-white hover:text-slate-900'
+                ? 'bg-teal-50 text-teal-800'
+                : 'text-slate-500 hover:bg-white hover:text-[#071b3a]'
               }`}
             >
               {tab.icon}
@@ -228,17 +229,17 @@ export default function Settings() {
         </div>
 
         {/* Settings Content */}
-        <div className="flex-1 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden min-h-[500px]">
+        <div className="min-h-[500px] flex-1 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
           <div className="p-8">
             {activeTab === 'profile' && (
               <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
                 <div className="flex items-center gap-6 mb-8">
                    <div className="relative group">
-                      <div className="h-24 w-24 rounded-full bg-slate-100 dark:bg-slate-800 border-4 border-white dark:border-slate-950 shadow-lg overflow-hidden flex items-center justify-center">
+                      <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-teal-50 shadow-lg">
                          {profileData.avatar ? (
                            <img src={profileData.avatar} alt="Profile" className="h-full w-full object-cover" />
                          ) : (
-                           <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(profileData.name)}&background=6366f1&color=fff`} alt="Profile" />
+                           <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(profileData.name)}&background=0f766e&color=fff`} alt="Profile" />
                          )}
                       </div>
                       <input 
@@ -250,52 +251,52 @@ export default function Settings() {
                       />
                       <label 
                         htmlFor="avatar-input" 
-                        className="absolute bottom-0 right-0 p-1.5 bg-white dark:bg-slate-800 rounded-full shadow-md border border-slate-100 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer"
+                        className="absolute bottom-0 right-0 cursor-pointer rounded-full border border-slate-100 bg-white p-1.5 text-slate-500 shadow-md transition-colors hover:text-teal-800"
                       >
                         <Camera size={14} />
                       </label>
                    </div>
                    <div>
-                      <h3 className="text-xl font-bold text-slate-900 dark:text-white">{profileData.name}</h3>
-                      <p className="text-sm text-slate-500 dark:text-slate-400">{profileData.role}</p>
+                      <h3 className="text-xl font-semibold text-[#071b3a]">{profileData.name}</h3>
+                      <p className="text-sm text-slate-500">{profileData.role}</p>
                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Full Name</label>
+                    <label className="ml-1 text-xs font-semibold uppercase tracking-widest text-slate-400">Full Name</label>
                     <input 
                       type="text" 
                       value={profileData.name}
                       onChange={(e) => setProfileData({...profileData, name: e.target.value})}
-                      className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
+                      className="w-full rounded-xl border border-slate-200 bg-[#f8faff] px-4 py-2.5 text-sm text-[#071b3a] outline-none transition-all focus:border-teal-700 focus:ring-4 focus:ring-teal-700/10"
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Work Email</label>
+                    <label className="ml-1 text-xs font-semibold uppercase tracking-widest text-slate-400">Work Email</label>
                     <input 
                       type="email" 
                       value={profileData.email}
                       onChange={(e) => setProfileData({...profileData, email: e.target.value})}
-                      className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
+                      className="w-full rounded-xl border border-slate-200 bg-[#f8faff] px-4 py-2.5 text-sm text-[#071b3a] outline-none transition-all focus:border-teal-700 focus:ring-4 focus:ring-teal-700/10"
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Job Title</label>
+                    <label className="ml-1 text-xs font-semibold uppercase tracking-widest text-slate-400">Job Title</label>
                     <input 
                       type="text" 
                       value={profileData.role}
                       onChange={(e) => setProfileData({...profileData, role: e.target.value})}
-                      className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
+                      className="w-full rounded-xl border border-slate-200 bg-[#f8faff] px-4 py-2.5 text-sm text-[#071b3a] outline-none transition-all focus:border-teal-700 focus:ring-4 focus:ring-teal-700/10"
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Company</label>
+                    <label className="ml-1 text-xs font-semibold uppercase tracking-widest text-slate-400">Company</label>
                     <input 
                       type="text" 
                       value={profileData.company}
                       onChange={(e) => setProfileData({...profileData, company: e.target.value})}
-                      className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
+                      className="w-full rounded-xl border border-slate-200 bg-[#f8faff] px-4 py-2.5 text-sm text-[#071b3a] outline-none transition-all focus:border-teal-700 focus:ring-4 focus:ring-teal-700/10"
                     />
                   </div>
                 </div>
@@ -304,26 +305,26 @@ export default function Settings() {
 
             {activeTab === 'notifications' && (
               <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Notification Preferences</h3>
+                <h3 className="mb-4 text-lg font-semibold text-[#071b3a]">Notification preferences</h3>
                 <div className="space-y-4">
                   {[
                     { id: 'emailAlerts', label: 'Email Alerts', sub: 'Receive daily candidate summaries', icon: <Mail size={18} /> },
                     { id: 'browserAlerts', label: 'Browser Notifications', sub: 'Instant alerts for test starts', icon: <Globe size={18} /> },
                     { id: 'malpracticeAlerts', label: 'Malpractice Warnings', sub: 'Critical security event alerts', icon: <Shield size={18} /> },
                   ].map((pref) => (
-                    <div key={pref.id} className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700">
+                    <div key={pref.id} className="flex items-center justify-between rounded-2xl border border-slate-200 bg-[#f8faff] p-4">
                       <div className="flex items-center gap-4">
-                        <div className="p-2 bg-white dark:bg-slate-900 rounded-xl text-indigo-600 dark:text-indigo-400 shadow-sm">
+                        <div className="rounded-xl bg-white p-2 text-teal-800 shadow-sm">
                           {pref.icon}
                         </div>
                         <div>
-                          <p className="text-sm font-bold text-slate-900 dark:text-white">{pref.label}</p>
-                          <p className="text-xs text-slate-500 dark:text-slate-400">{pref.sub}</p>
+                          <p className="text-sm font-semibold text-[#071b3a]">{pref.label}</p>
+                          <p className="text-xs text-slate-500">{pref.sub}</p>
                         </div>
                       </div>
                       <button 
                         onClick={() => setNotifications({...notifications, [pref.id]: !notifications[pref.id]})}
-                        className={`w-12 h-6 rounded-full transition-all relative ${notifications[pref.id] ? 'bg-indigo-600' : 'bg-slate-300 dark:bg-slate-700'}`}
+                        className={`relative h-6 w-12 rounded-full transition-all ${notifications[pref.id] ? 'bg-teal-700' : 'bg-slate-300'}`}
                       >
                         <div className={`absolute top-1 w-4 h-4 rounded-full bg-white transition-all ${notifications[pref.id] ? 'right-1' : 'left-1'}`}></div>
                       </button>
@@ -333,48 +334,22 @@ export default function Settings() {
               </div>
             )}
 
-            {activeTab === 'appearance' && (
-              <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Theme & Display</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  <button 
-                    onClick={() => handleThemeChange(false)}
-                    className={`p-6 rounded-2xl border-2 transition-all text-left ${
-                      !isDarkMode ? 'theme-card-active' : 'theme-card-inactive'
-                    }`}
-                  >
-                    <Sun size={24} className={!isDarkMode ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400 dark:text-slate-500'} />
-                    <p className="mt-4 font-bold text-slate-900 dark:text-white">Light Mode</p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Modern clean interface</p>
-                  </button>
-                  <button 
-                    onClick={() => handleThemeChange(true)}
-                    className={`p-6 rounded-2xl border-2 transition-all text-left ${
-                      isDarkMode ? 'theme-card-active' : 'theme-card-inactive'
-                    }`}
-                  >
-                    <Moon size={24} className={isDarkMode ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400 dark:text-slate-500'} />
-                    <p className="mt-4 font-bold text-slate-900 dark:text-white">Dark Mode</p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Easy on the eyes</p>
-                  </button>
-                </div>
-              </div>
-            )}
+            
 
             {activeTab === 'security' && (
               <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
-                 <div className="p-6 bg-slate-900 text-white rounded-2xl border border-slate-800 shadow-xl relative overflow-hidden">
+                 <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-[#f8faff] p-6 text-[#071b3a] shadow-sm">
                     <Shield size={80} className="absolute -bottom-4 -right-4 opacity-10" />
-                    <h3 className="text-lg font-bold mb-2">Account Security</h3>
-                    <p className="text-sm text-slate-400 max-w-md">Manage your password, 2FA, and active sessions for the ProofHire AI recruiter dashboard.</p>
+                    <h3 className="mb-2 text-lg font-semibold">Account security</h3>
+                    <p className="max-w-md text-sm text-slate-500">Manage your password, 2FA, and active sessions for your ProofHire workspace.</p>
                     {securitySuccess ? (
-                      <div className="mt-6 flex items-center gap-2 text-emerald-400 font-bold text-sm bg-emerald-950/40 p-3 rounded-xl border border-emerald-800 max-w-md animate-in zoom-in-95">
+                      <div className="mt-6 flex max-w-md items-center gap-2 rounded-xl border border-teal-100 bg-teal-50 p-3 text-sm font-semibold text-teal-800 animate-in zoom-in-95">
                         <CheckCircle2 size={16} /> Password reset link has been sent to your email!
                       </div>
                     ) : (
                       <button 
                         onClick={handleUpdatePassword}
-                        className="mt-6 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-bold hover:bg-indigo-700 transition-colors"
+                        className="mt-6 rounded-lg bg-[#071b3a] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#0b2a55]"
                       >
                         Update Password
                       </button>
@@ -385,20 +360,20 @@ export default function Settings() {
 
             {activeTab === 'integrations' && (
               <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
-                <div className="p-12 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl">
-                   <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                      <Database className="text-slate-300 dark:text-slate-600" />
+                <div className="rounded-2xl border-2 border-dashed border-slate-200 p-12 text-center">
+                   <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#f8faff] p-4">
+                      <Database className="text-slate-300" />
                    </div>
-                   <h3 className="text-lg font-bold text-slate-900 dark:text-white">ATS Integrations</h3>
-                   <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xs mx-auto">Connect with Greenhouse, Lever, or Workday to sync candidates automatically.</p>
+                   <h3 className="text-lg font-semibold text-[#071b3a]">ATS integrations</h3>
+                   <p className="mx-auto mt-2 max-w-xs text-sm text-slate-500">Connect with Greenhouse, Lever, or Workday to sync candidates automatically.</p>
                    {integrationSuccess ? (
-                     <div className="mt-6 text-emerald-600 font-bold text-sm bg-emerald-50 px-4 py-2 rounded-xl border border-emerald-100 max-w-xs mx-auto flex items-center justify-center gap-1.5 animate-in zoom-in-95">
+                     <div className="mx-auto mt-6 flex max-w-xs items-center justify-center gap-1.5 rounded-xl border border-teal-100 bg-teal-50 px-4 py-2 text-sm font-semibold text-teal-800 animate-in zoom-in-95">
                        <CheckCircle2 size={16} /> Request Received!
                      </div>
                    ) : (
                      <button 
                        onClick={handleRequestAccess}
-                       className="mt-6 text-indigo-600 font-bold hover:underline"
+                       className="mt-6 font-semibold text-teal-800 hover:underline"
                      >
                        Request early access
                      </button>
@@ -408,12 +383,12 @@ export default function Settings() {
             )}
           </div>
 
-          <div className="p-6 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex justify-end gap-3">
-             <button className="px-6 py-2 text-sm font-bold text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200">Cancel</button>
+          <div className="flex justify-end gap-3 border-t border-slate-100 bg-[#f8faff] p-6">
+             <button className="px-6 py-2 text-sm font-semibold text-slate-500 hover:text-slate-700">Cancel</button>
              <button 
               onClick={handleSave}
               disabled={isSaving}
-              className="flex items-center gap-2 px-8 py-2 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 dark:shadow-none disabled:opacity-50"
+              className="flex items-center gap-2 rounded-xl bg-[#071b3a] px-8 py-2 text-sm font-semibold text-white transition-all hover:bg-[#0b2a55] disabled:opacity-50"
              >
                 {isSaving ? 'Saving...' : <><Save size={16} /> Save Changes</>}
              </button>

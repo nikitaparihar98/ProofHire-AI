@@ -35,7 +35,7 @@ export default function ScoreChart({ score }) {
         </PieChart>
       </ResponsiveContainer>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-2xl font-bold text-slate-900 leading-none">{Math.round(score)}</span>
+        <span className="text-2xl font-medium text-slate-900 leading-none">{Math.round(score)}</span>
         <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold mt-1">Score</span>
       </div>
     </div>

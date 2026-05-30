@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { Users, Search, Filter, ArrowUpDown, FilterX, UserPlus } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { Users, Search, FilterX, UserPlus } from 'lucide-react';
 import useCandidates from '../hooks/useCandidates';
 import CandidateCard from '../components/CandidateCard';
 import CandidateUploadModal from '../components/CandidateUploadModal';
@@ -38,30 +38,31 @@ export default function Candidates() {
     return result;
   }, [candidates, searchQuery, roleFilter, statusFilter, sortBy]);
 
-  if (loading) return <div className="animate-pulse space-y-4">{[...Array(6)].map((_, i) => <div key={i} className="h-40 bg-white rounded-2xl border border-slate-100"></div>)}</div>;
+  if (loading) return <div className="animate-pulse space-y-4">{[...Array(6)].map((_, i) => <div key={i} className="h-40 rounded-2xl border border-slate-200 bg-white"></div>)}</div>;
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Candidate Pipeline</h1>
-          <p className="text-slate-500 text-sm">View and manage all candidates across all stages.</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-teal-800">Proof packets</p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-[#071b3a]">Candidate pipeline</h1>
+          <p className="mt-1 text-sm text-slate-500">View task evidence, authenticity signals, and candidate stages.</p>
         </div>
         <button 
           onClick={() => setIsUploadModalOpen(true)}
-          className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200"
+          className="flex items-center gap-2 rounded-xl bg-[#071b3a] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0b2a55]"
         >
           <UserPlus size={18} />
           Add Candidate
         </button>
       </div>
 
-      <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col lg:flex-row gap-4 items-center sticky top-24 z-10">
+      <div className="sticky top-24 z-10 flex flex-col items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm lg:flex-row">
         <div className="relative w-full lg:w-1/3">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
           <input
             type="text"
-            className="w-full pl-10 pr-4 py-2.5 border border-slate-100 bg-slate-50/50 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all"
+            className="w-full rounded-xl border border-slate-200 bg-[#f8faff] py-2.5 pl-10 pr-4 text-sm outline-none transition-all focus:border-teal-700 focus:ring-4 focus:ring-teal-700/10"
             placeholder="Search candidates..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -70,7 +71,7 @@ export default function Candidates() {
 
         <div className="flex flex-1 gap-3 w-full">
           <select
-            className="flex-1 px-3 py-2.5 border border-slate-100 bg-slate-50/50 rounded-xl text-xs font-bold text-slate-600 outline-none hover:bg-slate-100 transition-colors cursor-pointer"
+            className="flex-1 cursor-pointer rounded-xl border border-slate-200 bg-[#f8faff] px-3 py-2.5 text-xs font-semibold text-slate-600 outline-none transition-colors hover:bg-white"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
           >
@@ -83,7 +84,7 @@ export default function Candidates() {
           </select>
 
           <select
-            className="flex-1 px-3 py-2.5 border border-slate-100 bg-slate-50/50 rounded-xl text-xs font-bold text-slate-600 outline-none hover:bg-slate-100 transition-colors cursor-pointer"
+            className="flex-1 cursor-pointer rounded-xl border border-slate-200 bg-[#f8faff] px-3 py-2.5 text-xs font-semibold text-slate-600 outline-none transition-colors hover:bg-white"
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value)}
           >
@@ -93,7 +94,7 @@ export default function Candidates() {
           </select>
 
           <select
-            className="flex-1 px-3 py-2.5 border border-slate-100 bg-slate-50/50 rounded-xl text-xs font-bold text-slate-600 outline-none hover:bg-slate-100 transition-colors cursor-pointer"
+            className="flex-1 cursor-pointer rounded-xl border border-slate-200 bg-[#f8faff] px-3 py-2.5 text-xs font-semibold text-slate-600 outline-none transition-colors hover:bg-white"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
           >
@@ -109,7 +110,7 @@ export default function Candidates() {
               setStatusFilter('All');
               setSortBy('newest');
             }}
-            className="p-2.5 bg-slate-50 text-slate-400 rounded-xl hover:text-rose-500 hover:bg-rose-50 transition-all"
+            className="rounded-xl bg-[#f8faff] p-2.5 text-slate-400 transition-all hover:bg-rose-50 hover:text-rose-500"
           >
             <FilterX size={20} />
           </button>
@@ -117,28 +118,27 @@ export default function Candidates() {
       </div>
 
       {error && (
-        <div className="p-6 bg-rose-50 border border-rose-100 rounded-3xl text-rose-700 flex flex-col items-center text-center">
+        <div className="flex flex-col items-center rounded-2xl border border-rose-100 bg-rose-50 p-6 text-center text-rose-700">
            <Search size={32} className="mb-2 opacity-50" />
            <p className="font-bold">{error}</p>
-           <button onClick={refresh} className="mt-4 text-indigo-600 font-bold hover:underline">Try Again</button>
+           <button onClick={refresh} className="mt-4 font-semibold text-teal-800 hover:underline">Try again</button>
         </div>
       )}
 
       {!error && (
         filteredCandidates.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
             {filteredCandidates.map(candidate => (
               <CandidateCard key={candidate.id} candidate={candidate} />
             ))}
           </div>
         ) : (
-          <div className="py-24 text-center bg-white rounded-[3rem] border border-slate-100 shadow-sm flex flex-col items-center animate-in fade-in zoom-in duration-700">
-            <div className="bg-slate-50 p-10 rounded-full mb-8 relative">
-               <div className="absolute inset-0 bg-indigo-500/5 rounded-full animate-ping"></div>
+          <div className="flex flex-col items-center rounded-2xl border border-slate-200 bg-white py-24 text-center shadow-sm animate-in fade-in zoom-in duration-700">
+            <div className="relative mb-8 rounded-full bg-[#f8faff] p-10">
                <Users className="h-16 w-16 text-slate-200 relative z-10" />
             </div>
-            <h3 className="text-2xl font-black text-slate-900 tracking-tight">Pipeline is Empty</h3>
-            <p className="text-slate-500 mt-3 max-w-sm mx-auto font-medium leading-relaxed">
+            <h3 className="text-2xl font-semibold tracking-tight text-[#071b3a]">Pipeline is empty</h3>
+            <p className="mx-auto mt-3 max-w-sm font-medium leading-relaxed text-slate-500">
               {candidates.length === 0 
                 ? "You haven't added any candidates yet. Start building your team by adding an applicant." 
                 : "No candidates match your current filters. Try broadening your criteria."}
@@ -146,7 +146,7 @@ export default function Candidates() {
             {candidates.length === 0 && (
               <button 
                 onClick={() => setIsUploadModalOpen(true)}
-                className="mt-10 px-8 py-4 bg-indigo-600 text-white rounded-[1.25rem] font-black hover:bg-indigo-700 transition-all shadow-2xl shadow-indigo-200 flex items-center gap-3 uppercase text-xs tracking-widest"
+                className="mt-10 flex items-center gap-3 rounded-xl bg-[#071b3a] px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-[#0b2a55]"
               >
                 <UserPlus size={18} />
                 Add Candidate

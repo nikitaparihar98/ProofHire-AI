@@ -163,7 +163,7 @@ export default function AssignTasks() {
   if (loading) {
     return (
       <div className="min-h-[70vh] flex items-center justify-center">
-        <Loader2 className="w-12 h-12 animate-spin text-indigo-600" />
+        <Loader2 className="w-12 h-12 animate-spin text-teal-700" />
       </div>
     );
   }
@@ -171,18 +171,18 @@ export default function AssignTasks() {
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-7xl mx-auto px-4 sm:px-6">
       <header>
-        <h1 className="text-3xl font-black text-slate-900 tracking-tight">Assign Assessment Tasks</h1>
+        <h1 className="text-3xl font-semibold text-slate-900 tracking-tight">Assign Assessment Tasks</h1>
         <p className="text-slate-500 mt-2 text-sm font-medium">Assign standard or custom AI-generated technical challenges to candidates in your pipeline.</p>
       </header>
 
       {error && (
-        <div className="rounded-2xl border border-rose-100 bg-rose-50 p-4 text-sm font-bold text-rose-700">
+        <div className="rounded-2xl border border-rose-100 bg-rose-50 p-4 text-sm font-medium text-rose-700">
           {error}
         </div>
       )}
 
       {successMsg && (
-        <div className="rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-sm font-bold text-emerald-700 flex items-center gap-2">
+        <div className="rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-sm font-medium text-emerald-700 flex items-center gap-2">
           <CheckCircle2 size={18} /> {successMsg}
         </div>
       )}
@@ -191,33 +191,33 @@ export default function AssignTasks() {
         
         {/* Candidates List Column */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="bg-white border border-slate-200 rounded-[2.5rem] p-6 shadow-sm">
-            <h2 className="text-lg font-bold text-slate-950 mb-4 flex items-center gap-2">
-              <Users className="text-indigo-600" size={20} />
+          <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
+            <h2 className="text-lg font-medium text-slate-950 mb-4 flex items-center gap-2">
+              <Users className="text-teal-700" size={20} />
               Candidates ({filteredCandidates.length})
             </h2>
             
             {/* Filters */}
             <div className="space-y-3 mb-6">
               <div className="relative">
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 w-4 h-4" />
                 <input 
                   type="text"
                   placeholder="Search name or role..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-medium"
+                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/15 focus:border-teal-600 font-medium"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 {/* Role Filter */}
                 <div>
-                  <label className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Role</label>
+                  <label className="text-[10px] font-semibold uppercase text-slate-500 tracking-wider">Role</label>
                   <select
                     value={roleFilter}
                     onChange={(e) => setRoleFilter(e.target.value)}
-                    className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none"
+                    className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 focus:outline-none"
                   >
                     {uniqueRoles.map(role => (
                       <option key={role} value={role}>{role}</option>
@@ -227,11 +227,11 @@ export default function AssignTasks() {
                 
                 {/* Status Filter */}
                 <div>
-                  <label className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Status</label>
+                  <label className="text-[10px] font-semibold uppercase text-slate-500 tracking-wider">Status</label>
                   <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
-                    className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 focus:outline-none"
+                    className="w-full mt-1 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 focus:outline-none"
                   >
                     <option value="All">All Statuses</option>
                     <option value="Not Attended">Not Attended</option>
@@ -259,22 +259,22 @@ export default function AssignTasks() {
                       }}
                       className={`w-full text-left p-4 rounded-2xl border transition-all flex items-center justify-between ${
                         isSelected 
-                        ? 'border-indigo-600 bg-indigo-50/50 shadow-sm shadow-indigo-50' 
+                        ? 'border-teal-700 bg-teal-50/50 shadow-sm shadow-teal-50' 
                         : 'border-slate-100 hover:border-slate-200 hover:bg-slate-50/50'
                       }`}
                     >
                       <div className="min-w-0 pr-2">
-                        <p className="font-bold text-slate-900 truncate">{candidate.name}</p>
+                        <p className="font-medium text-slate-900 truncate">{candidate.name}</p>
                         <p className="text-xs text-slate-500 font-medium truncate mt-0.5">{candidate.role}</p>
                       </div>
                       
-                      <span className={`text-[10px] font-black uppercase tracking-wider px-2 py-1 rounded-full shrink-0 ${
+                      <span className={`text-[10px] font-semibold uppercase tracking-wider px-2 py-1 rounded-full shrink-0 ${
                         candidate.status === 'Evaluated' || candidate.status === 'Shortlisted'
                         ? 'bg-emerald-50 text-emerald-700'
                         : candidate.status === 'Rejected'
                         ? 'bg-rose-50 text-rose-700'
                         : candidate.status === 'Assigned' || candidate.status === 'IN_PROGRESS'
-                        ? 'bg-blue-50 text-blue-700'
+                        ? 'bg-teal-50 text-teal-800'
                         : 'bg-slate-100 text-slate-600'
                       }`}>
                         {candidate.status === 'IN_PROGRESS' ? 'In Progress' : candidate.status}
@@ -283,8 +283,8 @@ export default function AssignTasks() {
                   );
                 })
               ) : (
-                <div className="text-center py-12 text-slate-400">
-                  <p className="text-sm font-bold">No candidates match filters.</p>
+                <div className="text-center py-12 text-slate-500">
+                  <p className="text-sm font-medium">No candidates match filters.</p>
                 </div>
               )}
             </div>
@@ -294,21 +294,21 @@ export default function AssignTasks() {
         {/* Assignment Panel Column */}
         <div className="lg:col-span-7">
           {selectedCandidate ? (
-            <div className="bg-white border border-slate-200 rounded-[2.5rem] p-8 shadow-sm space-y-6">
+            <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm space-y-6">
               
               {/* Selected Candidate Header */}
               <div className="border-b border-slate-100 pb-5">
-                <p className="text-xs font-black uppercase tracking-wider text-indigo-600">Assigning Task For</p>
+                <p className="text-xs font-semibold uppercase tracking-wider text-teal-700">Assigning Task For</p>
                 <div className="flex items-center justify-between mt-2">
                   <div>
-                    <h2 className="text-2xl font-black text-slate-900 tracking-tight">{selectedCandidate.name}</h2>
+                    <h2 className="text-2xl font-semibold text-slate-900 tracking-tight">{selectedCandidate.name}</h2>
                     <p className="text-sm text-slate-500 font-medium mt-0.5">{selectedCandidate.role} • {selectedCandidate.email}</p>
                   </div>
                   
-                  <span className={`text-xs font-bold px-3 py-1.5 rounded-xl ${
+                  <span className={`text-xs font-medium px-3 py-1.5 rounded-xl ${
                     selectedCandidate.status === 'Not Attended' 
                     ? 'bg-slate-100 text-slate-600'
-                    : 'bg-blue-50 text-blue-700'
+                    : 'bg-teal-50 text-teal-800'
                   }`}>
                     {selectedCandidate.status === 'Not Attended' ? 'No Task Assigned' : 'Task Already Assigned'}
                   </span>
@@ -319,12 +319,12 @@ export default function AssignTasks() {
                 
                 {/* Task Source Tabs */}
                 <div>
-                  <label className="block text-xs font-black uppercase text-slate-400 tracking-wider mb-2.5">Task Setup Method</label>
+                  <label className="block text-xs font-semibold uppercase text-slate-500 tracking-wider mb-2.5">Task Setup Method</label>
                   <div className="grid grid-cols-2 gap-3 p-1.5 bg-slate-50 border border-slate-100 rounded-2xl">
                     <button
                       type="button"
                       onClick={() => setTaskSource('prebuilt')}
-                      className={`py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${
+                      className={`py-3 rounded-xl text-xs font-semibold uppercase tracking-wider transition-all ${
                         taskSource === 'prebuilt'
                         ? 'bg-white text-slate-900 shadow-sm'
                         : 'text-slate-500 hover:text-slate-800'
@@ -337,9 +337,9 @@ export default function AssignTasks() {
                     <button
                       type="button"
                       onClick={() => setTaskSource('ai')}
-                      className={`py-3 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${
+                      className={`py-3 rounded-xl text-xs font-semibold uppercase tracking-wider transition-all ${
                         taskSource === 'ai'
-                        ? 'bg-white text-indigo-600 shadow-sm'
+                        ? 'bg-white text-teal-700 shadow-sm'
                         : 'text-slate-500 hover:text-slate-850'
                       }`}
                     >
@@ -353,11 +353,11 @@ export default function AssignTasks() {
                 {/* Prebuilt Task Selector */}
                 {taskSource === 'prebuilt' && (
                   <div className="space-y-3">
-                    <label className="block text-xs font-black uppercase text-slate-400 tracking-wider">Select Prebuilt Task</label>
+                    <label className="block text-xs font-semibold uppercase text-slate-500 tracking-wider">Select Prebuilt Task</label>
                     <select
                       value={selectedTaskId}
                       onChange={(e) => setSelectedTaskId(e.target.value)}
-                      className="w-full p-3 bg-white border border-slate-200 rounded-2xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
+                      className="w-full p-3 bg-white border border-slate-200 rounded-2xl text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500/15 focus:border-teal-600"
                     >
                       <option value="" disabled>-- Choose a Task --</option>
                       {tasks.map(task => (
@@ -373,11 +373,11 @@ export default function AssignTasks() {
                       if (!selectedTask) return null;
                       return (
                         <div className="bg-slate-50 border border-slate-100 rounded-3xl p-5 space-y-3">
-                          <h4 className="font-bold text-slate-900">{selectedTask.title}</h4>
+                          <h4 className="font-medium text-slate-900">{selectedTask.title}</h4>
                           <p className="text-xs text-slate-600 leading-relaxed whitespace-pre-line">{selectedTask.prompt}</p>
                           <div className="flex flex-wrap gap-1.5 pt-2">
                             {selectedTask.evaluation_focus.map(item => (
-                              <span key={item} className="text-[10px] font-bold bg-white text-slate-600 border border-slate-100 px-2.5 py-1 rounded-full">
+                              <span key={item} className="text-[10px] font-medium bg-white text-slate-600 border border-slate-100 px-2.5 py-1 rounded-full">
                                 {item}
                               </span>
                             ))}
@@ -392,12 +392,12 @@ export default function AssignTasks() {
                 {taskSource === 'ai' && (
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <label className="block text-xs font-black uppercase text-slate-400 tracking-wider">Generate Technical Challenge</label>
+                      <label className="block text-xs font-semibold uppercase text-slate-500 tracking-wider">Generate Technical Challenge</label>
                       <button
                         type="button"
                         onClick={handleGenerateAiTask}
                         disabled={generatingAi}
-                        className="px-4 py-2 bg-indigo-50 text-indigo-600 rounded-xl hover:bg-indigo-100 font-black text-xs uppercase tracking-wider flex items-center gap-1.5 disabled:opacity-50 transition"
+                        className="px-4 py-2 bg-teal-50 text-teal-700 rounded-xl hover:bg-teal-100 font-semibold text-xs uppercase tracking-wider flex items-center gap-1.5 disabled:opacity-50 transition"
                       >
                         {generatingAi ? (
                           <>
@@ -418,7 +418,7 @@ export default function AssignTasks() {
                           value={customTitle}
                           onChange={(e) => setCustomTitle(e.target.value)}
                           placeholder="Task Title"
-                          className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-2xl text-sm font-bold text-slate-800 focus:outline-none"
+                          className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-2xl text-sm font-medium text-slate-800 focus:outline-none"
                         />
                         <textarea
                           value={customPrompt}
@@ -430,8 +430,8 @@ export default function AssignTasks() {
                       </div>
                     ) : (
                       <div className="border-2 border-dashed border-slate-200 rounded-3xl p-10 text-center bg-slate-50">
-                        <Sparkles className="mx-auto h-8 w-8 text-slate-300 mb-2.5 animate-pulse" />
-                        <p className="text-xs font-bold text-slate-500">Click "Generate Task" to prompt OpenAI to build a unique role-specific technical assessment.</p>
+                        <Sparkles className="mx-auto h-8 w-8 text-slate-600 mb-2.5 animate-pulse" />
+                        <p className="text-xs font-medium text-slate-500">Click "Generate Task" to prompt OpenAI to build a unique role-specific technical assessment.</p>
                       </div>
                     )}
                   </div>
@@ -441,7 +441,7 @@ export default function AssignTasks() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
                   {/* Difficulty */}
                   <div>
-                    <label className="block text-xs font-black uppercase text-slate-400 tracking-wider mb-2">Difficulty</label>
+                    <label className="block text-xs font-semibold uppercase text-slate-500 tracking-wider mb-2">Difficulty</label>
                     <div className="flex gap-2">
                       {['Easy', 'Medium', 'Hard'].map(level => {
                         const active = difficulty === level;
@@ -450,9 +450,9 @@ export default function AssignTasks() {
                             key={level}
                             type="button"
                             onClick={() => setDifficulty(level)}
-                            className={`flex-1 py-2.5 rounded-xl border text-xs font-bold tracking-wider transition ${
+                            className={`flex-1 py-2.5 rounded-xl border text-xs font-medium tracking-wider transition ${
                               active
-                              ? 'border-indigo-600 bg-indigo-50/30 text-indigo-700'
+                              ? 'border-teal-700 bg-teal-50/30 text-teal-800'
                               : 'border-slate-200 hover:border-slate-350 text-slate-600 bg-white'
                             }`}
                           >
@@ -465,16 +465,16 @@ export default function AssignTasks() {
 
                   {/* Duration */}
                   <div>
-                    <label className="block text-xs font-black uppercase text-slate-400 tracking-wider mb-2">Duration (minutes)</label>
+                    <label className="block text-xs font-semibold uppercase text-slate-500 tracking-wider mb-2">Duration (minutes)</label>
                     <div className="flex items-center gap-3">
-                      <Clock size={16} className="text-slate-400" />
+                      <Clock size={16} className="text-slate-500" />
                       <input
                         type="number"
                         min={10}
                         max={240}
                         value={duration}
                         onChange={(e) => setDuration(e.target.value)}
-                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm font-bold text-slate-800 focus:outline-none"
+                        className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-800 focus:outline-none"
                       />
                     </div>
                   </div>
@@ -485,7 +485,7 @@ export default function AssignTasks() {
                   <button
                     type="submit"
                     disabled={assigning}
-                    className="px-6 py-3.5 bg-indigo-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-700 transition shadow-lg shadow-indigo-200 flex items-center gap-2 disabled:opacity-50"
+                    className="px-6 py-3.5 bg-teal-700 text-white rounded-2xl font-semibold text-xs uppercase tracking-widest hover:bg-teal-800 transition shadow-lg shadow-teal-100 flex items-center gap-2 disabled:opacity-50"
                   >
                     {assigning ? (
                       <>
@@ -502,9 +502,9 @@ export default function AssignTasks() {
               </form>
             </div>
           ) : (
-            <div className="bg-white border border-slate-200 rounded-[2.5rem] p-12 text-center shadow-sm h-full flex flex-col items-center justify-center">
+            <div className="bg-white border border-slate-200 rounded-3xl p-12 text-center shadow-sm h-full flex flex-col items-center justify-center">
               <ClipboardList className="h-16 w-16 text-slate-200 mb-4" />
-              <h3 className="text-xl font-bold text-slate-900">No Candidate Selected</h3>
+              <h3 className="text-xl font-medium text-slate-900">No Candidate Selected</h3>
               <p className="text-slate-500 font-medium text-sm mt-2 max-w-sm">Select a candidate from the left panel to assign them a customized coding challenge.</p>
             </div>
           )}

@@ -12,7 +12,7 @@ export default function ProgressBar({ score, max = 100, label = "Score", showLab
       {showLabel && (
         <div className="flex justify-between items-center mb-1">
           <span className="text-sm font-medium text-slate-700">{label}</span>
-          <span className="text-sm font-bold text-slate-900">{score}/{max}</span>
+          <span className="text-sm font-medium text-slate-900">{score}/{max}</span>
         </div>
       )}
       <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden w-full">

@@ -14,32 +14,32 @@ export default function DashboardAnalytics({ candidates = [], loading = false })
   }, [candidates]);
 
   const cards = [
-    { name: 'Total Candidates', value: stats.total_candidates, icon: <Users className="text-indigo-600" />, color: 'bg-indigo-50' },
-    { name: 'Active Now', value: stats.active_assessments, icon: <Activity className="text-emerald-600" />, color: 'bg-emerald-50' },
-    { name: 'Completed', value: stats.completed_assessments, icon: <BarChart3 className="text-blue-600" />, color: 'bg-blue-50' },
-    { name: 'Shortlisted', value: stats.shortlisted, icon: <CheckCircle className="text-teal-600" />, color: 'bg-teal-50' },
+    { name: 'Candidates', value: stats.total_candidates, icon: <Users className="text-teal-800" />, color: 'bg-teal-50' },
+    { name: 'Active tasks', value: stats.active_assessments, icon: <Activity className="text-[#071b3a]" />, color: 'bg-[#f8faff]' },
+    { name: 'Proof packets', value: stats.completed_assessments, icon: <BarChart3 className="text-[#071b3a]" />, color: 'bg-[#f8faff]' },
+    { name: 'Shortlisted', value: stats.shortlisted, icon: <CheckCircle className="text-teal-800" />, color: 'bg-teal-50' },
     { name: 'Rejected', value: stats.rejected, icon: <XCircle className="text-slate-600" />, color: 'bg-slate-50' },
-    { name: 'High Risk', value: stats.high_risk, icon: <ShieldAlert className="text-rose-600" />, color: 'bg-rose-50' },
+    { name: 'Risk flags', value: stats.high_risk, icon: <ShieldAlert className="text-amber-700" />, color: 'bg-amber-50' },
   ];
 
   if (loading) {
      return <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 animate-pulse">
-       {[...Array(6)].map((_, i) => <div key={i} className="h-24 bg-white rounded-2xl border border-slate-100"></div>)}
+       {[...Array(6)].map((_, i) => <div key={i} className="h-24 rounded-2xl border border-slate-200 bg-white"></div>)}
      </div>;
   }
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
       {cards.map((card) => (
-        <div key={card.name} className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all group">
+        <div key={card.name} className="group rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-teal-700/40">
           <div className="flex justify-between items-start mb-2">
-            <div className={`p-2 rounded-xl ${card.color} group-hover:scale-110 transition-transform`}>
+            <div className={`rounded-xl p-2 ${card.color}`}>
               {card.icon}
             </div>
           </div>
           <div>
-            <p className="text-2xl font-bold text-slate-900">{card.value}</p>
-            <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">{card.name}</p>
+            <p className="text-2xl font-semibold text-[#071b3a]">{card.value}</p>
+            <p className="text-xs font-medium text-slate-500">{card.name}</p>
           </div>
         </div>
       ))}

@@ -19,7 +19,7 @@ export default function CandidateDetails() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold">Candidate Details</h1>
+      <h1 className="text-2xl font-medium">Candidate Details</h1>
 
       <SkillReport skills={skills} />
 

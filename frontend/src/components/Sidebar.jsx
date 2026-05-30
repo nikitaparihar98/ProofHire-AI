@@ -11,7 +11,6 @@ import {
   BarChart3,
   ChevronLeft,
   ChevronRight,
-  BrainCircuit,
   Calendar,
   MessageSquare,
   ClipboardList
@@ -33,25 +32,23 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
 
   return (
     <aside 
-      className={`fixed left-0 top-0 h-screen bg-primary border-r border-border-subtle transition-all duration-300 z-50 flex flex-col ${isOpen ? 'w-64' : 'w-20'}`}
+      className={`fixed left-0 top-0 z-50 flex h-screen flex-col border-r border-slate-200 bg-white transition-all duration-300 ${isOpen ? 'w-64' : 'w-20'}`}
     >
-      <div className="p-6 flex items-center gap-3">
-        <div className="bg-indigo-600 p-2 rounded-lg text-white">
-          <BrainCircuit size={24} />
-        </div>
-        {isOpen && <span className="text-xl font-bold text-slate-900 tracking-tight">ProofHire AI</span>}
+      <div className="flex h-20 items-center gap-3 px-6">
+        <span className="h-3 w-3 rounded-full bg-teal-700" />
+        {isOpen && <span className="text-xl font-semibold tracking-tight text-[#071b3a]">ProofHire</span>}
       </div>
 
-      <nav className="flex-1 px-4 space-y-1 mt-4">
+      <nav className="mt-2 flex-1 space-y-1 px-4">
         {menuItems.map((item) => (
           <NavLink
             key={item.name}
             to={item.path}
             className={({ isActive }) => 
-              `flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 ${
+              `flex items-center gap-3 rounded-xl px-3 py-3 text-sm transition-all duration-200 ${
                 isActive 
-                ? 'bg-indigo-50 text-indigo-600 font-semibold' 
-                : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+                ? 'bg-teal-50 text-teal-800 font-semibold' 
+                : 'text-slate-500 hover:bg-[#f6f8fb] hover:text-[#071b3a]'
               }`
             }
           >
@@ -61,10 +58,10 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
         ))}
       </nav>
 
-      <div className="p-4 border-t border-slate-100">
+      <div className="border-t border-slate-100 p-4">
         <button 
           onClick={toggleSidebar}
-          className="w-full flex items-center justify-center p-2 rounded-lg bg-slate-50 text-slate-500 hover:bg-slate-100 transition-colors"
+          className="flex w-full items-center justify-center rounded-lg border border-slate-200 bg-white p-2 text-slate-500 transition-colors hover:border-teal-700 hover:text-teal-800"
         >
           {isOpen ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
         </button>

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Bell, Search, User, LogOut, Settings, CreditCard, Shield, Loader } from 'lucide-react';
+import { Search, User, LogOut, Settings, Shield, Loader } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import NotificationCenter from './NotificationCenter';
 import { getCandidates } from '../services/api';
@@ -120,7 +120,7 @@ export default function Header() {
   };
 
   return (
-    <header className="h-20 bg-bg-main/80 backdrop-blur-md border-b border-subtle sticky top-0 z-40 px-8 flex items-center justify-between">
+    <header className="sticky top-0 z-40 flex h-20 items-center justify-between border-b border-slate-200 bg-white/90 px-8 backdrop-blur">
       <div className="relative w-96 max-w-full hidden md:block" ref={searchRef}>
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           <Search className="h-4 w-4 text-slate-400" />
@@ -130,15 +130,15 @@ export default function Header() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onFocus={handleSearchFocus}
-          className="block w-full pl-10 pr-3 py-2 border border-subtle rounded-xl bg-bg-card/50 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all dark:bg-slate-800 dark:border-slate-700 dark:text-white"
-          placeholder="Search candidates, reports..."
+          className="block w-full rounded-xl border border-slate-200 bg-[#f8faff] py-2.5 pl-10 pr-3 text-sm font-medium text-slate-950 transition-all placeholder:text-slate-400 focus:border-teal-700 focus:outline-none focus:ring-4 focus:ring-teal-700/10"
+          placeholder="Search candidates or proof packets..."
         />
 
         {showSearchDropdown && (searchQuery.trim() || searchLoading) && (
-          <div className="absolute left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-2xl rounded-2xl overflow-hidden z-50 max-h-96 overflow-y-auto py-2">
+          <div className="absolute left-0 right-0 z-50 mt-2 max-h-96 overflow-y-auto overflow-hidden rounded-2xl border border-slate-200 bg-white py-2 shadow-[0_18px_60px_rgba(15,23,42,0.12)]">
             {searchLoading ? (
               <div className="flex items-center justify-center p-6 text-sm text-secondary gap-2">
-                <Loader className="w-4 h-4 animate-spin text-indigo-600" />
+                <Loader className="w-4 h-4 animate-spin text-teal-700" />
                 <span>Loading candidates...</span>
               </div>
             ) : filteredResults.length === 0 ? (
@@ -154,20 +154,20 @@ export default function Header() {
                     setSearchQuery('');
                     setShowSearchDropdown(false);
                   }}
-                  className="px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors cursor-pointer flex items-center justify-between border-b border-slate-50 last:border-0 dark:border-slate-700"
+                  className="flex cursor-pointer items-center justify-between border-b border-slate-50 px-4 py-3 transition-colors last:border-0 hover:bg-[#f8faff]"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-bold text-sm">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-50 text-sm font-bold text-teal-800">
                       {candidate.name.charAt(0)}
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-primary">{candidate.name}</p>
+                      <p className="text-sm font-semibold text-[#071b3a]">{candidate.name}</p>
                       <p className="text-[11px] text-secondary font-medium">{candidate.role}</p>
                     </div>
                   </div>
                   <div className="flex flex-col items-end gap-1">
                     <span className="text-[10px] font-bold text-secondary uppercase tracking-wider">{candidate.status}</span>
-                    <span className="text-xs font-black text-accent">{candidate.overall_score}%</span>
+                    <span className="text-xs font-semibold text-teal-800">{candidate.overall_score}%</span>
                   </div>
                 </div>
               ))
@@ -176,54 +176,54 @@ export default function Header() {
         )}
       </div>
 
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-5">
         <NotificationCenter />
         
-        <div className="h-8 w-px bg-subtle mx-1"></div>
+        <div className="h-8 w-px bg-slate-200 mx-1"></div>
         
         <div className="relative" ref={dropdownRef}>
           <div 
-            className="flex items-center gap-3 cursor-pointer group p-1 hover:bg-slate-50 rounded-xl transition-all"
+            className="group flex cursor-pointer items-center gap-3 rounded-xl p-1 transition-all hover:bg-[#f8faff]"
             onClick={() => setIsProfileOpen(!isProfileOpen)}
           >
             <div className="text-right hidden sm:block">
-              <p className="text-sm font-bold text-slate-900 leading-none">{profileUser.name}</p>
-              <p className="text-[10px] text-slate-500 mt-1 uppercase font-bold tracking-wider">{profileUser.company} {profileUser.role}</p>
+              <p className="text-sm font-semibold leading-none text-[#071b3a]">{profileUser.name}</p>
+              <p className="mt-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500">{profileUser.company} {profileUser.role}</p>
             </div>
-            <div className={`h-10 w-10 rounded-full bg-slate-100 border-2 transition-all overflow-hidden shadow-sm flex items-center justify-center ${isProfileOpen ? 'border-indigo-500' : 'border-white'}`}>
+            <div className={`flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-2 bg-slate-100 shadow-sm transition-all ${isProfileOpen ? 'border-teal-700' : 'border-white'}`}>
                {profileUser.avatar ? (
                  <img src={profileUser.avatar} alt="Profile" className="h-full w-full object-cover" />
                ) : (
-                 <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(profileUser.name)}&background=6366f1&color=fff`} alt="Profile" />
+                 <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent(profileUser.name)}&background=0f766e&color=fff`} alt="Profile" />
                )}
             </div>
           </div>
 
           {/* Profile Dropdown */}
           {isProfileOpen && (
-            <div className="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-slate-100 py-3 animate-in fade-in zoom-in-95 duration-200 z-50">
+            <div className="absolute right-0 z-50 mt-3 w-64 animate-in rounded-2xl border border-slate-200 bg-white py-3 shadow-[0_18px_60px_rgba(15,23,42,0.12)] duration-200 fade-in zoom-in-95">
               <div className="px-4 py-2 border-b border-slate-50 mb-2">
-                <p className="text-sm font-bold text-slate-900">{profileUser.name}</p>
+                <p className="text-sm font-semibold text-[#071b3a]">{profileUser.name}</p>
                 <p className="text-xs text-slate-500">{profileUser.email}</p>
               </div>
               
               <Link 
                 to="/settings?tab=profile" 
-                className="flex items-center gap-3 px-4 py-2 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                className="flex items-center gap-3 px-4 py-2 text-sm text-slate-600 transition-colors hover:bg-teal-50 hover:text-teal-800"
                 onClick={() => setIsProfileOpen(false)}
               >
                 <User size={16} /> My Profile
               </Link>
               <Link 
                 to="/settings?tab=appearance" 
-                className="flex items-center gap-3 px-4 py-2 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                className="flex items-center gap-3 px-4 py-2 text-sm text-slate-600 transition-colors hover:bg-teal-50 hover:text-teal-800"
                 onClick={() => setIsProfileOpen(false)}
               >
                 <Settings size={16} /> Appearance & Display
               </Link>
               <Link 
                 to="/settings?tab=security" 
-                className="flex items-center gap-3 px-4 py-2 text-sm text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                className="flex items-center gap-3 px-4 py-2 text-sm text-slate-600 transition-colors hover:bg-teal-50 hover:text-teal-800"
                 onClick={() => setIsProfileOpen(false)}
               >
                 <Shield size={16} /> Security & Privacy

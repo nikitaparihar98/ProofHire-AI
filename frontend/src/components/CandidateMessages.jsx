@@ -72,7 +72,7 @@ export default function CandidateMessages({
     <div className="flex flex-col h-full">
       <div className="flex-grow overflow-y-auto p-6 space-y-4 bg-slate-50/30">
         {loading && messages.length === 0 ? (
-          <div className="flex items-center justify-center h-full text-sm font-bold text-slate-400">
+          <div className="flex h-full items-center justify-center text-sm font-semibold text-slate-400">
             <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
             Loading messages...
           </div>
@@ -95,12 +95,12 @@ export default function CandidateMessages({
                 <div className="max-w-[75%] space-y-1">
                   <div className={`p-4 rounded-2xl text-sm shadow-sm ${
                     isMine
-                      ? 'bg-indigo-600 text-white rounded-tr-none'
-                      : 'bg-white text-slate-700 border border-slate-100 rounded-tl-none dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200'
+                      ? 'bg-[#071b3a] text-white rounded-tr-none'
+                      : 'bg-white text-slate-700 border border-slate-100 rounded-tl-none'
                   }`}>
                     {msg.content}
                   </div>
-                  <div className={`flex items-center gap-1 text-[10px] text-slate-400 font-bold uppercase ${
+                  <div className={`flex items-center gap-1 text-[10px] font-semibold uppercase text-slate-400 ${
                     isMine ? 'justify-end' : 'justify-start'
                   }`}>
                     {msg.sender_type === 'recruiter' ? <Bot size={10} /> : <User size={10} />}
@@ -114,19 +114,19 @@ export default function CandidateMessages({
         <div ref={messagesEndRef} />
       </div>
 
-      <form onSubmit={handleSendMessage} className="p-4 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 flex gap-2">
+      <form onSubmit={handleSendMessage} className="flex gap-2 border-t border-slate-100 bg-white p-4">
         <input
           type="text"
           value={newMessage}
           onChange={(event) => setNewMessage(event.target.value)}
           placeholder="Type your message..."
-          className="flex-grow px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all dark:bg-slate-800 dark:border-slate-700 dark:text-white"
+          className="flex-grow rounded-xl border border-slate-200 bg-[#f8faff] px-4 py-3 text-sm outline-none transition-all focus:border-teal-700 focus:ring-4 focus:ring-teal-700/10"
           disabled={sending}
         />
         <button
           type="submit"
           disabled={sending || !newMessage.trim()}
-          className="p-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 disabled:opacity-50 disabled:shadow-none"
+          className="rounded-xl bg-[#071b3a] p-3 text-white transition-all hover:bg-[#0b2a55] disabled:opacity-50"
         >
           {sending ? <RefreshCw size={18} className="animate-spin" /> : <Send size={18} />}
         </button>

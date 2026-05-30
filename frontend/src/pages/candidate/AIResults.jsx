@@ -50,7 +50,7 @@ export default function AIResults() {
   if (loading) {
     return (
       <div className="flex-1 flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-12 h-12 animate-spin text-indigo-600" />
+        <Loader2 className="h-12 w-12 animate-spin text-teal-700" />
       </div>
     );
   }
@@ -61,17 +61,17 @@ export default function AIResults() {
   if (!isEvaluated) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center text-center max-w-md mx-auto py-20 animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <div className="w-24 h-24 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-400 mb-6 relative">
-          <div className="absolute inset-0 rounded-full bg-indigo-100/50 animate-ping"></div>
+        <div className="relative mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-teal-50 text-teal-800">
+          <div className="absolute inset-0 rounded-full bg-teal-100/50 animate-ping"></div>
           <BrainCircuit size={48} className="relative z-10" />
         </div>
-        <h2 className="text-3xl font-black text-slate-900 tracking-tight mb-3">No Results Yet</h2>
+        <h2 className="mb-3 text-3xl font-semibold tracking-tight text-[#071b3a]">No results yet</h2>
         <p className="text-slate-500 font-medium leading-relaxed">
           Complete your assigned technical task to receive an AI-powered evaluation of your performance.
         </p>
         <Link 
           to="/candidate/dashboard" 
-          className="mt-8 px-6 py-3 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-100 flex items-center gap-2"
+          className="mt-8 flex items-center gap-2 rounded-xl bg-[#071b3a] px-6 py-3 font-semibold text-white transition hover:bg-[#0b2a55]"
         >
           <ArrowLeft size={18} /> Back to Dashboard
         </Link>
@@ -88,50 +88,49 @@ export default function AIResults() {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-5xl">
       <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <Link to="/candidate/dashboard" className="inline-flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-indigo-600 mb-2 transition-colors">
+          <Link to="/candidate/dashboard" className="mb-2 inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition-colors hover:text-teal-800">
             <ArrowLeft size={16} /> Back to Dashboard
           </Link>
-          <h1 className="text-3xl font-black text-slate-900 tracking-tight">Assessment Evaluation</h1>
+          <h1 className="text-3xl font-semibold tracking-tight text-[#071b3a]">Assessment evaluation</h1>
           <p className="text-slate-500 mt-1 text-sm font-medium">Detailed breakdown of your AI-assessed performance.</p>
         </div>
         
-        <span className="w-fit px-4 py-2 bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-2xl font-black text-xs uppercase tracking-wider flex items-center gap-1.5 self-start sm:self-center">
+        <span className="flex w-fit items-center gap-1.5 self-start rounded-2xl border border-teal-100 bg-teal-50 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-teal-800 sm:self-center">
           <CheckCircle2 size={14} /> Evaluated
         </span>
       </header>
 
       {error && (
-        <div className="rounded-2xl border border-rose-100 bg-rose-50 p-4 text-sm font-bold text-rose-700">
+        <div className="rounded-2xl border border-rose-100 bg-rose-50 p-4 text-sm font-semibold text-rose-700">
           {error}
         </div>
       )}
 
       {/* Hero Score Card */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-1 bg-gradient-to-br from-indigo-600 to-violet-700 rounded-[3rem] p-8 flex flex-col items-center justify-center text-white shadow-xl shadow-indigo-600/10 relative overflow-hidden min-h-[300px]">
-          <div className="absolute top-0 right-0 p-8 opacity-10">
+        <div className="relative flex min-h-[300px] flex-col items-center justify-center overflow-hidden rounded-2xl border border-slate-200 bg-white p-8 text-[#071b3a] shadow-sm lg:col-span-1">
+          <div className="absolute right-0 top-0 p-8 text-teal-700 opacity-10">
             <BrainCircuit size={140} />
           </div>
           <div className="relative z-10 text-center">
-            <p className="text-indigo-200 font-bold uppercase tracking-widest text-xs mb-3">Overall Score</p>
+            <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-slate-500">Overall score</p>
             <div className="relative inline-flex items-center justify-center">
-              {/* Radial background effect */}
-              <div className="absolute inset-0 bg-white/5 rounded-full scale-150 blur-sm"></div>
-              <h2 className="text-7xl font-black relative z-10">{candidate?.overall_score || 0}<span className="text-2xl text-indigo-300">/100</span></h2>
+              <div className="absolute inset-0 scale-150 rounded-full bg-teal-50 blur-sm"></div>
+              <h2 className="relative z-10 text-7xl font-semibold">{candidate?.overall_score || 0}<span className="text-2xl text-slate-400">/100</span></h2>
             </div>
             
-            <p className="mt-6 text-sm font-bold text-indigo-100/90 bg-white/10 px-4 py-2 rounded-2xl w-fit mx-auto">
-              Recommendation: <span className="text-white font-black">{candidate?.hiring_recommendation || 'Evaluated'}</span>
+            <p className="mx-auto mt-6 w-fit rounded-2xl bg-[#f8faff] px-4 py-2 text-sm font-semibold text-slate-600">
+              Recommendation: <span className="font-semibold text-[#071b3a]">{candidate?.hiring_recommendation || 'Evaluated'}</span>
             </p>
           </div>
         </div>
 
         {/* Structural Score Breakdown */}
-        <div className="lg:col-span-2 bg-white rounded-[2.5rem] p-8 border border-slate-200 shadow-sm flex flex-col justify-between">
+        <div className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-8 shadow-sm lg:col-span-2">
           <div>
-            <h3 className="text-xl font-bold text-slate-900 mb-1 flex items-center gap-2">
-              <Award className="text-indigo-600" size={20} />
-              Performance Metrics
+            <h3 className="mb-1 flex items-center gap-2 text-xl font-semibold text-[#071b3a]">
+              <Award className="text-teal-800" size={20} />
+              Performance metrics
             </h3>
             <p className="text-sm text-slate-500 mb-6 font-medium">Evaluation across core development competency areas.</p>
           </div>
@@ -139,13 +138,13 @@ export default function AIResults() {
           <div className="space-y-6">
             {/* Technical Score */}
             <div>
-              <div className="flex justify-between text-sm font-bold text-slate-700 mb-2">
-                <span className="flex items-center gap-2"><Cpu size={16} className="text-indigo-600" /> Technical Competency</span>
+              <div className="mb-2 flex justify-between text-sm font-semibold text-slate-700">
+                <span className="flex items-center gap-2"><Cpu size={16} className="text-teal-800" /> Technical competency</span>
                 <span>{techScore}/100</span>
               </div>
               <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-full transition-all duration-1000" 
+                  className="h-full rounded-full bg-teal-700 transition-all duration-1000"
                   style={{ width: `${techScore}%` }}
                 ></div>
               </div>
@@ -153,13 +152,13 @@ export default function AIResults() {
 
             {/* Problem Solving Score */}
             <div>
-              <div className="flex justify-between text-sm font-bold text-slate-700 mb-2">
-                <span className="flex items-center gap-2"><Activity size={16} className="text-violet-600" /> Problem Solving</span>
+              <div className="mb-2 flex justify-between text-sm font-semibold text-slate-700">
+                <span className="flex items-center gap-2"><Activity size={16} className="text-[#071b3a]" /> Problem solving</span>
                 <span>{psScore}/100</span>
               </div>
               <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-gradient-to-r from-violet-500 to-violet-600 rounded-full transition-all duration-1000" 
+                  className="h-full rounded-full bg-[#071b3a] transition-all duration-1000"
                   style={{ width: `${psScore}%` }}
                 ></div>
               </div>
@@ -167,13 +166,13 @@ export default function AIResults() {
 
             {/* Communication Score */}
             <div>
-              <div className="flex justify-between text-sm font-bold text-slate-700 mb-2">
-                <span className="flex items-center gap-2"><MessageSquare size={16} className="text-fuchsia-600" /> Communication & Explanation</span>
+              <div className="mb-2 flex justify-between text-sm font-semibold text-slate-700">
+                <span className="flex items-center gap-2"><MessageSquare size={16} className="text-amber-700" /> Communication & explanation</span>
                 <span>{commScore}/100</span>
               </div>
               <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-gradient-to-r from-fuchsia-500 to-fuchsia-600 rounded-full transition-all duration-1000" 
+                  className="h-full rounded-full bg-amber-600 transition-all duration-1000"
                   style={{ width: `${commScore}%` }}
                 ></div>
               </div>
@@ -184,9 +183,9 @@ export default function AIResults() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Strengths */}
-        <div className="bg-white rounded-[2.5rem] p-8 border border-slate-200 shadow-sm hover:border-indigo-100 transition-colors">
-          <h3 className="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
-            <span className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+        <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition-colors hover:border-teal-700/40">
+          <h3 className="mb-6 flex items-center gap-2 text-lg font-semibold text-[#071b3a]">
+            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-teal-50 text-teal-800">
               <CheckCircle2 size={18} />
             </span>
             Key Strengths
@@ -195,7 +194,7 @@ export default function AIResults() {
             <ul className="space-y-4">
               {candidate.strengths.map((str, idx) => (
                 <li key={idx} className="flex gap-3 text-sm text-slate-600 font-medium">
-                  <span className="text-emerald-500 font-black mt-0.5">•</span> {str}
+                  <span className="mt-0.5 font-semibold text-teal-700">•</span> {str}
                 </li>
               ))}
             </ul>
@@ -205,9 +204,9 @@ export default function AIResults() {
         </div>
 
         {/* Weaknesses */}
-        <div className="bg-white rounded-[2.5rem] p-8 border border-slate-200 shadow-sm hover:border-indigo-100 transition-colors">
-          <h3 className="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
-            <span className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+        <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition-colors hover:border-teal-700/40">
+          <h3 className="mb-6 flex items-center gap-2 text-lg font-semibold text-[#071b3a]">
+            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-50 text-amber-700">
               <AlertCircle size={18} />
             </span>
             Areas for Improvement
@@ -216,7 +215,7 @@ export default function AIResults() {
             <ul className="space-y-4">
               {candidate.weaknesses.map((wk, idx) => (
                 <li key={idx} className="flex gap-3 text-sm text-slate-600 font-medium">
-                  <span className="text-amber-500 font-black mt-0.5">•</span> {wk}
+                  <span className="mt-0.5 font-semibold text-amber-600">•</span> {wk}
                 </li>
               ))}
             </ul>
@@ -227,16 +226,16 @@ export default function AIResults() {
       </div>
 
       {/* Skill Authenticity & Gaps Panel */}
-      <div className="bg-white rounded-[2.5rem] p-8 sm:p-10 border border-slate-200 shadow-sm hover:border-indigo-100 transition-colors">
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition-colors hover:border-teal-700/40 sm:p-10">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-100 pb-6 mb-8">
           <div>
-            <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-              <span className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+            <h3 className="flex items-center gap-2 text-xl font-semibold text-[#071b3a]">
+              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-teal-50 text-teal-800">
                 <BrainCircuit size={18} />
               </span>
               Resume Claims vs. Coding Proof
             </h3>
-            <p className="text-sm text-slate-500 mt-1 font-medium font-sans">AI-driven cross-reference of your resume claims against sandbox execution.</p>
+            <p className="mt-1 font-sans text-sm font-medium text-slate-500">Cross-reference of your resume claims against task evidence.</p>
           </div>
           
           <div className="flex items-center gap-4 bg-slate-50/50 p-3 rounded-2xl border border-slate-100">
@@ -248,18 +247,18 @@ export default function AIResults() {
                   cx="32" 
                   cy="32" 
                   r="28" 
-                  className="stroke-indigo-600 fill-none transition-all duration-1000 ease-out" 
+                  className="fill-none stroke-teal-700 transition-all duration-1000 ease-out"
                   strokeWidth="6"
                   strokeDasharray={175.9}
                   strokeDashoffset={175.9 - (175.9 * (candidate?.skill_authenticity_score || 0)) / 100}
                   strokeLinecap="round"
                 />
               </svg>
-              <span className="absolute text-sm font-black text-slate-800">{candidate?.skill_authenticity_score || 0}%</span>
+              <span className="absolute text-sm font-semibold text-[#071b3a]">{candidate?.skill_authenticity_score || 0}%</span>
             </div>
             <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Authenticity Match</p>
-              <p className="text-sm font-black text-slate-700">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Authenticity match</p>
+              <p className="text-sm font-semibold text-slate-700">
                 {(candidate?.skill_authenticity_score || 0) >= 90 ? 'Excellent Match' :
                  (candidate?.skill_authenticity_score || 0) >= 70 ? 'High Authenticity' :
                  (candidate?.skill_authenticity_score || 0) >= 50 ? 'Moderate Gaps' : 'Significant Gaps'}
@@ -277,10 +276,10 @@ export default function AIResults() {
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-slate-50 border-b border-slate-100">
-                    <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Skill</th>
-                    <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Claimed</th>
-                    <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Proven</th>
-                    <th className="p-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Analysis</th>
+                    <th className="p-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Skill</th>
+                    <th className="p-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Claimed</th>
+                    <th className="p-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Proven</th>
+                    <th className="p-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Analysis</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
@@ -293,29 +292,29 @@ export default function AIResults() {
                     let statusBadge = null;
                     if (claimedVal === provenVal) {
                       statusBadge = (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-lg text-xs font-bold border border-indigo-100">
+                        <span className="inline-flex items-center gap-1 rounded-lg border border-teal-100 bg-teal-50 px-2.5 py-1 text-xs font-semibold text-teal-800">
                           <CheckCircle2 size={12} /> Verified Match
                         </span>
                       );
                     } else if (claimedVal > provenVal) {
                       statusBadge = (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-50 text-amber-700 rounded-lg text-xs font-bold border border-amber-100">
+                        <span className="inline-flex items-center gap-1 rounded-lg border border-amber-100 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">
                           <AlertCircle size={12} /> Overclaimed
                         </span>
                       );
                     } else {
                       statusBadge = (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-lg text-xs font-bold border border-emerald-200 shadow-sm shadow-emerald-100/50 animate-pulse">
-                          <Sparkles size={12} className="text-emerald-500" /> Hidden Talent!
+                        <span className="inline-flex items-center gap-1 rounded-lg border border-teal-100 bg-teal-50 px-2.5 py-1 text-xs font-semibold text-teal-800 shadow-sm">
+                          <Sparkles size={12} className="text-teal-700" /> Hidden Talent!
                         </span>
                       );
                     }
 
                     return (
                       <tr key={skill} className="hover:bg-slate-50/50 transition-colors">
-                        <td className="p-4 text-sm font-bold text-slate-900">{skill}</td>
+                        <td className="p-4 text-sm font-semibold text-[#071b3a]">{skill}</td>
                         <td className="p-4 text-sm font-medium text-slate-500">{claimedLvl}</td>
-                        <td className="p-4 text-sm font-bold text-indigo-600">{provenLvl}</td>
+                        <td className="p-4 text-sm font-semibold text-teal-800">{provenLvl}</td>
                         <td className="p-4">{statusBadge}</td>
                       </tr>
                     );
@@ -331,9 +330,9 @@ export default function AIResults() {
           </div>
 
           {/* Growth Board Panel */}
-          <div className="lg:col-span-1 bg-slate-50/50 rounded-2xl border border-slate-100 p-6 flex flex-col">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-1.5">
-              <Activity size={14} className="text-indigo-600" /> Growth Board
+          <div className="flex flex-col rounded-2xl border border-slate-100 bg-[#f8faff] p-6 lg:col-span-1">
+            <h4 className="mb-4 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400">
+              <Activity size={14} className="text-teal-800" /> Growth board
             </h4>
             
             {candidate?.growth_nudges?.length > 0 ? (
@@ -345,20 +344,20 @@ export default function AIResults() {
                       key={i} 
                       className={`p-3.5 rounded-xl border text-xs font-medium leading-relaxed transition-all duration-300 shadow-sm ${
                         isHiddenTalent 
-                          ? 'bg-emerald-50/40 border-emerald-200/60 text-emerald-800' 
+                          ? 'bg-teal-50 border-teal-100 text-teal-800'
                           : 'bg-white border-slate-200/60 text-slate-600'
                       }`}
                     >
                       <p className="font-bold mb-1 flex items-center gap-1">
                         {isHiddenTalent ? (
                           <>
-                            <Sparkles size={12} className="text-emerald-500 animate-spin-slow" />
+                            <Sparkles size={12} className="text-teal-700" />
                             Hidden Talent nudge
                           </>
                         ) : (
                           <>
-                            <Cpu size={12} className="text-indigo-500" />
-                            Growth Nudge
+                            <Cpu size={12} className="text-teal-800" />
+                            Growth nudge
                           </>
                         )}
                       </p>
@@ -378,15 +377,15 @@ export default function AIResults() {
       </div>
 
       {/* AI Detailed Feedback */}
-      <div className="bg-slate-900 rounded-[2.5rem] p-8 sm:p-10 shadow-2xl relative overflow-hidden group">
-        <div className="absolute top-0 right-0 p-8 opacity-5 text-indigo-400">
+      <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-8 shadow-sm sm:p-10">
+        <div className="absolute right-0 top-0 p-8 text-teal-700 opacity-5">
           <Sparkles size={160} />
         </div>
         <div className="flex items-center gap-3 mb-6 relative z-10">
-          <Terminal className="w-6 h-6 text-indigo-400" />
-          <h3 className="text-xl font-bold text-white">AI Synthesis & Recommendations</h3>
+          <Terminal className="h-6 w-6 text-teal-800" />
+          <h3 className="text-xl font-semibold text-[#071b3a]">Evaluation summary and recommendations</h3>
         </div>
-        <p className="text-slate-300 leading-relaxed whitespace-pre-line text-base relative z-10 font-medium">
+        <p className="relative z-10 whitespace-pre-line text-base font-medium leading-relaxed text-slate-600">
           {candidate?.ai_feedback || "No AI evaluation generated yet."}
         </p>
       </div>

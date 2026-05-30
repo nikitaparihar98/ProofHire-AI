@@ -6,13 +6,13 @@ import { Loader2, AlertTriangle, Clock, Brain, Check, FileText } from 'lucide-re
 
 function RichEditor({ value, onChange, disabled }) {
   return (
-    <div className="relative rounded-[2rem] border border-slate-200 overflow-hidden shadow-inner bg-slate-900">
-      <div className="flex items-center justify-between px-6 py-3 bg-slate-900 border-b border-slate-800 text-xs font-mono text-slate-400">
+    <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-inner">
+      <div className="flex items-center justify-between border-b border-slate-200 bg-[#f8faff] px-6 py-3 font-mono text-xs text-slate-500">
         <span>challenges_editor.txt</span>
         <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span> Autosaving</span>
       </div>
       <textarea
-        className="w-full h-[400px] p-6 bg-slate-950 text-slate-100 font-mono text-sm leading-relaxed focus:outline-none resize-none"
+        className="h-[400px] w-full resize-none bg-white p-6 font-mono text-sm leading-relaxed text-[#071b3a] focus:outline-none"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
@@ -36,19 +36,19 @@ function Countdown({ seconds }) {
 function ProctoringOverlay({ visible, onClose }) {
   if (!visible) return null;
   return (
-    <div className="fixed inset-0 bg-slate-900/80 backdrop-blur-sm flex items-center justify-center z-50 animate-in fade-in duration-200">
-      <div className="bg-white p-8 rounded-[2.5rem] border border-slate-200 shadow-2xl max-w-md text-center space-y-6">
+    <div className="fixed inset-0 z-50 flex animate-in items-center justify-center bg-[#071b3a]/70 backdrop-blur-sm duration-200 fade-in">
+      <div className="max-w-md space-y-6 rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-2xl">
         <div className="w-16 h-16 bg-rose-50 text-rose-600 rounded-full flex items-center justify-center mx-auto">
           <AlertTriangle size={32} />
         </div>
         <div className="space-y-2">
-          <h2 className="text-2xl font-black text-slate-950 tracking-tight">Window Focus Lost</h2>
+          <h2 className="text-2xl font-semibold tracking-tight text-[#071b3a]">Window focus lost</h2>
           <p className="text-slate-500 text-sm leading-relaxed">
             Please keep your focus on this window. Leaving the assessment screen or performing copy/paste actions is logged as a proctoring flag.
           </p>
         </div>
         <button 
-          className="w-full py-3 bg-indigo-600 hover:bg-indigo-750 text-white rounded-2xl font-bold transition shadow-lg shadow-indigo-100" 
+          className="w-full rounded-xl bg-[#071b3a] py-3 font-semibold text-white transition hover:bg-[#0b2a55]"
           onClick={onClose}
         >
           I Understand, Continue
@@ -72,19 +72,19 @@ function EvaluationOverlay({ steps, onFinish }) {
   if (index >= steps.length) return null;
 
   return (
-    <div className="fixed inset-0 bg-slate-950 flex items-center justify-center z-50 text-white animate-in fade-in duration-300">
+    <div className="fixed inset-0 z-50 flex animate-in items-center justify-center bg-[#071b3a] text-white duration-300 fade-in">
       <div className="max-w-md w-full px-6 text-center space-y-8">
-        <div className="w-20 h-20 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto shadow-2xl shadow-indigo-500/30 relative">
-          <div className="absolute inset-0 bg-indigo-600 rounded-full animate-ping opacity-25"></div>
+        <div className="relative mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-teal-700 text-white shadow-2xl">
+          <div className="absolute inset-0 animate-ping rounded-full bg-teal-700 opacity-25"></div>
           <Brain size={40} className="animate-pulse" />
         </div>
         
         <div className="space-y-2">
-          <h3 className="text-2xl font-black tracking-tight">AI Assessment Evaluator</h3>
-          <p className="text-slate-400 text-sm font-medium">Analyzing candidate submissions using ProofHire AI</p>
+          <h3 className="text-2xl font-semibold tracking-tight">Assessment evaluator</h3>
+          <p className="text-sm font-medium text-slate-300">Generating a ProofHire evaluation from your submission</p>
         </div>
 
-        <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-4 text-left">
+        <div className="space-y-4 rounded-2xl border border-white/10 bg-white/5 p-6 text-left">
           {steps.map((step, idx) => {
             const isCompleted = idx < index;
             const isActive = idx === index;
@@ -95,7 +95,7 @@ function EvaluationOverlay({ steps, onFinish }) {
                     <Check size={12} className="stroke-[3]" />
                   </div>
                 ) : isActive ? (
-                  <Loader2 className="w-5 h-5 animate-spin text-indigo-400 shrink-0" />
+                  <Loader2 className="h-5 w-5 shrink-0 animate-spin text-teal-300" />
                 ) : (
                   <div className="w-5 h-5 bg-slate-800 rounded-full shrink-0"></div>
                 )}
@@ -237,7 +237,7 @@ export default function CandidateAssessmentPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <Loader2 className="w-12 h-12 animate-spin text-indigo-600" />
+        <Loader2 className="h-12 w-12 animate-spin text-teal-700" />
       </div>
     );
   }
@@ -248,29 +248,29 @@ export default function CandidateAssessmentPage() {
     <div className="max-w-5xl mx-auto p-6 sm:p-8 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       
       {/* Header Panel */}
-      <header className="bg-white border border-slate-200 rounded-[2.5rem] p-8 shadow-sm space-y-6">
+      <header className="space-y-6 rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
           <div className="space-y-2">
-            <h1 className="text-3xl font-black text-slate-900 tracking-tight">
+            <h1 className="text-3xl font-semibold tracking-tight text-[#071b3a]">
               {assessment?.custom_title || task?.title || 'Technical Assessment'}
             </h1>
             <p className="text-sm font-semibold text-slate-500">
-              Candidate: <span className="text-slate-900">{assessment?.candidate?.name}</span> • Role: <span className="text-slate-900">{task?.role || assessment?.candidate?.role}</span>
+              Candidate: <span className="text-[#071b3a]">{assessment?.candidate?.name}</span> • Role: <span className="text-[#071b3a]">{task?.role || assessment?.candidate?.role}</span>
             </p>
           </div>
           
           <div className="shrink-0 flex flex-wrap gap-3">
-            <span className="px-3.5 py-1.5 bg-amber-50 border border-amber-100 text-amber-700 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-1">
+            <span className="flex items-center gap-1 rounded-xl border border-amber-100 bg-amber-50 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-amber-700">
               {assessment?.difficulty || 'Medium'}
             </span>
-            <span className="px-3.5 py-1.5 bg-indigo-50 border border-indigo-100 text-indigo-700 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-1">
+            <span className="flex items-center gap-1 rounded-xl border border-teal-100 bg-teal-50 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-teal-800">
               {assessment?.duration || 60} Min
             </span>
           </div>
         </div>
 
-        <div className="p-6 bg-slate-50 border border-slate-100 rounded-3xl space-y-2">
-          <h4 className="text-xs font-black uppercase text-slate-400 tracking-wider flex items-center gap-1.5">
+        <div className="space-y-2 rounded-2xl border border-slate-100 bg-[#f8faff] p-6">
+          <h4 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400">
             <FileText size={14} /> Problem Description & Prompt
           </h4>
           <p className="text-slate-700 text-sm leading-relaxed whitespace-pre-line">
@@ -281,7 +281,7 @@ export default function CandidateAssessmentPage() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-2">
           <div className="flex flex-wrap gap-2">
             {task?.evaluation_focus?.map(focus => (
-              <span key={focus} className="text-[10px] font-black uppercase tracking-wider bg-slate-100 border border-slate-200/60 px-3 py-1 rounded-full text-slate-600">
+              <span key={focus} className="rounded-full border border-slate-200/60 bg-[#f8faff] px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-slate-600">
                 {focus}
               </span>
             ))}
@@ -298,7 +298,7 @@ export default function CandidateAssessmentPage() {
       {/* Code Editor */}
       <section className="space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-black uppercase text-slate-400 tracking-wider">Your Solution</h3>
+          <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-400">Your solution</h3>
           {malpracticeLog.length > 0 && (
             <span className="text-[10px] font-bold text-rose-600 bg-rose-50 px-2.5 py-1 rounded-full flex items-center gap-1">
               <AlertTriangle size={12} /> Proctoring Flags: {malpracticeLog.length}
@@ -310,14 +310,14 @@ export default function CandidateAssessmentPage() {
 
       {/* Action Buttons */}
       <div className="flex items-center justify-between border-t border-slate-200 pt-6">
-        <Link 
+        <Link
           to="/candidate/dashboard" 
-          className="px-5 py-3 border border-slate-200 text-slate-600 rounded-2xl text-sm font-bold hover:bg-slate-50 transition"
+          className="rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
         >
           Exit Assessment
         </Link>
         <button
-          className="px-6 py-3.5 bg-indigo-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-700 transition shadow-lg shadow-indigo-100 flex items-center gap-2"
+          className="flex items-center gap-2 rounded-xl bg-[#071b3a] px-6 py-3.5 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-[#0b2a55]"
           onClick={() => setConfirmSubmit(true)}
           disabled={submitting}
         >
@@ -327,22 +327,22 @@ export default function CandidateAssessmentPage() {
 
       {/* Confirmation Dialog */}
       {confirmSubmit && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 animate-in fade-in duration-200">
-          <div className="bg-white p-8 rounded-[2.5rem] border border-slate-200 shadow-2xl max-w-md w-full space-y-6">
-            <h3 className="text-2xl font-black text-slate-900 tracking-tight">Submit Assessment?</h3>
+        <div className="fixed inset-0 z-50 flex animate-in items-center justify-center bg-[#071b3a]/60 backdrop-blur-sm duration-200 fade-in">
+          <div className="w-full max-w-md space-y-6 rounded-2xl border border-slate-200 bg-white p-8 shadow-2xl">
+            <h3 className="text-2xl font-semibold tracking-tight text-[#071b3a]">Submit assessment?</h3>
             <p className="text-slate-500 text-sm leading-relaxed">
               Once submitted, you will not be able to edit your solution. ProofHire AI will immediately begin evaluation.
             </p>
             <div className="grid grid-cols-2 gap-4">
               <button 
                 onClick={() => setConfirmSubmit(false)} 
-                className="py-3 border border-slate-200 rounded-2xl font-bold hover:bg-slate-50 text-slate-600 transition text-sm"
+                className="rounded-xl border border-slate-200 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
               >
                 Cancel
               </button>
               <button 
                 onClick={handleSubmit} 
-                className="py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold transition text-sm shadow-md"
+                className="rounded-xl bg-[#071b3a] py-3 text-sm font-semibold text-white transition hover:bg-[#0b2a55]"
               >
                 Yes, Submit
               </button>

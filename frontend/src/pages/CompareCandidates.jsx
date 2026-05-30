@@ -47,18 +47,18 @@ export default function CompareCandidatesPage() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
-      <Link to="/" className="inline-flex items-center gap-2 text-slate-500 hover:text-indigo-600 transition-colors text-sm font-medium">
+      <Link to="/" className="inline-flex items-center gap-2 text-slate-500 hover:text-teal-700 transition-colors text-sm font-medium">
         <ArrowLeft className="w-4 h-4" />
         Back to Dashboard
       </Link>
 
       <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
         <div className="flex items-center gap-3 mb-6">
-          <div className="bg-indigo-100 p-2 rounded-lg">
-            <GitCompare className="w-6 h-6 text-indigo-600" />
+          <div className="bg-teal-100 p-2 rounded-lg">
+            <GitCompare className="w-6 h-6 text-teal-700" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">Compare Candidates</h1>
+            <h1 className="text-2xl font-medium text-slate-900">Compare Candidates</h1>
             <p className="text-slate-500 text-sm">Select two candidates to run an AI-powered side-by-side comparison.</p>
           </div>
         </div>
@@ -74,7 +74,7 @@ export default function CompareCandidatesPage() {
           <div className="w-full">
             <label className="block text-sm font-medium text-slate-700 mb-1">Candidate 1</label>
             <select
-              className="block w-full py-2.5 px-3 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 bg-slate-50 text-slate-900 shadow-sm"
+              className="block w-full py-2.5 px-3 border border-slate-300 rounded-lg focus:ring-teal-500 focus:border-teal-600 bg-slate-50 text-slate-900 shadow-sm"
               value={selected1}
               onChange={(e) => setSelected1(e.target.value)}
             >
@@ -85,12 +85,12 @@ export default function CompareCandidatesPage() {
             </select>
           </div>
           
-          <div className="hidden md:flex text-slate-400 font-bold px-2 py-2.5">VS</div>
+          <div className="hidden md:flex text-slate-500 font-medium px-2 py-2.5">VS</div>
 
           <div className="w-full">
             <label className="block text-sm font-medium text-slate-700 mb-1">Candidate 2</label>
             <select
-              className="block w-full py-2.5 px-3 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 bg-slate-50 text-slate-900 shadow-sm"
+              className="block w-full py-2.5 px-3 border border-slate-300 rounded-lg focus:ring-teal-500 focus:border-teal-600 bg-slate-50 text-slate-900 shadow-sm"
               value={selected2}
               onChange={(e) => setSelected2(e.target.value)}
             >
@@ -104,7 +104,7 @@ export default function CompareCandidatesPage() {
           <button
             onClick={handleCompare}
             disabled={loading}
-            className="w-full md:w-auto px-6 py-2.5 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors shadow-sm disabled:opacity-70 disabled:cursor-not-allowed flex-shrink-0"
+            className="w-full md:w-auto px-6 py-2.5 bg-teal-700 text-white rounded-lg font-medium hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors shadow-sm disabled:opacity-70 disabled:cursor-not-allowed flex-shrink-0"
           >
             {loading ? "Comparing..." : "Run Comparison"}
           </button>
@@ -114,7 +114,7 @@ export default function CompareCandidatesPage() {
       {/* Comparison Results */}
       {loading && (
         <div className="flex justify-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-700"></div>
         </div>
       )}
 
@@ -122,12 +122,12 @@ export default function CompareCandidatesPage() {
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
           
           {/* AI Decision Box */}
-          <div className="bg-indigo-900 text-white rounded-2xl p-8 shadow-lg border border-indigo-700 relative overflow-hidden">
+          <div className="bg-white text-slate-700 rounded-2xl p-8 shadow-sm border border-teal-100 relative overflow-hidden">
             <div className="absolute top-0 right-0 p-8 opacity-10">
               <GitCompare className="w-32 h-32" />
             </div>
             <div className="relative z-10 max-w-3xl">
-              <h2 className="text-xl text-indigo-200 font-medium mb-2">AI Recommendation</h2>
+              <h2 className="text-xl text-slate-900 font-medium mb-2">AI Recommendation</h2>
               <p className="text-lg leading-relaxed">
                 {comparisonResult.reasoning}
               </p>
@@ -140,11 +140,11 @@ export default function CompareCandidatesPage() {
             {/* Candidate 1 Column */}
             <div className={`space-y-6 p-6 rounded-2xl border-2 transition-colors ${comparisonResult.stronger_candidate_id === comparisonResult.candidate_1.id ? 'border-emerald-500 bg-emerald-50/30 shadow-emerald-100/50 shadow-lg' : 'border-slate-200 bg-white'}`}>
                {comparisonResult.stronger_candidate_id === comparisonResult.candidate_1.id && (
-                  <div className="bg-emerald-500 text-white text-xs font-bold uppercase tracking-wider py-1 px-3 rounded-full inline-block mb-2">Stronger Match</div>
+                  <div className="bg-emerald-500 text-white text-xs font-medium uppercase tracking-wider py-1 px-3 rounded-full inline-block mb-2">Stronger Match</div>
                )}
                <div className="pb-4 border-b border-slate-100 flex justify-between items-start">
                  <div>
-                   <h3 className="text-2xl font-bold text-slate-900">{comparisonResult.candidate_1.name}</h3>
+                   <h3 className="text-2xl font-medium text-slate-900">{comparisonResult.candidate_1.name}</h3>
                    <p className="text-slate-500">{comparisonResult.candidate_1.role}</p>
                  </div>
                  <ScoreBadge recommendation={comparisonResult.candidate_1.hiring_recommendation} score={comparisonResult.candidate_1.overall_score} />
@@ -185,11 +185,11 @@ export default function CompareCandidatesPage() {
             {/* Candidate 2 Column */}
             <div className={`space-y-6 p-6 rounded-2xl border-2 transition-colors ${comparisonResult.stronger_candidate_id === comparisonResult.candidate_2.id ? 'border-emerald-500 bg-emerald-50/30 shadow-emerald-100/50 shadow-lg' : 'border-slate-200 bg-white'}`}>
                {comparisonResult.stronger_candidate_id === comparisonResult.candidate_2.id && (
-                  <div className="bg-emerald-500 text-white text-xs font-bold uppercase tracking-wider py-1 px-3 rounded-full inline-block mb-2">Stronger Match</div>
+                  <div className="bg-emerald-500 text-white text-xs font-medium uppercase tracking-wider py-1 px-3 rounded-full inline-block mb-2">Stronger Match</div>
                )}
                <div className="pb-4 border-b border-slate-100 flex justify-between items-start">
                  <div>
-                   <h3 className="text-2xl font-bold text-slate-900">{comparisonResult.candidate_2.name}</h3>
+                   <h3 className="text-2xl font-medium text-slate-900">{comparisonResult.candidate_2.name}</h3>
                    <p className="text-slate-500">{comparisonResult.candidate_2.role}</p>
                  </div>
                  <ScoreBadge recommendation={comparisonResult.candidate_2.hiring_recommendation} score={comparisonResult.candidate_2.overall_score} />

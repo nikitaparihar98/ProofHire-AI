@@ -3,7 +3,6 @@ import {
   Search, 
   PlusCircle, 
   Activity, 
-  Play, 
   Monitor, 
   Users, 
   Clock,
@@ -95,18 +94,18 @@ export default function Dashboard() {
   if (error && !candidates.length) {
     return (
       <div className="flex flex-col items-center justify-center h-screen -mt-20 px-6">
-        <div className="w-full max-w-lg bg-white rounded-[2.5rem] border border-slate-200 shadow-2xl overflow-hidden">
+        <div className="w-full max-w-lg overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_18px_60px_rgba(15,23,42,0.08)]">
            <div className="p-10 text-center">
-              <div className="bg-rose-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+              <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-rose-50">
                 <Activity className="w-10 h-10 text-rose-500" />
               </div>
-              <h2 className="text-2xl font-black text-slate-900 mb-2">System Error</h2>
-              <p className="text-slate-500 font-medium mb-8 leading-relaxed">{error}</p>
+              <h2 className="mb-2 text-2xl font-semibold text-[#071b3a]">Connection issue</h2>
+              <p className="mb-8 font-medium leading-relaxed text-slate-500">{error}</p>
               <button 
                 onClick={handleGlobalRefresh}
-                className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-black hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-100 uppercase text-xs tracking-widest"
+                className="w-full rounded-xl bg-[#071b3a] py-4 text-sm font-semibold text-white transition hover:bg-[#0b2a55]"
               >
-                Retry Connection
+                Retry connection
               </button>
            </div>
         </div>
@@ -117,8 +116,8 @@ export default function Dashboard() {
   if (loading) {
     return (
       <div className="flex flex-col justify-center items-center h-screen -mt-20">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-indigo-600 mb-6"></div>
-        <p className="text-slate-500 font-bold uppercase text-xs tracking-[0.2em] animate-pulse">Syncing Pipeline Data...</p>
+        <div className="mb-6 h-16 w-16 animate-spin rounded-full border-b-4 border-t-4 border-teal-700"></div>
+        <p className="animate-pulse text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Syncing pipeline data...</p>
       </div>
     );
   }
@@ -127,20 +126,21 @@ export default function Dashboard() {
     <div className="space-y-8 animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Recruiter Dashboard</h1>
-          <p className="text-slate-500 mt-1">Single source of truth for your hiring pipeline.</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-teal-800">Recruiter workspace</p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-[#071b3a]">Today’s hiring work</h1>
+          <p className="mt-1 text-slate-500">Review task evidence, active assessments, and candidate proof packets.</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={() => setIsBulkModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-bold hover:bg-slate-800 transition-all shadow-lg"
+            className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-[#071b3a] shadow-sm transition hover:border-teal-700 hover:text-teal-800"
           >
             <Upload className="w-4 h-4" />
             Bulk Upload
           </button>
           <button
             onClick={() => setIsUploadModalOpen(true)}
-            className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200"
+            className="flex items-center gap-2 rounded-xl bg-[#071b3a] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0b2a55]"
           >
             <PlusCircle className="w-4 h-4" />
             Add Candidate
@@ -155,33 +155,33 @@ export default function Dashboard() {
         <section className="space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="p-1.5 bg-emerald-100 rounded-lg">
-                <Activity className="w-4 h-4 text-emerald-600" />
+              <div className="rounded-lg bg-teal-50 p-1.5">
+                <Activity className="w-4 h-4 text-teal-800" />
               </div>
-              <h2 className="text-lg font-bold text-slate-900">Live Assessments</h2>
+              <h2 className="text-lg font-semibold text-[#071b3a]">Live assessments</h2>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {activeSessions.map(session => (
-              <div key={session.id} className="bg-white rounded-2xl border border-emerald-100 p-6 shadow-sm border-l-4 border-l-emerald-500 hover:shadow-md transition-all relative overflow-hidden group">
+              <div key={session.id} className="group relative overflow-hidden rounded-2xl border border-slate-200 border-l-4 border-l-teal-700 bg-white p-6 shadow-sm transition hover:border-teal-700/40">
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h3 className="font-bold text-slate-900">{session.candidate_name}</h3>
-                    <p className="text-xs text-slate-500 font-medium">{session.role}</p>
+                    <h3 className="font-semibold text-[#071b3a]">{session.candidate_name}</h3>
+                    <p className="text-xs font-medium text-slate-500">{session.role}</p>
                   </div>
                   <div className="flex flex-col items-end gap-1.5">
-                    <span className="px-2 py-1 bg-emerald-50 text-emerald-700 text-[10px] font-bold rounded uppercase">Active</span>
+                    <span className="rounded bg-teal-50 px-2 py-1 text-[10px] font-semibold uppercase text-teal-800">Active</span>
                   </div>
                 </div>
                 
                 <div className="flex items-center justify-between mt-6">
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-slate-400">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-400">
                     <Clock className="w-3.5 h-3.5" />
                     {Math.floor((new Date() - new Date(session.started_at)) / 60000)}m Elapsed
                   </div>
                   <Link 
                     to={`/monitor/${session.id}`}
-                    className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-colors shadow-sm"
+                    className="flex items-center gap-2 rounded-xl bg-[#071b3a] px-4 py-2 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-[#0b2a55]"
                   >
                     <Monitor className="w-3.5 h-3.5" />
                     Monitor Live
@@ -197,22 +197,22 @@ export default function Dashboard() {
       <section className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="p-1.5 bg-indigo-100 rounded-lg">
-              <Users className="w-4 h-4 text-indigo-600" />
+              <div className="rounded-lg bg-teal-50 p-1.5">
+              <Users className="w-4 h-4 text-teal-800" />
             </div>
-            <h2 className="text-lg font-bold text-slate-900">Candidate Pipeline</h2>
+            <h2 className="text-lg font-semibold text-[#071b3a]">Candidate pipeline</h2>
           </div>
-          <div className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+          <div className="text-xs font-semibold uppercase tracking-widest text-slate-400">
             {processedCandidates.length} candidates in view
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col lg:flex-row gap-4 items-center">
+        <div className="flex flex-col items-center gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm lg:flex-row">
           <div className="relative w-full lg:w-1/3">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
             <input
               type="text"
-              className="w-full pl-10 pr-4 py-2.5 border border-slate-100 bg-slate-50/50 rounded-xl text-sm focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-500 outline-none transition-all"
+              className="w-full rounded-xl border border-slate-200 bg-[#f8faff] py-2.5 pl-10 pr-4 text-sm outline-none transition-all focus:border-teal-700 focus:ring-4 focus:ring-teal-700/10"
               placeholder="Search name, role..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -221,7 +221,7 @@ export default function Dashboard() {
 
           <div className="flex flex-1 gap-3 w-full">
             <select
-              className="flex-1 px-3 py-2.5 border border-slate-100 bg-slate-50/50 rounded-xl text-xs font-bold text-slate-600 outline-none hover:bg-slate-100 transition-colors cursor-pointer"
+              className="flex-1 cursor-pointer rounded-xl border border-slate-200 bg-[#f8faff] px-3 py-2.5 text-xs font-semibold text-slate-600 outline-none transition-colors hover:bg-white"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
             >
@@ -234,7 +234,7 @@ export default function Dashboard() {
             </select>
 
             <select
-              className="flex-1 px-3 py-2.5 border border-slate-100 bg-slate-50/50 rounded-xl text-xs font-bold text-slate-600 outline-none hover:bg-slate-100 transition-colors cursor-pointer"
+              className="flex-1 cursor-pointer rounded-xl border border-slate-200 bg-[#f8faff] px-3 py-2.5 text-xs font-semibold text-slate-600 outline-none transition-colors hover:bg-white"
               value={roleFilter}
               onChange={(e) => setRoleFilter(e.target.value)}
             >
@@ -244,7 +244,7 @@ export default function Dashboard() {
             </select>
 
             <select
-              className="flex-1 px-3 py-2.5 border border-slate-100 bg-slate-50/50 rounded-xl text-xs font-bold text-slate-600 outline-none hover:bg-slate-100 transition-colors cursor-pointer"
+              className="flex-1 cursor-pointer rounded-xl border border-slate-200 bg-[#f8faff] px-3 py-2.5 text-xs font-semibold text-slate-600 outline-none transition-colors hover:bg-white"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
             >
@@ -260,7 +260,7 @@ export default function Dashboard() {
                 setStatusFilter('All');
                 setRecommendationFilter('All');
               }}
-              className="p-2.5 bg-slate-50 text-slate-400 rounded-xl hover:text-rose-500 hover:bg-rose-50 transition-all"
+              className="rounded-xl bg-[#f8faff] p-2.5 text-slate-400 transition-all hover:bg-rose-50 hover:text-rose-500"
               title="Clear Filters"
             >
               <FilterX size={20} />
@@ -269,18 +269,18 @@ export default function Dashboard() {
         </div>
 
         {processedCandidates.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
             {processedCandidates.map(candidate => (
               <CandidateCard key={candidate.id} candidate={candidate} />
             ))}
           </div>
         ) : (
-          <div className="py-24 text-center bg-white rounded-[3rem] border border-slate-100 shadow-sm flex flex-col items-center">
-            <div className="bg-slate-50 p-10 rounded-full mb-8 relative">
+          <div className="flex flex-col items-center rounded-2xl border border-slate-200 bg-white py-24 text-center shadow-sm">
+            <div className="relative mb-8 rounded-full bg-[#f8faff] p-10">
                <Users className="h-16 w-16 text-slate-200 relative z-10" />
             </div>
-            <h3 className="text-2xl font-black text-slate-900 tracking-tight">No candidates found</h3>
-            <p className="text-slate-500 mt-3 max-w-sm mx-auto font-medium leading-relaxed">
+            <h3 className="text-2xl font-semibold tracking-tight text-[#071b3a]">No candidates found</h3>
+            <p className="mx-auto mt-3 max-w-sm font-medium leading-relaxed text-slate-500">
                Try adjusting your filters or search query to find candidates.
             </p>
           </div>

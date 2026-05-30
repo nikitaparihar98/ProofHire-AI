@@ -45,9 +45,9 @@ export default function Interviews() {
     <div className="space-y-8 animate-in fade-in duration-700">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight flex items-center gap-3">
-            <div className="p-2 bg-indigo-100 rounded-xl">
-              <Calendar className="text-indigo-600" size={24} />
+          <h1 className="text-3xl font-medium text-slate-900 tracking-tight flex items-center gap-3">
+            <div className="p-2 bg-teal-100 rounded-xl">
+              <Calendar className="text-teal-700" size={24} />
             </div>
             Interview Scheduler
           </h1>
@@ -55,7 +55,7 @@ export default function Interviews() {
         </div>
         <button 
           onClick={fetchInterviews}
-          className="flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 text-slate-600 rounded-xl font-bold hover:bg-slate-50 transition-all shadow-sm"
+          className="flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 text-slate-600 rounded-xl font-medium hover:bg-slate-50 transition-all shadow-sm"
         >
           <RefreshCw size={18} />
           Sync Data
@@ -63,11 +63,11 @@ export default function Interviews() {
       </div>
 
       {interviews.length === 0 ? (
-        <div className="py-24 text-center bg-white rounded-[3rem] border border-slate-100 shadow-sm flex flex-col items-center">
+        <div className="py-24 text-center bg-white rounded-3xl border border-slate-100 shadow-sm flex flex-col items-center">
           <div className="bg-slate-50 p-10 rounded-full mb-6">
             <Calendar className="h-16 w-16 text-slate-200" />
           </div>
-          <h3 className="text-2xl font-black text-slate-900 tracking-tight">No Interviews Found</h3>
+          <h3 className="text-2xl font-semibold text-slate-900 tracking-tight">No Interviews Found</h3>
           <p className="text-slate-500 mt-3 max-w-sm mx-auto font-medium leading-relaxed">
             Schedule an interview from the candidate's profile or the pipeline dashboard to get started.
           </p>
@@ -75,26 +75,26 @@ export default function Interviews() {
       ) : (
         <div className="grid grid-cols-1 gap-6">
           {interviews.map((interview) => (
-            <div key={interview.id} className="bg-white rounded-[2rem] border border-slate-200 p-8 shadow-sm hover:shadow-md transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative overflow-hidden group">
-              <div className="absolute top-0 left-0 w-2 h-full bg-indigo-500 transform -translate-x-full group-hover:translate-x-0 transition-transform"></div>
+            <div key={interview.id} className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm hover:shadow-md transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative overflow-hidden group">
+              <div className="absolute top-0 left-0 w-2 h-full bg-teal-500 transform -translate-x-full group-hover:translate-x-0 transition-transform"></div>
               
               <div className="flex items-center gap-6">
-                <div className="w-16 h-16 bg-slate-900 rounded-2xl flex items-center justify-center text-white text-xl font-black shadow-xl shadow-slate-100">
+                <div className="w-16 h-16 bg-teal-700 rounded-2xl flex items-center justify-center text-white text-xl font-semibold shadow-xl shadow-teal-100">
                   {interview.candidate_name?.charAt(0) || "C"}
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-slate-900">{interview.candidate_name}</h3>
-                  <p className="text-sm font-bold text-slate-400 mb-3">{interview.candidate_role}</p>
+                  <h3 className="text-xl font-medium text-slate-900">{interview.candidate_name}</h3>
+                  <p className="text-sm font-medium text-slate-400 mb-3">{interview.candidate_role}</p>
                   <div className="flex flex-wrap items-center gap-3">
-                    <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
+                    <span className={`px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-widest ${
                       interview.status === 'Completed' ? 'bg-emerald-100 text-emerald-700' :
                       interview.status === 'Cancelled' ? 'bg-rose-100 text-rose-700' :
-                      'bg-indigo-100 text-indigo-700'
+                      'bg-teal-100 text-teal-800'
                     }`}>
                       {interview.status}
                     </span>
-                    <span className="flex items-center gap-1.5 text-xs font-bold text-slate-500 bg-slate-50 px-3 py-1 rounded-full">
-                      <Tag size={12} className="text-indigo-400" /> {interview.interview_title}
+                    <span className="flex items-center gap-1.5 text-xs font-medium text-slate-500 bg-slate-50 px-3 py-1 rounded-full">
+                      <Tag size={12} className="text-teal-500" /> {interview.interview_title}
                     </span>
                   </div>
                 </div>
@@ -102,15 +102,15 @@ export default function Interviews() {
 
               <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 mx-0 lg:mx-8">
                 <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-1">
-                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Schedule Info</p>
-                   <div className="flex items-center gap-2 text-slate-700 font-bold">
-                      <Clock size={16} className="text-indigo-500" />
+                   <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Schedule Info</p>
+                   <div className="flex items-center gap-2 text-slate-700 font-medium">
+                      <Clock size={16} className="text-teal-600" />
                       {new Date(interview.scheduled_time).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
                    </div>
                 </div>
                 <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-1">
-                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Location / Mode</p>
-                   <div className="flex items-center gap-2 text-slate-700 font-bold">
+                   <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest">Location / Mode</p>
+                   <div className="flex items-center gap-2 text-slate-700 font-medium">
                       {interview.mode === 'Online' ? <Video size={16} className="text-emerald-500" /> : <MapPin size={16} className="text-rose-500" />}
                       {interview.mode} Session
                    </div>
@@ -124,17 +124,17 @@ export default function Interviews() {
                   title="View Profile"
                 >
                   <LinkIcon size={18} />
-                  <span className="text-[10px] font-bold uppercase">Profile</span>
+                  <span className="text-[10px] font-medium uppercase">Profile</span>
                 </Link>
                 
                 {interview.status !== 'Cancelled' && (
                   <Link
                     to={`/interviews/${interview.id}/room`}
-                    className="p-4 bg-indigo-600 text-white rounded-2xl hover:bg-indigo-700 transition-all flex flex-col items-center gap-1 min-w-[80px] shadow-lg shadow-indigo-100"
+                    className="p-4 bg-teal-700 text-white rounded-2xl hover:bg-teal-800 transition-all flex flex-col items-center gap-1 min-w-[80px] shadow-lg shadow-teal-100"
                     title={interview.status === 'Completed' ? 'Review Interview' : 'Monitor Interview Room'}
                   >
                     <Video size={18} />
-                    <span className="text-[10px] font-bold uppercase">
+                    <span className="text-[10px] font-medium uppercase">
                       {interview.status === 'Completed' ? 'Review' : 'Monitor'}
                     </span>
                   </Link>
@@ -148,7 +148,7 @@ export default function Interviews() {
                       title="Mark as Completed"
                     >
                       <CheckCircle2 size={18} />
-                      <span className="text-[10px] font-bold uppercase">Finish</span>
+                      <span className="text-[10px] font-medium uppercase">Finish</span>
                     </button>
                     <button 
                       onClick={() => handleStatusUpdate(interview.id, 'Cancelled')}
@@ -156,7 +156,7 @@ export default function Interviews() {
                       title="Cancel Interview"
                     >
                       <XCircle size={18} />
-                      <span className="text-[10px] font-bold uppercase">Cancel</span>
+                      <span className="text-[10px] font-medium uppercase">Cancel</span>
                     </button>
                   </>
                 )}

@@ -12,12 +12,12 @@ export default function Rejected() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+          <h1 className="text-2xl font-medium text-slate-900 flex items-center gap-2">
             <XCircle className="text-rose-600" /> Rejected Pipeline
           </h1>
           <p className="text-slate-500 text-sm">Archived candidates who did not meet role or authenticity requirements.</p>
         </div>
-        <div className="text-xs font-bold text-rose-600 bg-rose-50 px-3 py-1.5 rounded-full border border-rose-100 uppercase">
+        <div className="text-xs font-medium text-rose-600 bg-rose-50 px-3 py-1.5 rounded-full border border-rose-100 uppercase">
            {candidates.length} Profiles
         </div>
       </div>
@@ -30,7 +30,7 @@ export default function Rejected() {
                <div className="mt-3 p-3 bg-rose-50 rounded-xl border border-rose-100 flex gap-2 items-start">
                   <Info className="text-rose-500 flex-shrink-0" size={14} />
                   <div>
-                    <p className="text-[10px] font-bold text-rose-900 uppercase">Rejection Reason</p>
+                    <p className="text-[10px] font-medium text-rose-900 uppercase">Rejection Reason</p>
                     <p className="text-xs text-rose-700 mt-0.5 line-clamp-2">{candidate.rejection_reason || "Not specified."}</p>
                   </div>
                </div>
@@ -38,11 +38,11 @@ export default function Rejected() {
           ))}
         </div>
       ) : (
-        <div className="py-24 text-center bg-white rounded-[3rem] border border-slate-100 shadow-sm flex flex-col items-center animate-in fade-in zoom-in duration-700">
+        <div className="py-24 text-center bg-white rounded-3xl border border-slate-100 shadow-sm flex flex-col items-center animate-in fade-in zoom-in duration-700">
           <div className="bg-slate-50 p-10 rounded-full mb-8">
              <XCircle className="h-16 w-16 text-slate-200" />
           </div>
-          <h3 className="text-2xl font-black text-slate-900 tracking-tight">Rejected Pipeline is Empty</h3>
+          <h3 className="text-2xl font-semibold text-slate-900 tracking-tight">Rejected Pipeline is Empty</h3>
           <p className="text-slate-500 mt-3 max-w-sm mx-auto font-medium leading-relaxed">
             Profiles marked as "Rejected" will appear here. This section serves as an archive for candidates who did not meet the role criteria.
           </p>

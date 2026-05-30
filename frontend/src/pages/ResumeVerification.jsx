@@ -125,30 +125,30 @@ export default function ResumeVerification() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 flex flex-col items-center py-12 px-6 transition-colors duration-300">
+    <div className="flex min-h-screen flex-col items-center bg-[#f6f8fb] px-6 py-12 text-[#071b3a] transition-colors duration-300">
       <nav className="w-full max-w-4xl mb-12 flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold tracking-tight text-indigo-600 dark:text-indigo-400 font-sans flex items-center gap-2">
-          <span className="material-symbols-outlined text-indigo-600 dark:text-indigo-400 text-3xl">api</span>
-          Recruit AI
+        <Link to="/" className="flex items-center gap-3 font-sans text-2xl font-semibold tracking-tight text-[#071b3a]">
+          <span className="h-3 w-3 rounded-full bg-teal-700"></span>
+          ProofHire
         </Link>
-        <span className="text-xs px-3 py-1 bg-indigo-500/10 border border-indigo-500/30 text-indigo-600 dark:text-indigo-300 rounded-full font-mono font-bold">
-          PREMIUM APPLICANT GATE
+        <span className="rounded-full border border-teal-100 bg-teal-50 px-3 py-1 text-xs font-semibold text-teal-800">
+          Resume context
         </span>
       </nav>
 
       <main className="flex-1 w-full max-w-2xl flex flex-col justify-center">
         {step === 1 && (
-          <div className="bg-white dark:bg-slate-800/60 backdrop-blur-md p-10 rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-2xl text-center transition-all duration-300 hover:border-slate-300 dark:hover:border-slate-600/80">
-            <span className="material-symbols-outlined text-7xl text-indigo-600 dark:text-indigo-400 mb-6 animate-pulse">upload_file</span>
-            <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-3">Upload Your Resume</h1>
-            <p className="text-slate-500 dark:text-slate-400 mb-8 max-w-md mx-auto font-medium">
-              Our advanced AI parses your profile, matches claimed technical experience, and sets up your verification playground.
+          <div className="rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm transition-all duration-300 hover:border-teal-700/40">
+            <span className="material-symbols-outlined mb-6 text-7xl text-teal-800">upload_file</span>
+            <h1 className="mb-3 text-3xl font-semibold text-[#071b3a]">Upload your resume</h1>
+            <p className="mx-auto mb-8 max-w-md font-medium text-slate-500">
+              Add resume context so your claimed skills can be compared with task evidence.
             </p>
             
             <div 
               onDragOver={handleDragOver}
               onDrop={handleDrop}
-              className="relative border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-10 bg-slate-50 dark:bg-slate-900/40 hover:bg-slate-100 dark:hover:bg-slate-900/60 hover:border-indigo-500/50 dark:hover:border-indigo-500/50 transition-all cursor-pointer group mb-6"
+              className="group relative mb-6 cursor-pointer rounded-2xl border-2 border-dashed border-slate-200 bg-[#f8faff] p-10 transition-all hover:border-teal-700/50 hover:bg-white"
             >
               <input 
                 type="file" 
@@ -156,70 +156,70 @@ export default function ResumeVerification() {
                 onChange={handleUpload}
                 className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
               />
-              <span className="material-symbols-outlined text-5xl text-slate-400 dark:text-slate-500 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 mb-4 transition-colors">cloud_upload</span>
-              <p className="font-semibold text-slate-600 dark:text-slate-300 group-hover:text-indigo-600 dark:group-hover:text-white transition-colors">Click to browse files or drag and drop</p>
-              <p className="text-xs text-slate-400 dark:text-slate-500 mt-2">Accepts PDF, DOCX documents (Up to 5MB)</p>
+              <span className="material-symbols-outlined mb-4 text-5xl text-slate-400 transition-colors group-hover:text-teal-800">cloud_upload</span>
+              <p className="font-semibold text-slate-600 transition-colors group-hover:text-teal-800">Click to browse files or drag and drop</p>
+              <p className="mt-2 text-xs text-slate-400">Accepts PDF, DOCX documents (Up to 5MB)</p>
             </div>
 
-            <div className="flex justify-center gap-4 text-xs text-slate-400 dark:text-slate-500">
+            <div className="flex justify-center gap-4 text-xs text-slate-400">
               <span className="flex items-center gap-1 font-semibold">
-                <span className="material-symbols-outlined text-sm text-indigo-600 dark:text-indigo-400">lock</span> Secure Ingestion
+                <span className="material-symbols-outlined text-sm text-teal-800">lock</span> Secure ingestion
               </span>
               <span>•</span>
               <span className="flex items-center gap-1 font-semibold">
-                <span className="material-symbols-outlined text-sm text-indigo-600 dark:text-indigo-400">bolt</span> Instant LLM Analysis
+                <span className="material-symbols-outlined text-sm text-teal-800">bolt</span> Skill extraction
               </span>
             </div>
           </div>
         )}
 
         {step === 2 && (
-          <div className="bg-slate-950 p-8 rounded-2xl border border-indigo-955 shadow-2xl w-full">
-            <div className="flex items-center justify-between border-b border-slate-900 pb-4 mb-6">
+          <div className="w-full rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+            <div className="mb-6 flex items-center justify-between border-b border-slate-100 pb-4">
               <div className="flex gap-2">
                 <div className="w-3 h-3 rounded-full bg-rose-500"></div>
                 <div className="w-3 h-3 rounded-full bg-amber-500"></div>
-                <div className="w-3 h-3 rounded-full bg-emerald-500"></div>
+                <div className="w-3 h-3 rounded-full bg-teal-700"></div>
               </div>
-              <span className="text-xs font-mono text-indigo-400 font-bold">recruitai_eval_agent.sh</span>
+              <span className="font-mono text-xs font-semibold text-teal-800">resume_context_parser</span>
             </div>
 
-            <div className="font-mono text-sm space-y-3 min-h-[220px] text-left leading-relaxed text-slate-100">
+            <div className="min-h-[220px] space-y-3 text-left font-mono text-sm leading-relaxed text-slate-600">
               {terminalLines && terminalLines.map((line, i) => (
                 <div key={i} className="flex gap-2 items-start animate-fade-in">
-                  <span className="text-indigo-500/80 shrink-0">❯</span>
+                  <span className="shrink-0 text-teal-800">›</span>
                   <span className={
-                    line && line.startsWith('[SUCCESS]') ? 'text-emerald-400' :
-                    line && line.startsWith('[SYSTEM]') ? 'text-indigo-300' :
-                    line && line.startsWith('[CONNECT]') ? 'text-blue-300' :
-                    line && line.startsWith('[READY]') ? 'text-indigo-400 font-bold' : 'text-slate-305'
+                    line && line.startsWith('[SUCCESS]') ? 'text-teal-800' :
+                    line && line.startsWith('[SYSTEM]') ? 'text-[#071b3a]' :
+                    line && line.startsWith('[CONNECT]') ? 'text-slate-600' :
+                    line && line.startsWith('[READY]') ? 'font-semibold text-teal-800' : 'text-slate-500'
                   }>
                     {line}
                   </span>
                 </div>
               ))}
-              <div className="inline-block w-2 h-4 bg-indigo-400 animate-blink ml-1"></div>
+              <div className="ml-1 inline-block h-4 w-2 animate-blink bg-teal-700"></div>
             </div>
           </div>
         )}
 
         {step === 3 && (
-          <div className="bg-white dark:bg-slate-800/80 backdrop-blur-md p-8 rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-2xl w-full">
-            <div className="flex items-center gap-4 mb-8 pb-5 border-b border-slate-100 dark:border-slate-700/60">
-              <span className="material-symbols-outlined text-4xl text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 p-2 rounded-xl shrink-0">task_alt</span>
+          <div className="w-full rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+            <div className="mb-8 flex items-center gap-4 border-b border-slate-100 pb-5">
+              <span className="material-symbols-outlined shrink-0 rounded-xl bg-teal-50 p-2 text-4xl text-teal-800">task_alt</span>
               <div>
-                <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Verification Center</h1>
-                <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">Review claims extracted from your resume & lock them in.</p>
+                <h1 className="text-2xl font-semibold text-[#071b3a]">Resume context</h1>
+                <p className="text-sm font-medium text-slate-500">Review skills extracted from your resume and save them.</p>
               </div>
             </div>
 
             <div className="space-y-6 mb-8">
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2">Applied Role Mode</label>
+                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-400">Applied role mode</label>
                 <select 
                   value={targetRole}
                   onChange={handleRoleChange}
-                  className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-white shadow-sm outline-none focus:border-indigo-500 transition-colors font-semibold"
+                  className="w-full rounded-xl border border-slate-200 bg-[#f8faff] px-4 py-3 font-semibold text-[#071b3a] shadow-sm outline-none transition-colors focus:border-teal-700"
                 >
                   <option value="Backend Engineer">Backend Engineer</option>
                   <option value="Frontend Engineer">Frontend Engineer</option>
@@ -229,31 +229,31 @@ export default function ResumeVerification() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-4">
-                  Extracted Tech Skills & Self-Assessed Levels
+                <label className="mb-4 block text-xs font-semibold uppercase tracking-wider text-slate-400">
+                  Extracted skills and self-assessed levels
                 </label>
                 
                 <div className="space-y-4">
                   {Object.entries(skills || {}).map(([skill, level]) => (
                     <div 
                       key={skill} 
-                      className="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-xl border border-slate-200 dark:border-slate-700/40 flex flex-col md:flex-row md:items-center justify-between gap-4"
+                      className="flex flex-col justify-between gap-4 rounded-xl border border-slate-200 bg-[#f8faff] p-4 md:flex-row md:items-center"
                     >
                       <div className="flex items-center gap-2">
-                        <span className="w-2.5 h-2.5 rounded-full bg-indigo-600 dark:bg-indigo-500"></span>
-                        <span className="font-bold text-slate-900 dark:text-white">{skill}</span>
+                        <span className="h-2.5 w-2.5 rounded-full bg-teal-700"></span>
+                        <span className="font-semibold text-[#071b3a]">{skill}</span>
                       </div>
                       
-                      <div className="flex bg-white dark:bg-slate-950 p-1 rounded-lg border border-slate-200 dark:border-slate-800">
+                      <div className="flex rounded-lg border border-slate-200 bg-white p-1">
                         {['Junior', 'Intermediate', 'Advanced'].map((lvl) => (
                           <button
                             key={lvl}
                             onClick={() => setSkillLevel(skill, lvl)}
                             type="button"
-                            className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all duration-200 ${
+                            className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all duration-200 ${
                               level === lvl 
-                                ? 'bg-indigo-600 text-white shadow-md' 
-                                : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
+                                ? 'bg-[#071b3a] text-white shadow-md'
+                                : 'text-slate-500 hover:text-slate-800'
                             }`}
                           >
                             {lvl}
@@ -269,16 +269,16 @@ export default function ResumeVerification() {
             <button 
               onClick={handleConfirm} 
               disabled={loading}
-              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-4 rounded-xl font-extrabold transition-all shadow-lg shadow-indigo-600/10 active:translate-y-[1px] disabled:opacity-50 flex items-center justify-center gap-2"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#071b3a] py-4 font-semibold text-white transition-all hover:bg-[#0b2a55] active:translate-y-[1px] disabled:opacity-50"
             >
               {loading ? (
                 <>
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  Generating Dashboard...
+                  Saving resume context...
                 </>
               ) : (
                 <>
-                  Lock in Claims & Generate Dashboard
+                  Save resume context
                   <span className="material-symbols-outlined text-sm">arrow_forward</span>
                 </>
               )}

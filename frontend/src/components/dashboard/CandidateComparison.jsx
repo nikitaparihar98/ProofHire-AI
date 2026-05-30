@@ -40,17 +40,17 @@ const CandidateComparison = () => {
 
   return (
     <div className="w-full">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
-        <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-          <ArrowRightLeft className="text-blue-600" />
+      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8">
+        <h2 className="text-xl font-medium text-slate-800 mb-6 flex items-center gap-2">
+          <ArrowRightLeft className="text-teal-700" />
           Compare Candidates
         </h2>
 
         <div className="flex flex-col md:flex-row gap-6 items-end">
           <div className="w-full">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Candidate A</label>
+            <label className="block text-sm font-medium text-slate-700 mb-2">Candidate A</label>
             <select
-              className="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:outline-none"
               value={selectedId1}
               onChange={(e) => setSelectedId1(e.target.value)}
             >
@@ -61,14 +61,14 @@ const CandidateComparison = () => {
             </select>
           </div>
 
-          <div className="hidden md:flex pb-3 items-center justify-center w-12 flex-shrink-0 text-gray-400">
+          <div className="hidden md:flex pb-3 items-center justify-center w-12 flex-shrink-0 text-slate-400">
             VS
           </div>
 
           <div className="w-full">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Candidate B</label>
+            <label className="block text-sm font-medium text-slate-700 mb-2">Candidate B</label>
             <select
-              className="w-full p-3 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:outline-none"
               value={selectedId2}
               onChange={(e) => setSelectedId2(e.target.value)}
             >
@@ -82,14 +82,14 @@ const CandidateComparison = () => {
           <button
             onClick={handleCompare}
             disabled={loading}
-            className="w-full md:w-auto px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 disabled:opacity-50 transition-colors"
+            className="w-full md:w-auto px-6 py-3 bg-teal-700 text-white font-medium rounded-lg hover:bg-teal-800 focus:ring-4 focus:ring-teal-100 disabled:opacity-50 transition-colors"
           >
             {loading ? 'Comparing...' : 'Compare'}
           </button>
         </div>
 
         {error && (
-          <div className="mt-4 p-3 bg-red-50 text-red-700 rounded-lg flex items-center gap-2">
+          <div className="mt-4 p-3 bg-rose-50 text-rose-700 rounded-lg flex items-center gap-2">
             <AlertTriangle size={18} />
             {error}
           </div>
@@ -99,12 +99,12 @@ const CandidateComparison = () => {
       {comparisonResult && (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
           {/* Winner Banner */}
-          <div className="bg-gradient-to-r from-yellow-500 to-amber-600 p-6 rounded-2xl text-white shadow-lg flex items-center gap-6">
-            <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm">
-              <Trophy size={40} className="text-yellow-100" />
+          <div className="bg-white border border-teal-100 p-6 rounded-2xl text-slate-700 shadow-sm flex items-center gap-6">
+            <div className="bg-teal-50 p-4 rounded-full">
+              <Trophy size={40} className="text-teal-700" />
             </div>
             <div>
-              <h3 className="text-sm uppercase tracking-widest font-semibold text-yellow-100 mb-1">Recommended Choice</h3>
+              <h3 className="text-sm uppercase tracking-widest font-semibold text-teal-700 mb-1">Recommended Choice</h3>
               <p className="text-xl font-medium leading-relaxed">
                 {comparisonResult.reasoning}
               </p>
@@ -113,10 +113,10 @@ const CandidateComparison = () => {
 
           {/* Side by side comparison */}
           <div className="grid md:grid-cols-2 gap-8">
-            <div className={`transition-all duration-300 ${comparisonResult.stronger_candidate_id === comparisonResult.candidate_1.id ? 'ring-4 ring-yellow-400 rounded-2xl' : 'opacity-90'}`}>
+            <div className={`transition-all duration-300 ${comparisonResult.stronger_candidate_id === comparisonResult.candidate_1.id ? 'ring-4 ring-teal-100 rounded-2xl' : 'opacity-90'}`}>
               <SkillReport candidate={comparisonResult.candidate_1} />
             </div>
-            <div className={`transition-all duration-300 ${comparisonResult.stronger_candidate_id === comparisonResult.candidate_2.id ? 'ring-4 ring-yellow-400 rounded-2xl' : 'opacity-90'}`}>
+            <div className={`transition-all duration-300 ${comparisonResult.stronger_candidate_id === comparisonResult.candidate_2.id ? 'ring-4 ring-teal-100 rounded-2xl' : 'opacity-90'}`}>
               <SkillReport candidate={comparisonResult.candidate_2} />
             </div>
           </div>

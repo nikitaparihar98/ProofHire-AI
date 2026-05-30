@@ -456,7 +456,7 @@ export default function InterviewRoom() {
   if (loading) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <Loader2 className="h-10 w-10 animate-spin text-indigo-600" />
+        <Loader2 className="h-10 w-10 animate-spin text-teal-600" />
       </div>
     );
   }
@@ -467,15 +467,15 @@ export default function InterviewRoom() {
         <div>
           <Link
             to={isRecruiter ? '/interviews' : '/candidate/interviews'}
-            className="mb-3 inline-flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-indigo-600"
+            className="mb-3 inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-teal-600"
           >
             <ArrowLeft size={18} /> Back to interviews
           </Link>
-          <h1 className="text-3xl font-black tracking-tight text-slate-900">{interview?.interview_title}</h1>
+          <h1 className="text-3xl font-semibold tracking-tight text-slate-900">{interview?.interview_title}</h1>
           <p className="mt-1 text-sm font-semibold text-slate-500">
             {interview?.candidate_name} | {interview?.candidate_role} | {new Date(interview?.scheduled_time).toLocaleString()}
           </p>
-          <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-4 py-2 text-xs font-black uppercase tracking-widest text-indigo-700">
+          <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-teal-100 bg-teal-50 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-teal-700">
             <Bot size={14} /> {isRecruiter ? 'Recruiter monitor mode' : 'AI online interview'}
           </div>
         </div>
@@ -484,7 +484,7 @@ export default function InterviewRoom() {
           <button
             onClick={completeInterview}
             disabled={saving}
-            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-black text-white shadow-lg shadow-emerald-100 transition hover:bg-emerald-700 disabled:opacity-60"
+            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-100 transition hover:bg-emerald-700 disabled:opacity-60"
           >
             {saving ? <Loader2 className="animate-spin" size={18} /> : <CheckCircle2 size={18} />}
             Finalize Review
@@ -493,7 +493,7 @@ export default function InterviewRoom() {
           <button
             onClick={startAiInterview}
             disabled={!canStartInterview}
-            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-5 py-3 text-sm font-black text-white shadow-lg shadow-indigo-100 transition hover:bg-indigo-700 disabled:opacity-60"
+            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-teal-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-teal-100 transition hover:bg-teal-700 disabled:opacity-60"
           >
             <Play size={18} />
             {simulationStatus === 'not_started'
@@ -506,16 +506,16 @@ export default function InterviewRoom() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1.45fr_0.9fr]">
-        <section className="overflow-hidden rounded-[2rem] border border-slate-200 bg-slate-950 shadow-sm">
+        <section className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-sm">
           <div className="grid min-h-[420px] grid-cols-1 md:grid-cols-2">
-            <div className="relative flex items-center justify-center overflow-hidden border-b border-slate-800 bg-slate-900 md:border-b-0 md:border-r">
-              <div className="absolute left-5 top-5 z-10 inline-flex items-center gap-2 rounded-full bg-black/40 px-3 py-1.5 text-xs font-bold text-white">
+            <div className="relative flex items-center justify-center overflow-hidden border-b border-slate-200 bg-white md:border-b-0 md:border-r">
+              <div className="absolute left-5 top-5 z-10 inline-flex items-center gap-2 rounded-full bg-white/90 px-3 py-1.5 text-xs font-medium text-slate-700 shadow-sm">
                 <User size={14} /> Candidate
               </div>
               {cameraOn && !cameraError ? (
                 <>
                   <video ref={videoRef} autoPlay playsInline muted className="h-full min-h-[420px] w-full object-cover" />
-                  <div className="absolute bottom-5 left-5 rounded-full bg-black/40 px-3 py-1.5 text-xs font-bold text-white">
+                  <div className="absolute bottom-5 left-5 rounded-full bg-white/90 px-3 py-1.5 text-xs font-medium text-slate-700 shadow-sm">
                     Camera preview
                   </div>
                 </>
@@ -529,15 +529,15 @@ export default function InterviewRoom() {
               )}
             </div>
 
-            <div className="relative flex items-center justify-center bg-slate-950">
-              <div className="absolute left-5 top-5 inline-flex items-center gap-2 rounded-full bg-black/30 px-3 py-1.5 text-xs font-bold text-white">
+            <div className="relative flex items-center justify-center bg-slate-50">
+              <div className="absolute left-5 top-5 inline-flex items-center gap-2 rounded-full bg-white/90 px-3 py-1.5 text-xs font-medium text-slate-700 shadow-sm">
                 <Bot size={14} /> AI Interviewer
               </div>
               <div className="space-y-5 px-8 text-center">
-                <div className="mx-auto flex h-32 w-32 items-center justify-center rounded-full border border-indigo-400/30 bg-indigo-400/10 text-indigo-200">
+                <div className="mx-auto flex h-32 w-32 items-center justify-center rounded-full border border-teal-100 bg-teal-50 text-teal-700">
                   <Bot size={54} />
                 </div>
-                <p className="text-sm font-bold leading-6 text-slate-300">
+                <p className="text-sm font-medium leading-6 text-slate-600">
                   {simulationStatus === 'not_started'
                     ? 'Waiting to begin.'
                     : simulationStatus === 'completed'
@@ -548,8 +548,8 @@ export default function InterviewRoom() {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-800 bg-slate-900 px-5 py-4">
-            <div className="flex items-center gap-2 text-xs font-bold text-slate-400">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 bg-white px-5 py-4">
+            <div className="flex items-center gap-2 text-xs font-medium text-slate-400">
               <Clock size={15} /> Status: {simulationStatus.replace('_', ' ')}
             </div>
             {!isRecruiter && (
@@ -557,18 +557,18 @@ export default function InterviewRoom() {
                 <button
                   onClick={toggleListening}
                   disabled={simulationStatus === 'completed' || interview?.status !== 'Scheduled'}
-                  className={`rounded-xl p-3 text-white hover:bg-slate-700 disabled:opacity-50 ${listening ? 'bg-rose-600' : 'bg-slate-800'}`}
+                  className={`rounded-xl p-3 disabled:opacity-50 ${listening ? 'bg-rose-600 text-white hover:bg-rose-700' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                   title={listening ? 'Stop speech input' : simulationStatus === 'not_started' ? 'Start interview and speak' : 'Speak your answer'}
                 >
                   {listening ? <Mic size={18} /> : <MicOff size={18} />}
                 </button>
-                <button onClick={() => setCameraOn((value) => !value)} className="rounded-xl bg-slate-800 p-3 text-white hover:bg-slate-700">
+                <button onClick={() => setCameraOn((value) => !value)} className="rounded-xl bg-slate-100 p-3 text-slate-600 hover:bg-slate-200">
                   {cameraOn ? <Video size={18} /> : <VideoOff size={18} />}
                 </button>
-                <button onClick={() => speakText(questionBank[activeQuestion])} className="rounded-xl bg-slate-800 p-3 text-white hover:bg-slate-700">
+                <button onClick={() => speakText(questionBank[activeQuestion])} className="rounded-xl bg-slate-100 p-3 text-slate-600 hover:bg-slate-200">
                   <Volume2 size={18} />
                 </button>
-                <button className="rounded-xl bg-slate-800 p-3 text-white hover:bg-slate-700">
+                <button className="rounded-xl bg-slate-100 p-3 text-slate-600 hover:bg-slate-200">
                   <Monitor size={18} />
                 </button>
               </div>
@@ -577,17 +577,17 @@ export default function InterviewRoom() {
         </section>
 
         <aside className="space-y-6">
-          <section className="rounded-[2rem] border border-indigo-100 bg-indigo-50 p-6 shadow-sm">
-            <div className="mb-3 flex items-center gap-2 text-indigo-700">
+          <section className="rounded-2xl border border-teal-100 bg-teal-50 p-6 shadow-sm">
+            <div className="mb-3 flex items-center gap-2 text-teal-700">
               <Bot size={20} />
-              <h2 className="text-lg font-black">{isRecruiter ? 'Live AI Evaluation' : 'AI Interviewer'}</h2>
+              <h2 className="text-lg font-semibold">{isRecruiter ? 'Live AI Evaluation' : 'AI Interviewer'}</h2>
             </div>
-            <p className="text-sm font-semibold leading-6 text-indigo-900">{aiEvaluation.summary}</p>
-            <div className="mt-4 rounded-2xl bg-white/70 p-4 text-sm font-black text-indigo-800">
+            <p className="text-sm font-semibold leading-6 text-teal-900">{aiEvaluation.summary}</p>
+            <div className="mt-4 rounded-2xl bg-white/70 p-4 text-sm font-semibold text-teal-800">
               AI signal: {aiEvaluation.average || '0.0'}/5
             </div>
             {isRecruiter && (
-              <div className="mt-4 grid grid-cols-1 gap-3 text-xs font-bold md:grid-cols-2">
+              <div className="mt-4 grid grid-cols-1 gap-3 text-xs font-medium md:grid-cols-2">
                 <div className="rounded-2xl bg-white/70 p-3 text-emerald-700">
                   Strengths: {(aiEvaluation.strengths || []).join(', ') || 'Waiting for signal'}
                 </div>
@@ -597,16 +597,16 @@ export default function InterviewRoom() {
               </div>
             )}
             {!isRecruiter && simulationStatus === 'not_started' && (
-              <p className="mt-3 rounded-2xl bg-white/70 p-3 text-xs font-bold text-indigo-800">
+              <p className="mt-3 rounded-2xl bg-white/70 p-3 text-xs font-medium text-teal-800">
                 Click Start AI Interview or press the mic button to begin voice mode.
               </p>
             )}
             {speechError && !isRecruiter && (
-              <p className="mt-3 rounded-2xl bg-white/70 p-3 text-xs font-bold text-rose-700">{speechError}</p>
+              <p className="mt-3 rounded-2xl bg-white/70 p-3 text-xs font-medium text-rose-700">{speechError}</p>
             )}
           </section>
 
-          <section className={`rounded-[2rem] border p-6 shadow-sm ${
+          <section className={`rounded-2xl border p-6 shadow-sm ${
             malpracticeFlags.length > 0
               ? 'border-rose-200 bg-rose-50'
               : 'border-emerald-100 bg-emerald-50'
@@ -615,12 +615,12 @@ export default function InterviewRoom() {
               malpracticeFlags.length > 0 ? 'text-rose-700' : 'text-emerald-700'
             }`}>
               <ShieldAlert size={20} />
-              <h2 className="text-lg font-black">Interview Proctoring</h2>
+              <h2 className="text-lg font-semibold">Interview Proctoring</h2>
             </div>
             {malpracticeFlags.length > 0 ? (
               <div className="space-y-2">
                 {malpracticeFlags.map((flag) => (
-                  <p key={flag} className="rounded-2xl bg-white/80 p-3 text-xs font-bold text-rose-700">
+                  <p key={flag} className="rounded-2xl bg-white/80 p-3 text-xs font-medium text-rose-700">
                     {flag}
                   </p>
                 ))}
@@ -631,17 +631,17 @@ export default function InterviewRoom() {
           </section>
 
           {isRecruiter && (
-            <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+            <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-lg font-black text-slate-900">Recruiter Scorecard</h2>
-                <div className="rounded-2xl bg-indigo-50 px-4 py-2 text-sm font-black text-indigo-700">{averageScore}/5</div>
+                <h2 className="text-lg font-semibold text-slate-900">Recruiter Scorecard</h2>
+                <div className="rounded-2xl bg-teal-50 px-4 py-2 text-sm font-semibold text-teal-700">{averageScore}/5</div>
               </div>
               <div className="space-y-4">
                 {scoreAreas.map((area) => (
                   <label key={area} className="block">
-                    <div className="mb-2 flex items-center justify-between text-xs font-black uppercase tracking-widest text-slate-400">
+                    <div className="mb-2 flex items-center justify-between text-xs font-semibold uppercase tracking-widest text-slate-400">
                       <span>{area}</span>
-                      <span className="inline-flex items-center gap-1 text-indigo-600"><Star size={12} /> {scores[area]}</span>
+                      <span className="inline-flex items-center gap-1 text-teal-600"><Star size={12} /> {scores[area]}</span>
                     </div>
                     <input
                       type="range"
@@ -653,7 +653,7 @@ export default function InterviewRoom() {
                         setReviewDirty(true);
                       }}
                       onMouseUp={saveRecruiterReview}
-                      className="w-full accent-indigo-600"
+                      className="w-full accent-teal-600"
                     />
                   </label>
                 ))}
@@ -662,8 +662,8 @@ export default function InterviewRoom() {
           )}
 
           {isRecruiter && (
-            <section className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
-              <h2 className="text-lg font-black text-slate-900">Recruiter Notes</h2>
+            <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+              <h2 className="text-lg font-semibold text-slate-900">Recruiter Notes</h2>
               <textarea
                 value={notes}
                 onChange={(event) => {
@@ -672,7 +672,7 @@ export default function InterviewRoom() {
                 }}
                 onBlur={saveRecruiterReview}
                 rows="6"
-                className="mt-4 w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10"
+                className="mt-4 w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/10"
                 placeholder="Capture final hiring signal..."
               />
             </section>
@@ -680,9 +680,9 @@ export default function InterviewRoom() {
         </aside>
       </div>
 
-      <section className="rounded-[2rem] border border-slate-200 bg-white shadow-sm">
+      <section className="rounded-2xl border border-slate-200 bg-white shadow-sm">
         <div className="border-b border-slate-100 p-6">
-          <h2 className="text-lg font-black text-slate-900">Live Interview Transcript</h2>
+          <h2 className="text-lg font-semibold text-slate-900">Live Interview Transcript</h2>
           <p className="mt-1 text-sm text-slate-500">
             Candidate speech is captured here and saved for recruiter monitoring and evaluation.
           </p>
@@ -690,12 +690,12 @@ export default function InterviewRoom() {
         <div className="max-h-80 space-y-3 overflow-y-auto p-6">
           {transcript.map((item, index) => (
             <div key={`${item.speaker}-${index}`} className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
-              <p className="text-xs font-black uppercase tracking-widest text-slate-400">{item.speaker}</p>
+              <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">{item.speaker}</p>
               <p className="mt-1 text-sm leading-6 text-slate-700">{item.text}</p>
             </div>
           ))}
           {transcript.length === 0 && (
-            <p className="rounded-2xl bg-slate-50 p-6 text-sm font-bold text-slate-400">
+            <p className="rounded-2xl bg-slate-50 p-6 text-sm font-medium text-slate-400">
               No transcript yet. The candidate has not started the AI interview.
             </p>
           )}
@@ -709,13 +709,13 @@ export default function InterviewRoom() {
                 if (event.key === 'Enter') submitAnswer();
               }}
               disabled={simulationStatus !== 'in_progress'}
-              className="min-w-0 flex-1 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 disabled:opacity-60"
+              className="min-w-0 flex-1 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/10 disabled:opacity-60"
               placeholder={listening ? 'Listening...' : 'Speak with the mic or type your answer...'}
             />
             <button
               onClick={submitAnswer}
               disabled={simulationStatus !== 'in_progress' || !answer.trim()}
-              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-5 py-3 text-sm font-black text-white hover:bg-indigo-700 disabled:opacity-60"
+              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-teal-600 px-5 py-3 text-sm font-semibold text-white hover:bg-teal-700 disabled:opacity-60"
             >
               <Send size={17} /> Submit Answer
             </button>
