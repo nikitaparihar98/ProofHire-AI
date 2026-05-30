@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from backend.core.schema_sync import sync_sqlite_schema
 from backend.routers import (
     live_ws,
     candidates,
@@ -16,6 +17,7 @@ from backend.routers import (
     candidate_profile,
 )
 
+sync_sqlite_schema()
 
 app = FastAPI(
     title="ProofHire AI Backend",

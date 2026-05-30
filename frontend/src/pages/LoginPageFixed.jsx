@@ -1,32 +1,36 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { CheckSquare, ChevronRight, ClipboardCheck, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { getApiErrorMessage } from '../services/api';
+
+const portalCopy = {
+  candidate: {
+    title: 'Continue to your assessment workspace',
+    description: 'Review assigned tasks, submit work, and see feedback that explains where you stand.',
+    demoEmail: 'candidate@proofhire.ai',
+  },
+  recruiter: {
+    title: 'Continue to your hiring workspace',
+    description: 'Review proof packets, compare candidates, and follow up with clearer interview questions.',
+    demoEmail: 'recruiter@proofhire.ai',
+  },
+};
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
-  
-  // Tab role selection
-  const [role, setRole] = useState('candidate'); // 'candidate' or 'recruiter'
+
+  const [role, setRole] = useState('candidate');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    return document.documentElement.classList.contains('dark') || localStorage.getItem('theme') === 'dark';
-  });
-
   useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
-  }, [isDarkMode]);
+    document.documentElement.classList.remove('dark');
+    window.localStorage?.setItem('theme', 'light');
+  }, []);
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -46,12 +50,13 @@ export default function LoginPage() {
   const handleQuickLogin = async (targetRole) => {
     setLoading(true);
     setError('');
-    const demoEmail = targetRole === 'candidate' ? 'candidate@proofhire.ai' : 'recruiter@proofhire.ai';
-    const demoPassword = 'password';
     setRole(targetRole);
 
     try {
-      const user = await login({ email: demoEmail, password: demoPassword });
+      const user = await login({
+        email: portalCopy[targetRole].demoEmail,
+        password: 'password',
+      });
       navigate(user.role === 'candidate' ? '/candidate/dashboard' : '/recruiter-dashboard');
     } catch (err) {
       setError(getApiErrorMessage(err, 'Login failed'));
@@ -60,183 +65,138 @@ export default function LoginPage() {
     }
   };
 
+  const activeCopy = portalCopy[role];
+
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#0f172a] text-slate-800 dark:text-slate-100 flex items-center justify-center p-4 relative overflow-hidden mesh-gradient transition-colors duration-300">
-      
-      {/* Decorative Blur Blobs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 dark:bg-purple-500/5 rounded-full blur-[100px] pointer-events-none"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-[100px] pointer-events-none"></div>
-
-      {/* Theme Toggle Button */}
-      <div className="absolute top-6 right-6 z-50">
-        <button
-          onClick={() => setIsDarkMode(!isDarkMode)}
-          className="w-10 h-10 rounded-full flex items-center justify-center border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white bg-white/50 dark:bg-slate-900/50 backdrop-blur-md transition-all focus:outline-none shadow-sm"
-          aria-label="Toggle Theme"
-          type="button"
-        >
-          <span className="material-symbols-outlined text-[20px] select-none">
-            {isDarkMode ? 'light_mode' : 'dark_mode'}
-          </span>
-        </button>
-      </div>
-
-      {/* Main Split-Screen Container */}
-      <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-0 bg-white/70 dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800 rounded-[3rem] shadow-2xl backdrop-blur-md overflow-hidden relative z-10">
-        
-        {/* Left Column: Brand Storytelling & Tagline */}
-        <div className="md:col-span-6 p-8 md:p-14 flex flex-col justify-center space-y-8 bg-slate-50/50 dark:bg-slate-950/40 border-r border-slate-200/80 dark:border-slate-800">
-          <div className="flex items-center gap-2">
-            <span className="w-5 h-5 rounded-lg bg-indigo-600 flex items-center justify-center font-black text-white text-xs select-none">P</span>
-            <span className="font-bold text-sm text-slate-600 dark:text-slate-300 font-mono tracking-wider">ProofHire AI</span>
-          </div>
-
-          <div className="space-y-4">
-            <h1 className="text-4xl font-black leading-tight tracking-tight text-slate-900 dark:text-white">
-              Hire on proof.<br />
-              <span className="text-indigo-600 dark:text-indigo-400">Not on paper.</span>
-            </h1>
-            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
-              The only hiring platform that tells you why—why someone was selected, why they weren't, and why a weaker resume might be your strongest hire.
-            </p>
-          </div>
-
-          {/* Pillars List */}
-          <div className="space-y-4 pt-2">
-            <div className="flex items-start gap-3">
-              <span className="material-symbols-outlined text-indigo-600 dark:text-indigo-400 text-lg mt-0.5 animate-pulse">check_circle</span>
-              <div>
-                <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200">Skill Over Resume</h4>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Evaluate actual task performance first, credentials second.</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3">
-              <span className="material-symbols-outlined text-indigo-600 dark:text-indigo-400 text-lg mt-0.5 animate-pulse">feedback</span>
-              <div>
-                <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200">Explainable Rejection</h4>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Precise, actionable decisions that build deep candidate trust.</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3">
-              <span className="material-symbols-outlined text-indigo-600 dark:text-indigo-400 text-lg mt-0.5 animate-pulse">stars</span>
-              <div>
-                <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200">Hidden Talent Mode</h4>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Auto-flag and promote strong code-performers from non-traditional paths.</p>
-              </div>
-            </div>
-          </div>
+    <div className="min-h-screen bg-[#f6f8fb] text-[#071b3a]">
+      <header className="border-b border-slate-200 bg-white">
+        <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-5 md:px-8">
+          <Link to="/" className="flex items-center gap-3 text-2xl font-semibold tracking-tight">
+            <span className="h-3 w-3 rounded-full bg-teal-700" />
+            ProofHire
+          </Link>
+          <Link
+            to="/recruiter-signup"
+            className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold shadow-sm transition hover:border-teal-700 hover:text-teal-800"
+          >
+            Create account
+          </Link>
         </div>
+      </header>
 
-        {/* Right Column: Sleek Glassmorphic Form */}
-        <div className="md:col-span-6 p-8 md:p-14 flex flex-col justify-center bg-transparent">
-          
-          <div className="text-center mb-6">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Sign In</h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Select your portal to continue</p>
+      <main className="mx-auto grid min-h-[calc(100vh-72px)] max-w-7xl items-center gap-10 px-5 py-12 md:px-8 lg:grid-cols-[0.9fr_1fr]">
+        <section className="hidden lg:block">
+          <div className="mb-8 inline-flex items-center gap-3 rounded-md bg-teal-50 px-4 py-2 text-sm font-semibold uppercase tracking-[0.14em] text-teal-800">
+            <CheckSquare className="h-4 w-4" />
+            Proof-based hiring
+          </div>
+          <h1 className="max-w-xl text-5xl font-normal leading-[1.08] tracking-tight md:text-6xl">
+            Sign in to review work, not just resumes.
+          </h1>
+          <p className="mt-7 max-w-lg text-lg leading-8 text-slate-600">
+            ProofHire keeps assessments, authenticity signals, and explainable feedback in one calm workspace.
+          </p>
+
+          <div className="mt-10 rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_18px_60px_rgba(15,23,42,0.06)]">
+            <div className="flex items-center gap-3 border-b border-slate-200 pb-4">
+              <ShieldCheck className="h-5 w-5 text-teal-700" />
+              <div>
+                <p className="font-semibold text-slate-950">Demo proof packet</p>
+                <p className="text-sm text-slate-500">What recruiters see after an assessment</p>
+              </div>
+            </div>
+            <div className="mt-5 grid gap-3">
+              <div className="rounded-xl bg-[#f8faff] p-4">
+                <p className="text-sm font-semibold text-slate-950">Task score</p>
+                <p className="mt-1 text-sm text-slate-500">React component, API handling, edge cases</p>
+              </div>
+              <div className="rounded-xl bg-[#f8faff] p-4">
+                <p className="text-sm font-semibold text-slate-950">Authenticity check</p>
+                <p className="mt-1 text-sm text-slate-500">Paste activity, tab switches, timing signals</p>
+              </div>
+              <div className="rounded-xl bg-[#f8faff] p-4">
+                <p className="text-sm font-semibold text-slate-950">Resume Analysis</p>
+                <p className="mt-1 text-sm text-slate-500">upload, get context, job matching</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto flex w-full max-w-xl flex-col justify-center rounded-2xl border border-slate-200 bg-white p-7 shadow-[0_18px_60px_rgba(15,23,42,0.06)] md:min-h-[640px] md:p-10">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-teal-800">Sign in</p>
+            <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950">{activeCopy.title}</h2>
+            <p className="mt-3 text-sm leading-6 text-slate-500">{activeCopy.description}</p>
+          </div>
+
+          <div className="mt-7 grid grid-cols-2 gap-2 rounded-xl border border-slate-200 bg-[#f6f8fb] p-1">
+            {['candidate', 'recruiter'].map((type) => (
+              <button
+                key={type}
+                onClick={() => setRole(type)}
+                type="button"
+                className={`rounded-lg px-4 py-2.5 text-sm font-semibold capitalize transition ${
+                  role === type
+                    ? 'bg-white text-[#071b3a] shadow-sm'
+                    : 'text-slate-500 hover:text-[#071b3a]'
+                }`}
+              >
+                {type}
+              </button>
+            ))}
           </div>
 
           {error && (
-            <div className="mb-5 rounded-2xl border border-rose-200 bg-rose-50 dark:border-rose-500/20 dark:bg-rose-500/10 px-4 py-3 text-xs font-bold text-rose-600 dark:text-rose-400">
+            <div className="mt-5 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">
               {error}
             </div>
           )}
 
-          {/* Capsule Switcher */}
-          <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 rounded-2xl mb-6">
-            <button
-              onClick={() => setRole('candidate')}
-              type="button"
-              className={`py-2.5 rounded-xl text-xs font-bold transition-all ${
-                role === 'candidate'
-                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20'
-                : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'
-              }`}
-            >
-              Candidate
-            </button>
-            <button
-              onClick={() => setRole('recruiter')}
-              type="button"
-              className={`py-2.5 rounded-xl text-xs font-bold transition-all ${
-                role === 'recruiter'
-                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20'
-                : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'
-              }`}
-            >
-              Recruiter
-            </button>
-          </div>
-
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleLogin} className="mt-6 space-y-4">
             <div>
-              <label className="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1.5">Email Address</label>
+              <label className="block text-sm font-semibold text-slate-700">Email address</label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
-                className="w-full px-4 py-2.5 bg-white dark:bg-slate-950/30 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-medium text-slate-900 dark:text-slate-200 placeholder-slate-400"
-                placeholder={role === 'candidate' ? 'candidate@proofhire.ai' : 'recruiter@proofhire.ai'}
+                className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-teal-700 focus:ring-4 focus:ring-teal-700/10"
+                placeholder={activeCopy.demoEmail}
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1.5">Password</label>
+              <label className="block text-sm font-semibold text-slate-700">Password</label>
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
-                className="w-full px-4 py-2.5 bg-white dark:bg-slate-950/30 border border-slate-200 dark:border-slate-800 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-medium text-slate-900 dark:text-slate-200 placeholder-slate-400"
-                placeholder="••••••••"
+                className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-teal-700 focus:ring-4 focus:ring-teal-700/10"
+                placeholder="At least 6 characters"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-indigo-600/25 transition-all active:scale-95 disabled:opacity-60"
+              className="flex w-full items-center justify-center rounded-xl bg-[#071b3a] px-5 py-3.5 text-sm font-semibold text-white shadow-sm transition hover:bg-[#0b2a55] disabled:opacity-60"
             >
-              {loading ? 'Entering Portal...' : `Enter ${role === 'candidate' ? 'Candidate' : 'Recruiter'} Portal`}
+              {loading ? 'Signing in...' : `Enter ${role} workspace`}
+              {!loading && <ChevronRight className="ml-2 h-4 w-4" />}
             </button>
           </form>
 
-          {/* Quick Demo Logins Section */}
-          <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-800">
-            <p className="text-center text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-4">
-              Demo Portals Quick Access
-            </p>
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                onClick={() => handleQuickLogin('candidate')}
-                type="button"
-                className="flex items-center justify-center gap-1.5 py-2.5 bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/20 text-indigo-700 dark:text-indigo-300 text-xs font-bold rounded-xl hover:bg-indigo-100/70 dark:hover:bg-indigo-500/20 transition-all group"
-              >
-                <span className="material-symbols-outlined text-[16px] group-hover:scale-110 transition-transform">person_pin</span>
-                <span>Candidate Demo</span>
-              </button>
-              <button
-                onClick={() => handleQuickLogin('recruiter')}
-                type="button"
-                className="flex items-center justify-center gap-1.5 py-2.5 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-xs font-bold rounded-xl hover:bg-emerald-100/70 dark:hover:bg-emerald-500/20 transition-all group"
-              >
-                <span className="material-symbols-outlined text-[16px] group-hover:scale-110 transition-transform">corporate_fare</span>
-                <span>Recruiter Demo</span>
-              </button>
-            </div>
-          </div>
+          
 
-          <div className="mt-6 text-center text-xs text-slate-500 dark:text-slate-400">
+          <p className="mt-7 text-center text-sm text-slate-500">
             Need a fresh account?{' '}
-            <Link to="/recruiter-signup" className="text-indigo-600 dark:text-indigo-400 font-bold hover:underline">
-              Create an account
+            <Link to="/recruiter-signup" className="font-semibold text-teal-800 hover:underline">
+              Create one
             </Link>
-          </div>
-        </div>
-
-      </div>
+          </p>
+        </section>
+      </main>
     </div>
   );
 }

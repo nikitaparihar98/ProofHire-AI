@@ -12,6 +12,52 @@ router = APIRouter(
     tags=["interviews"]
 )
 
+def _parse_simulation_notes(notes: str):
+    if not notes:
+        return {}
+
+    try:
+        parsed = json.loads(notes)
+    except (TypeError, json.JSONDecodeError):
+        return {}
+
+    return parsed if isinstance(parsed, dict) else {}
+
+
+def _sync_interview_malpractice(interview: models.Interview, candidate: models.Candidate, db: Session):
+    simulation = _parse_simulation_notes(interview.notes)
+    interview_flags = simulation.get("malpractice_flags") or []
+    if not interview_flags:
+        return []
+
+    existing_flags = candidate.malpractice_flags or []
+    if not isinstance(existing_flags, list):
+        existing_flags = [str(existing_flags)]
+
+    seen = {str(flag).strip() for flag in existing_flags if str(flag).strip()}
+    new_flags = []
+    for flag in interview_flags:
+        text = str(flag).strip()
+        if text and text not in seen:
+            new_flags.append(text)
+            seen.add(text)
+
+    if not new_flags:
+        return []
+
+    candidate.malpractice_flags = existing_flags + new_flags
+    candidate.malpractice_severity = min(len(candidate.malpractice_flags) * 20, 100)
+
+    notification = models.Notification(
+        title="Interview Malpractice Warning",
+        message=f"{candidate.name} completed an interview with {len(new_flags)} new proctoring flag(s).",
+        type="critical" if candidate.malpractice_severity >= 60 else "warning",
+        created_at=datetime.now().isoformat()
+    )
+    db.add(notification)
+    return new_flags
+
+
 @router.post("/schedule", response_model=schemas.InterviewResponse)
 def schedule_interview(request: schemas.InterviewScheduleRequest, db: Session = Depends(get_db)):
     # 1. Verify candidate exists
@@ -78,6 +124,7 @@ def update_interview(id: int, status: str, db: Session = Depends(get_db)):
     candidate = db.query(models.Candidate).filter(models.Candidate.id == interview.candidate_id).first()
     if status == "Completed" and candidate:
         candidate.status = "Interview Completed"
+        _sync_interview_malpractice(interview, candidate, db)
     elif status == "Cancelled" and candidate:
         candidate.status = "Interview Cancelled"
             

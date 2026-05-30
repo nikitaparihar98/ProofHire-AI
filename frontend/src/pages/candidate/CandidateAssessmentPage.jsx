@@ -1,9 +1,8 @@
 // src/pages/candidate/CandidateAssessmentPage.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
 import { getAssessment, saveAssessmentDraft, submitAssessment } from '../../services/api';
-import { Loader2, Upload, AlertTriangle, Clock, Play, Brain, Check, FileText } from 'lucide-react';
+import { Loader2, AlertTriangle, Clock, Brain, Check, FileText } from 'lucide-react';
 
 function RichEditor({ value, onChange, disabled }) {
   return (
@@ -23,17 +22,7 @@ function RichEditor({ value, onChange, disabled }) {
   );
 }
 
-function Countdown({ initialSeconds, onExpire }) {
-  const [seconds, setSeconds] = useState(initialSeconds);
-  useEffect(() => {
-    if (seconds <= 0) {
-      onExpire();
-      return;
-    }
-    const id = setTimeout(() => setSeconds(seconds - 1), 1000);
-    return () => clearTimeout(id);
-  }, [seconds, onExpire]);
-
+function Countdown({ seconds }) {
   const mins = Math.floor(seconds / 60);
   const secs = seconds % 60;
   return (
@@ -123,7 +112,6 @@ function EvaluationOverlay({ steps, onFinish }) {
 export default function CandidateAssessmentPage() {
   const { assessmentId } = useParams();
   const navigate = useNavigate();
-  const { user } = useAuth();
   
   const [assessment, setAssessment] = useState(null);
   const [draft, setDraft] = useState('');
@@ -182,6 +170,16 @@ export default function CandidateAssessmentPage() {
     return () => clearInterval(interval);
   }, [assessmentId, draft, timeLeft, assessment, malpracticeLog, submitting]);
 
+  useEffect(() => {
+    if (!assessment || submitting || timeLeft <= 0) return undefined;
+
+    const timer = setInterval(() => {
+      setTimeLeft((seconds) => Math.max(seconds - 1, 0));
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [assessment, submitting, timeLeft]);
+
   // Proctoring event listeners – track window focus changes and copy-paste events
   useEffect(() => {
     function handleVisibility() {
@@ -209,6 +207,7 @@ export default function CandidateAssessmentPage() {
   }, []);
 
   const handleSubmit = async () => {
+    if (submitting) return;
     setConfirmSubmit(false);
     setSubmitting(true);
     setShowEval(true);
@@ -221,6 +220,11 @@ export default function CandidateAssessmentPage() {
       console.error(e);
     }
   };
+
+  useEffect(() => {
+    if (!assessment || submitting || timeLeft > 0) return;
+    handleSubmit();
+  }, [assessment, submitting, timeLeft]);
 
   const evalSteps = [
     { text: 'Scanning submission structure...' },
@@ -285,11 +289,7 @@ export default function CandidateAssessmentPage() {
           
           {timeLeft > 0 && (
             <Countdown 
-              initialSeconds={timeLeft} 
-              onExpire={() => {
-                // Auto submit on expire
-                handleSubmit();
-              }} 
+              seconds={timeLeft} 
             />
           )}
         </div>

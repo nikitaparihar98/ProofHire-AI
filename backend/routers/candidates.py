@@ -25,6 +25,54 @@ def normalize_candidate(c):
     Converts dict-based fields into schema-safe types.
     """
 
+    list_fields = [
+        "strengths",
+        "weaknesses",
+        "malpractice_flags",
+        "authenticity_gaps",
+        "growth_nudges",
+    ]
+    dict_fields = ["submission_data", "resume_skills", "proven_skills"]
+    float_fields = [
+        "overall_score",
+        "technical_score",
+        "communication_score",
+        "problem_solving_score",
+        "plagiarism_score",
+        "originality_score",
+        "ai_generated_suspicion",
+        "skill_authenticity_score",
+    ]
+    text_defaults = {
+        "hiring_recommendation": "Pending",
+        "ai_feedback": "Awaiting evaluation.",
+        "recruiter_summary": "",
+        "status": "Not Attended",
+        "rejection_reason": "",
+        "recruiter_notes": "",
+        "plagiarism_risk_level": "Low",
+        "authenticity_summary": "Not evaluated yet.",
+    }
+
+    for field in list_fields:
+        if getattr(c, field, None) is None:
+            setattr(c, field, [])
+
+    for field in dict_fields:
+        if getattr(c, field, None) is None:
+            setattr(c, field, {})
+
+    for field in float_fields:
+        if getattr(c, field, None) is None:
+            setattr(c, field, 0.0)
+
+    for field, default in text_defaults.items():
+        if getattr(c, field, None) is None:
+            setattr(c, field, default)
+
+    if c.originality_score == 0.0:
+        c.originality_score = 100.0
+
     # growth_nudges fix (dict -> string)
     if isinstance(c.growth_nudges, list):
         c.growth_nudges = [
@@ -224,4 +272,4 @@ def assign_task_to_candidate(
     db.refresh(task_assignment)
 
     # Return the task definition as TaskResponse schema
-    return schemas.TaskResponse(**task_def)
+    return schemas.TaskResponse(**task_def)
