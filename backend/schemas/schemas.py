@@ -69,93 +69,8 @@ class CandidateCreate(CandidateBase):
     plagiarism_score: float = 0.0
     originality_score: float = 100.0
     plagiarism_risk_level: str = "Low"
-    ai_generated_suspicion: float = 0.0
-
-    authenticity_summary: str = "Not evaluated yet."
-
-    malpractice_flags: List[str] = Field(default_factory=list)
-
-    status: str = "Not Attended"
-    rejection_reason: str = ""
-    recruiter_notes: str = ""
-
-    resume_skills: Dict[str, str] = Field(default_factory=dict)
-    proven_skills: Dict[str, str] = Field(default_factory=dict)
-
-    skill_authenticity_score: float = 0.0
-    authenticity_gaps: List[str] = Field(default_factory=list)
-    growth_nudges: List[str] = Field(default_factory=list)
-
-
-class CandidateResponse(CandidateCreate):
-    id: int
-    has_malpractice: bool = Field(default=False)
-
-    class Config:
-        from_attributes = True
-
-
-# =========================
-# TASK SCHEMAS
-# =========================
-
-class TaskResponse(BaseModel):
-    id: str
-    role: str
-    title: str
-    task_type: str
-    prompt: str
-    evaluation_focus: List[str]
-    time_limit_minutes: int
-
-
-class TaskAssignRequest(BaseModel):
-    role: str
-
-
-class RecruiterTaskAssignRequest(BaseModel):
-    task_id: str
-    difficulty: str = "Medium"
-    duration: int = 60
-    custom_prompt: Optional[str] = None
-    custom_title: Optional[str] = None
-    deadline: Optional[str] = None
-    evaluation_criteria: Optional[str] = None
-
-
-class TaskGenerateRequest(BaseModel):
-    role: str
-    difficulty: str = "Medium"
-    tech_stack: str = "General"
-
-
-# =========================
-# DECISION / ANALYTICS
-# =========================
-
-class DecisionRequest(BaseModel):
-    status: str
-    reason: str = ""
-    notes: str = ""
-
-
-class CandidateResultSummary(BaseModel):
-    id: int
-    name: str
-    role: str
-    score: float
-    score_out_of_10: float
-    status: str
-    hiring_recommendation: str
-    hidden_talent: bool
-    why_not_selected: str
-
-
-class CandidateComparisonResponse(BaseModel):
-    candidate_1: CandidateResponse
-    candidate_2: CandidateResponse
-    stronger_candidate_id: int
-    reasoning: str
+    hidden_talent: bool = False
+    why_not_selected: str = ""
 
 
 class AnalyticsSummary(BaseModel):
@@ -285,17 +200,6 @@ class EvaluationRequest(BaseModel):
     email: Optional[str] = None
     role: str
     submission_data: Dict[str, Any]
-# =========================
-# AUTH FLOW
-# =========================
-
-class CandidateDashboardResponse(BaseModel):
-    user: UserResponse
-    candidate: "CandidateResponse"
-    assigned_task: TaskResponse
-    assignment_id: int
-    submission_status: str
-    scheduled_interviews: int = 0
 
 
 # =========================
@@ -330,3 +234,94 @@ class SubmissionRequest(BaseModel):
 class SubmissionResponse(BaseModel):
     message: str
     candidate: "CandidateResponse"
+
+
+class CandidateResultSummary(BaseModel):
+    id: int
+    name: str
+    role: str
+    score: float
+    score_out_of_10: float
+    status: Optional[str] = None
+    hiring_recommendation: Optional[str] = None
+    hidden_talent: bool = False
+    why_not_selected: str = ""
+
+
+class TaskResponse(BaseModel):
+    id: str
+    role: str
+    title: str
+    task_type: str
+    prompt: str
+    evaluation_focus: List[str]
+    time_limit_minutes: int
+
+
+class TaskAssignRequest(BaseModel):
+    role: str
+
+
+class TaskGenerateRequest(BaseModel):
+    role: str
+    difficulty: str = "Medium"
+    tech_stack: str = "Python"
+
+
+class RecruiterTaskAssignRequest(BaseModel):
+    task_id: Optional[str] = None
+    difficulty: str = "Medium"
+    duration: int = 60
+    custom_prompt: Optional[str] = None
+    custom_title: Optional[str] = None
+
+
+class CandidateResponse(CandidateCreate):
+    id: int
+    status: Optional[str] = None
+    class Config:
+        from_attributes = True
+
+
+class CandidateComparisonResponse(BaseModel):
+    candidate_1: CandidateResponse
+    candidate_2: CandidateResponse
+    stronger_candidate_id: int
+    reasoning: str
+
+
+class CandidateDashboardResponse(BaseModel):
+    user: UserResponse
+    candidate: CandidateResponse
+    assigned_task: TaskResponse
+    assignment_id: int
+    submission_status: str
+    scheduled_interviews: int = 0
+
+    class Config:
+        from_attributes = True
+
+
+class DecisionRequest(BaseModel):
+    status: str
+    reason: Optional[str] = None
+    notes: Optional[str] = None
+
+
+class AssessmentResponse(BaseModel):
+    id: int
+    candidate_id: int
+    task_id: str
+    status: str
+    difficulty: Optional[str] = None
+    duration: Optional[int] = None
+    custom_prompt: Optional[str] = None
+    custom_title: Optional[str] = None
+    draft_answer: Optional[str] = None
+    time_left_seconds: Optional[int] = None
+    assigned_at: Optional[str] = None
+    submitted_at: Optional[str] = None
+    task: TaskResponse
+    candidate: CandidateResponse
+    class Config:
+        from_attributes = True

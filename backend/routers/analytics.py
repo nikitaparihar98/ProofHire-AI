@@ -13,6 +13,29 @@ from backend.schemas.analytics_extended import CandidateAnalyticsResponse, Recru
 
 router = APIRouter(prefix="/api/analytics", tags=["Analytics"])
 
+
+@router.get("/summary", response_model=AnalyticsSummary)
+async def get_analytics_summary(db: Session = Depends(get_db)):
+    candidates = db.query(Candidate).all()
+    completed_statuses = {"Evaluated", "Shortlisted", "Rejected"}
+
+    return AnalyticsSummary(
+        total_candidates=len(candidates),
+        active_assessments=sum(1 for candidate in candidates if candidate.status == "Attending"),
+        completed_assessments=sum(
+            1 for candidate in candidates if candidate.status in completed_statuses
+        ),
+        shortlisted=sum(1 for candidate in candidates if candidate.status == "Shortlisted"),
+        rejected=sum(1 for candidate in candidates if candidate.status == "Rejected"),
+        high_risk=sum(
+            1
+            for candidate in candidates
+            if candidate.plagiarism_risk_level == "High"
+            or candidate.recruiter_risk_level in {"High", "Critical"}
+        ),
+    )
+
+
 @router.get("/candidates", response_model=List[CandidateAnalyticsResponse])
 async def get_candidates(
     db: Session = Depends(get_db),

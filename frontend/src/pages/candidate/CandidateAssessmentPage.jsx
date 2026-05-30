@@ -114,6 +114,7 @@ export default function CandidateAssessmentPage() {
   const navigate = useNavigate();
   
   const [assessment, setAssessment] = useState(null);
+  const activeAssessmentId = assessment?.id || assessmentId;
   const [draft, setDraft] = useState('');
   const [timeLeft, setTimeLeft] = useState(0);
   const [malpracticeLog, setMalpracticeLog] = useState([]);
@@ -158,7 +159,7 @@ export default function CandidateAssessmentPage() {
     if (!assessment || submitting) return;
     const interval = setInterval(async () => {
       try {
-        await saveAssessmentDraft(assessmentId, {
+        await saveAssessmentDraft(activeAssessmentId, {
           draft_answer: draft,
           time_left_seconds: timeLeft,
           malpractice_log: malpracticeLog,
@@ -168,7 +169,7 @@ export default function CandidateAssessmentPage() {
       }
     }, 30000);
     return () => clearInterval(interval);
-  }, [assessmentId, draft, timeLeft, assessment, malpracticeLog, submitting]);
+  }, [activeAssessmentId, draft, timeLeft, assessment, malpracticeLog, submitting]);
 
   useEffect(() => {
     if (!assessment || submitting || timeLeft <= 0) return undefined;
@@ -210,9 +211,9 @@ export default function CandidateAssessmentPage() {
     if (submitting) return;
     setConfirmSubmit(false);
     setSubmitting(true);
-    setShowEval(true);
+      setShowEval(true);
     try {
-      await submitAssessment(assessmentId, { 
+      await submitAssessment(activeAssessmentId, { 
         final_answer: draft,
         malpractice_log: malpracticeLog
       });

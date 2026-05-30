@@ -159,8 +159,18 @@ export const submitAssessment = async (assessmentId, data) => {
   return response.data;
 };
 export const getCandidateDashboard = async () => {
-  const response = await api.get('/candidate/me/dashboard');
-  return response.data;
+  try {
+    const response = await api.get('/candidate/me/dashboard');
+    return response.data;
+  } catch (error) {
+    if (error?.response?.status === 404) {
+      console.warn('Dashboard 404 – creating candidate profile and retrying.');
+      await api.post('/candidate/me/profile');
+      const retry = await api.get('/candidate/me/dashboard');
+      return retry.data;
+    }
+    throw error;
+  }
 };
 
 export const submitCandidateAssessment = async (data) => {
