@@ -9,7 +9,7 @@ export default function NotificationCenter() {
 
   const fetchNotifications = async () => {
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001/api';
       const res = await axios.get(`${API_URL}/notifications/`);
       setNotifications(res.data);
       setUnreadCount(res.data.filter(n => n.is_read === 0).length);
@@ -26,7 +26,7 @@ export default function NotificationCenter() {
 
   const markAsRead = async (id) => {
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001/api';
       await axios.post(`${API_URL}/notifications/read/${id}`);
       fetchNotifications();
     } catch (err) {
@@ -36,7 +36,7 @@ export default function NotificationCenter() {
 
   const clearAll = async () => {
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001/api';
       await axios.post(`${API_URL}/notifications/clear-all`);
       fetchNotifications();
     } catch (err) {
