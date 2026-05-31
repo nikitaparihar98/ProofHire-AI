@@ -1,123 +1,269 @@
 # ProofHire AI 🚀
+
 ### *"Hire on proof. Not on paper."*
 
-ProofHire AI is a state-of-the-art, AI-driven technical assessment, candidate authenticity verification, and malpractice proctoring platform. By combining interactive technical challenges, automatic code-level claim-to-proof cross-referencing, smart proctoring telemetry, and premium dark/light interfaces, it helps modern teams eliminate resume pedigree bias and confidently identify top engineering talents.
+ProofHire AI is an AI-powered technical assessment, candidate authenticity verification, and malpractice proctoring platform. By combining interactive coding evaluations, resume claim verification, recruiter analytics, and proctoring telemetry, it helps organizations identify top engineering talent based on demonstrated skills rather than credentials alone.
 
 ---
 
-## 🌟 Key Differentiators & Brand Pillars
+## 🌟 Key Features
 
-1. **Skill-Over-Pedigree Verification**:
-   * Auto-extracts claims from uploaded resumes and cross-references them against actual code/task execution.
-   * Leverages advanced keyword heuristics and code patterns to detect overclaims (deducting score dynamically) or underclaims (boosting them!).
-2. **Hidden Talent Spotlight**:
-   * Automatically detects and spotlights "Hidden Talents"—capable developers with non-traditional backgrounds (modest resume scores but top-tier technical evaluation).
-   * Renders high-visibility animated spotlight frames in recruiter views to prevent credential bias.
-3. **Explainable Rejection & Selection**:
-   * Provides immediate, constructive AI feedback to candidates and explains decisions transparently to recruiters to eliminate "black-box" hiring frustration.
-4. **Malpractice & Proctoring Telemetry**:
-   * Live proctoring, event log, code paste monitoring, and active tab-switch detection dynamically tracking malpractice severity.
-5. **Interactive Unified Messaging & Threading**:
-   * Full partitioned split-screen candidate inbox allowing private messaging threads across multiple recruiters.
-6. **Automatic SQLite Schema Alignment**:
-   * Out-of-the-box hot schema migrations and synchronization via auto-introspecting SQLAlchemy engine to eliminate setup database crashes.
+### Skill-Over-Pedigree Verification
+
+* Extracts technical claims from uploaded resumes.
+* Cross-references claims against actual coding performance and assessment results.
+* Detects potential overclaims and underrepresented skills.
+
+### Hidden Talent Spotlight
+
+* Highlights candidates with strong technical performance despite modest resume credentials.
+* Helps recruiters identify capable developers from non-traditional backgrounds.
+
+### Explainable Hiring Decisions
+
+* Generates transparent AI-powered feedback.
+* Provides reasoning behind candidate evaluations and recommendations.
+
+### Malpractice Detection & Proctoring
+
+* Tab-switch monitoring.
+* Copy-paste detection.
+* Proctoring event logs and malpractice scoring.
+
+### Recruiter Dashboard
+
+* Candidate pipeline management.
+* Technical evaluation analytics.
+* Candidate messaging and communication tools.
 
 ---
 
 ## 🛠️ Technology Stack
 
-* **Frontend**: React (Vite), Tailwind CSS, Lucide icons, Chart.js, HSL-harmonized Dark/Light appearance switcher, and custom radial SVG gauges.
-* **Backend**: FastAPI, SQLAlchemy (SQLite ORM), Pydantic, WatchFiles (Hot Reload), Llama API service layer.
-* **Testing**: pytest-based automated assertion suite.
+### Frontend
+
+* React (Vite)
+* Tailwind CSS
+* Chart.js
+* Lucide Icons
+
+### Backend
+
+* FastAPI
+* SQLAlchemy
+* SQLite
+* Pydantic
+* WatchFiles
+* Llama API Integration
+
+### Testing
+
+* Pytest
 
 ---
 
-## 📂 Project Architecture
+## 📂 Project Structure
 
-```txt
-RecruitAi/
-├── backend/                  # FastAPI Application
-│   ├── core/                 # DB, config, and schema sync (schema_sync.py)
-│   ├── models/               # SQLAlchemy schema definitions (models.py)
-│   ├── routers/              # Modular API endpoints (candidates, portal, auth)
-│   ├── schemas/              # Pydantic schemas (schemas.py)
-│   ├── services/             # Llama analysis, auth, and analytics services
-│   └── tests/                # Automated pytest files
-├── frontend/                 # Vite + React Client
+```text
+RecruitAi-main/
+├── backend/
+│   ├── core/
+│   ├── database/
+│   ├── models/
+│   ├── routers/
+│   ├── routes/
+│   ├── schemas/
+│   ├── services/
+│   ├── tests/
+│   ├── init_db.py
+│   ├── main.py
+│   └── requirements.txt
+│
+├── frontend/
 │   ├── src/
-│   │   ├── components/       # Visual components (Layout, Sidebar, Charts)
-│   │   ├── pages/            # Viewports (Dashboard, Profile, ResumeVerification)
-│   │   ├── context/          # React Auth and Theme context providers
-│   │   └── services/         # Axios API clients
-│   └── tailwind.config.js    # Custom Tailwind typography and dark mode mapping
-└── proofhire.db              # SQLite Database file
+│   └── package.json
+│
+└── proofhire.db
 ```
 
 ---
 
-## 🚀 Quick Setup & Installation
+# 🚀 Installation & Setup
 
-### Prerequisite
-Ensure you have **Python 3.10+** and **Node.js 18+** installed on your system.
+## Prerequisites
 
-### 1. Backend Setup
-1. Open your terminal and navigate to the backend directory:
-   ```bash
-   cd backend
-   ```
-2. Create and activate a Python virtual environment:
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-3. Install all dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. Set up your environment file:
-   Create a `.env` file in the root workspace or backend folder:
-   ```env
-   DATABASE_URL=sqlite:///./proofhire.db
-   LLAMA_API_KEY=your-llama-api-key-here
-   AUTH_SECRET=proofhire-local-dev-secret
-   ```
-5. Start the FastAPI development server:
-   ```bash
-   uvicorn backend.main:app --reload
-   ```
-   *The backend will automatically synchronize the SQLite schema and start on:* [http://127.0.0.1:8000](http://127.0.0.1:8000)
+Ensure the following are installed:
+
+* Python 3.10 or later
+* Node.js 18 or later
+* npm
 
 ---
 
-### 2. Frontend Setup
-1. In a new terminal window, navigate to the frontend directory:
-   ```bash
-   cd frontend
-   ```
-2. Install the node packages:
-   ```bash
-   npm install
-   ```
-3. Run the Vite development server:
-   ```bash
-   npm run dev
-   ```
-   *The frontend client will spin up on:* [http://localhost:5173/](http://localhost:5173/)
+## Backend Setup
 
----
+**Important:** Run all backend commands from the project root directory (`RecruitAi-main`).
 
-## 🧪 Testing & Verification
+### 1. Navigate to Project Root
 
-We maintain a suite of automated unit and integration assertions validating our Llama skill evaluation algorithms and authenticity rating pipeline.
-
-Run all tests in the backend virtual environment:
 ```bash
-PYTHONPATH=backend pytest backend/tests
+cd RecruitAi-main
+```
+
+### 2. Create Virtual Environment
+
+```bash
+python3 -m venv backend/venv
+```
+
+### 3. Activate Virtual Environment
+
+#### macOS/Linux
+
+```bash
+source backend/venv/bin/activate
+```
+
+#### Windows
+
+```bash
+backend\venv\Scripts\activate
+```
+
+### 4. Install Dependencies
+
+```bash
+pip install -r backend/requirements.txt
+```
+
+### 5. Create Environment File
+
+Create a `.env` file in the project root:
+
+```env
+DATABASE_URL=sqlite:///./proofhire.db
+LLAMA_API_KEY=your-llama-api-key
+AUTH_SECRET=proofhire-local-dev-secret
+```
+
+### 6. Initialize Database
+
+```bash
+python -m backend.init_db
+```
+
+This command creates and seeds the SQLite database.
+
+### 7. Start Backend Server
+
+```bash
+python -m uvicorn backend.main:app --reload
+```
+
+Backend will run at:
+
+```text
+http://127.0.0.1:8000
+```
+
+### API Documentation
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+### Health Check
+
+```text
+http://127.0.0.1:8000/health
 ```
 
 ---
 
-## 🔒 Security & CORS Policy
+## Frontend Setup
 
-* **Regex CORS Allowed Origins**: Automatically matches any local development origin (`http://localhost:517*` or `http://127.0.0.1:517*`) dynamically, preserving secure Cookie/Token credential transmission.
-* **Tokenized Authentications**: Utilizes clean, bearer-token validations (`Authorization: Bearer <token>`) across endpoints.
+Open a new terminal window.
+
+### 1. Navigate to Frontend
+
+```bash
+cd frontend
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Start Development Server
+
+```bash
+npm run dev
+```
+
+Frontend will run at:
+
+```text
+http://localhost:5173
+```
+
+---
+
+## 🧪 Running Tests
+
+From the project root:
+
+```bash
+PYTHONPATH=. pytest backend/tests
+```
+
+---
+
+## 🔒 Security
+
+* Token-based authentication.
+* CORS support for local development environments.
+* SQLite database with automatic schema synchronization.
+
+---
+
+## ⚠️ Common Issue
+
+### ModuleNotFoundError: No module named 'backend'
+
+This occurs when the backend is started from inside the `backend` folder.
+
+❌ Incorrect:
+
+```bash
+cd backend
+uvicorn backend.main:app --reload
+```
+
+✅ Correct:
+
+```bash
+cd RecruitAi-main
+python -m uvicorn backend.main:app --reload
+```
+
+Always start the backend from the project root directory.
+
+---
+
+## 💡 Features to Explore
+
+* Resume Verification
+* Candidate Skill Analysis
+* Hidden Talent Detection
+* Recruiter Dashboard
+* Explainable AI Evaluations
+* Proctoring & Malpractice Monitoring
+* Candidate Messaging System
+
+---
+
+## 📄 License
+
+This project is intended for educational, research, and recruitment technology demonstrations.
