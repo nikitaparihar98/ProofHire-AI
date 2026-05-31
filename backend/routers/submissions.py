@@ -11,6 +11,7 @@ from backend.services.decision_service import (
     score_out_of_10,
     why_not_selected,
 )
+from backend.services.auth_service import require_recruiter
 from backend.services.submission_service import evaluate_and_store_submission
 
 router = APIRouter(tags=["submissions"])
@@ -19,6 +20,7 @@ router = APIRouter(tags=["submissions"])
 @router.post("/api/submit", response_model=schemas.SubmissionResponse)
 def submit_assessment(
     request: schemas.SubmissionRequest,
+    _recruiter: models.User = Depends(require_recruiter),
     db: Session = Depends(get_db),
 ):
     """Submit candidate assessment data and return the stored evaluation result."""
@@ -37,7 +39,11 @@ def submit_assessment(
 
 
 @router.get("/api/results/{candidate_id}", response_model=schemas.CandidateResponse)
-def get_candidate_result(candidate_id: int, db: Session = Depends(get_db)):
+def get_candidate_result(
+    candidate_id: int,
+    _recruiter: models.User = Depends(require_recruiter),
+    db: Session = Depends(get_db),
+):
     """Fetch the evaluated result for a candidate."""
     candidate = db.query(models.Candidate).filter(models.Candidate.id == candidate_id).first()
     if not candidate:
@@ -47,7 +53,10 @@ def get_candidate_result(candidate_id: int, db: Session = Depends(get_db)):
 
 
 @router.get("/api/results", response_model=list[schemas.CandidateResultSummary])
-def list_ranked_results(db: Session = Depends(get_db)):
+def list_ranked_results(
+    _recruiter: models.User = Depends(require_recruiter),
+    db: Session = Depends(get_db),
+):
     """Return ranked candidate results for the recruiter dashboard."""
     candidates = db.query(models.Candidate).order_by(models.Candidate.overall_score.desc()).all()
 
@@ -71,7 +80,11 @@ def list_ranked_results(db: Session = Depends(get_db)):
     "/api/results/{candidate_id}/decision-insights",
     response_model=schemas.CandidateDecisionInsights,
 )
-def get_candidate_decision_insights(candidate_id: int, db: Session = Depends(get_db)):
+def get_candidate_decision_insights(
+    candidate_id: int,
+    _recruiter: models.User = Depends(require_recruiter),
+    db: Session = Depends(get_db),
+):
     """Explain selection, rejection, and Hidden Talent signals for one candidate."""
     candidate = db.query(models.Candidate).filter(models.Candidate.id == candidate_id).first()
     if not candidate:

@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from backend.core.database import get_db
 from backend.models import models
 from backend.schemas import schemas
-from backend.services.auth_service import get_current_user
+from backend.services.auth_service import require_candidate
 from backend.services.candidate_service import create_candidate_for_user
 
 router = APIRouter(
@@ -13,7 +13,7 @@ router = APIRouter(
 
 @router.post("/profile", response_model=schemas.CandidateResponse)
 def init_candidate_profile(
-    current_user: models.User = Depends(get_current_user),
+    current_user: models.User = Depends(require_candidate),
     db: Session = Depends(get_db),
 ):
     if current_user.candidate_id:

@@ -4,6 +4,11 @@ import { Link } from 'react-router-dom';
 
 const CANDIDATES_LIST_BASE = (import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api").replace(/\/$/, "");
 
+const authHeaders = () => {
+  const token = localStorage.getItem("access_token") || localStorage.getItem("authToken") || localStorage.getItem("token");
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
 const ScoreRing = ({ score }) => {
   const normalized = score != null ? (score > 10 ? score / 10 : score) : 0;
   const percentage = (normalized / 10) * 100;
@@ -47,7 +52,9 @@ export default function HiddenTalents() {
     let cancelled = false;
     const fetchTalents = async () => {
       try {
-        const res = await fetch(`${CANDIDATES_LIST_BASE}/candidates/hidden-talents`);
+        const res = await fetch(`${CANDIDATES_LIST_BASE}/candidates/hidden-talents`, {
+          headers: { Accept: "application/json", ...authHeaders() },
+        });
         if (!res.ok) throw new Error("Failed to fetch hidden talents");
         const data = await res.json();
         if (!cancelled) {

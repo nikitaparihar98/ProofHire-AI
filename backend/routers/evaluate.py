@@ -2,7 +2,9 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from backend.core.database import get_db
+from backend.models import models
 from backend.schemas.schemas import EvaluationRequest, CandidateResponse
+from backend.services.auth_service import require_recruiter
 from backend.services.evaluation_service import evaluate_and_store_submission
 
 router = APIRouter(
@@ -14,6 +16,7 @@ router = APIRouter(
 @router.post("/", response_model=CandidateResponse)
 def evaluate_candidate(
     request: EvaluationRequest,
+    _recruiter: models.User = Depends(require_recruiter),
     db: Session = Depends(get_db)
 ):
     """

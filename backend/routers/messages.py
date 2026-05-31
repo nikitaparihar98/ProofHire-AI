@@ -5,6 +5,11 @@ from datetime import datetime
 from backend.core.database import get_db
 from backend.models import models
 from backend.schemas import schemas
+from backend.services.auth_service import (
+    get_current_user,
+    require_recruiter,
+    require_recruiter_or_own_candidate,
+)
 
 router = APIRouter(
     prefix="/api/messages",
@@ -12,7 +17,11 @@ router = APIRouter(
 )
 
 @router.post("/send", response_model=schemas.MessageResponse)
-def send_message(request: schemas.MessageSendRequest, db: Session = Depends(get_db)):
+def send_message(
+    request: schemas.MessageSendRequest,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
     if request.sender_type not in {"recruiter", "candidate"}:
         raise HTTPException(status_code=422, detail="sender_type must be recruiter or candidate")
     if not request.content.strip():
@@ -22,6 +31,10 @@ def send_message(request: schemas.MessageSendRequest, db: Session = Depends(get_
     candidate = db.query(models.Candidate).filter(models.Candidate.id == request.candidate_id).first()
     if not candidate:
         raise HTTPException(status_code=404, detail="Candidate not found")
+
+    require_recruiter_or_own_candidate(current_user, request.candidate_id)
+    if request.sender_type != current_user.role.lower():
+        raise HTTPException(status_code=403, detail="Sender type does not match logged-in user")
     
     new_message = models.Message(
         candidate_id=request.candidate_id,
@@ -37,7 +50,10 @@ def send_message(request: schemas.MessageSendRequest, db: Session = Depends(get_
     return new_message
 
 @router.get("/conversations", response_model=List[schemas.ConversationPreview])
-def get_conversations(db: Session = Depends(get_db)):
+def get_conversations(
+    _recruiter: models.User = Depends(require_recruiter),
+    db: Session = Depends(get_db),
+):
     # Get all distinct candidate IDs who have messages
     candidate_ids = [r[0] for r in db.query(models.Message.candidate_id).distinct().all()]
     
@@ -67,7 +83,12 @@ def get_conversations(db: Session = Depends(get_db)):
     return result
 
 @router.get("/candidate/{candidate_id}/conversations", response_model=List[schemas.ConversationPreview])
-def get_candidate_conversations(candidate_id: int, db: Session = Depends(get_db)):
+def get_candidate_conversations(
+    candidate_id: int,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    require_recruiter_or_own_candidate(current_user, candidate_id)
     # Find all distinct recruiter IDs who have messages with this candidate
     recruiter_ids = [r[0] for r in db.query(models.Message.recruiter_id).filter(models.Message.candidate_id == candidate_id).distinct().all()]
     
@@ -105,11 +126,22 @@ def get_candidate_conversations(candidate_id: int, db: Session = Depends(get_db)
     return result
 
 @router.get("/recruiters", response_model=List[schemas.UserResponse])
-def get_recruiters(db: Session = Depends(get_db)):
+def get_recruiters(
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    if current_user.role.lower() not in {"candidate", "recruiter"}:
+        raise HTTPException(status_code=403, detail="Access denied")
     return db.query(models.User).filter(models.User.role == "recruiter").all()
 
 @router.get("/{candidate_id}", response_model=List[schemas.MessageResponse])
-def get_messages(candidate_id: int, recruiter_id: str = None, db: Session = Depends(get_db)):
+def get_messages(
+    candidate_id: int,
+    recruiter_id: str = None,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    require_recruiter_or_own_candidate(current_user, candidate_id)
     query = db.query(models.Message).filter(models.Message.candidate_id == candidate_id)
     if recruiter_id:
         query = query.filter(models.Message.recruiter_id == recruiter_id)

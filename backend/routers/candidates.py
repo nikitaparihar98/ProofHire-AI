@@ -8,11 +8,14 @@ from backend.services.task_service import get_task_by_id
 from backend.models import models
 from backend.schemas import schemas
 from backend.services.evaluation_service import compare_candidates
+from backend.services.auth_service import require_recruiter
+from backend.services.decision_service import hidden_talent_reason, is_hidden_talent
 from backend.routers.notifications import create_notification
 
 router = APIRouter(
     prefix="/api/candidates",
-    tags=["candidates"]
+    tags=["candidates"],
+    dependencies=[Depends(require_recruiter)],
 )
 
 
@@ -241,6 +244,53 @@ def compare_two_candidates(candidate1_id: int, candidate2_id: int, db: Session =
         stronger_candidate_id=stronger_id,
         reasoning=reasoning
     )
+
+
+# -----------------------------
+# HIDDEN TALENTS
+# -----------------------------
+@router.get("/hidden-talents", response_model=List[schemas.CandidateResponse])
+def get_hidden_talent_candidates(db: Session = Depends(get_db)):
+    candidates = db.query(models.Candidate).all()
+    results = []
+    for candidate in candidates:
+        if is_hidden_talent(candidate):
+            normalized = normalize_candidate(candidate)
+            setattr(normalized, "hidden_talent_reason", hidden_talent_reason(candidate))
+            results.append(normalized)
+
+    return sorted(results, key=lambda c: c.overall_score or 0, reverse=True)
+
+
+# -----------------------------
+# WHY NOT SELECTED
+# -----------------------------
+@router.post("/why-not-selected")
+def generate_why_not_selected_feedback(payload: dict):
+    candidate_name = payload.get("candidate_name") or "the candidate"
+    role = str(payload.get("role") or "the role").replace("_", " ")
+    submission_text = payload.get("submission_text") or ""
+
+    improvement_areas = [
+        "Add more concrete evidence of technical depth and decision making.",
+        "Show clearer trade-offs, testing strategy, and edge-case handling.",
+        f"Tailor the solution more closely to the expectations for {role}.",
+    ]
+
+    if len(submission_text.strip()) < 80:
+        improvement_areas[0] = "Provide a more complete submission with specific implementation details."
+
+    return {
+        "explanation": (
+            f"After reviewing {candidate_name}'s submission, the current evidence was not strong "
+            "enough to move forward compared with stronger matches in the pipeline."
+        ),
+        "improvement_areas": improvement_areas,
+        "encouragement": (
+            "This is useful feedback, not a dead end. With clearer proof of skill and a more "
+            "complete task response, this profile can become much more competitive."
+        ),
+    }
 
 
 # -----------------------------

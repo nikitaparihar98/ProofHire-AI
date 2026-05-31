@@ -4,6 +4,11 @@ import { Loader2, AlertCircle, Copy, Check, MessageSquare, Target, Zap, Trending
 /** Base for POST /why-not-selected */
 const CANDIDATES_LIST_BASE = (import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api").replace(/\/$/, "");
 
+const authHeaders = () => {
+  const token = localStorage.getItem("access_token") || localStorage.getItem("authToken") || localStorage.getItem("token");
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
 function candidateToSubmissionPayload(c) {
   const submissionText =
     (typeof c.submission_data?.submission_text === "string" && c.submission_data.submission_text) ||
@@ -37,7 +42,7 @@ export default function WhyNotSelected() {
       setListLoading(true);
       try {
         const res = await fetch(`${CANDIDATES_LIST_BASE}/candidates/`, {
-          headers: { Accept: "application/json" },
+          headers: { Accept: "application/json", ...authHeaders() },
         });
         if (!res.ok) throw new Error("Failed to load candidates");
         const data = await res.json();
@@ -72,7 +77,7 @@ export default function WhyNotSelected() {
       const body = candidateToSubmissionPayload(selectedCandidate);
       const res = await fetch(`${CANDIDATES_LIST_BASE}/candidates/why-not-selected`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        headers: { "Content-Type": "application/json", Accept: "application/json", ...authHeaders() },
         body: JSON.stringify(body),
       });
       const text = await res.text();

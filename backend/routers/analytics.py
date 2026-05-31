@@ -15,7 +15,11 @@ router = APIRouter(prefix="/api/analytics", tags=["Analytics"])
 
 
 @router.get("/summary", response_model=AnalyticsSummary)
-async def get_analytics_summary(db: Session = Depends(get_db)):
+async def get_analytics_summary(
+    db: Session = Depends(get_db),
+    current_user = Depends(get_current_user),
+):
+    require_role(current_user, "recruiter")
     candidates = db.query(Candidate).all()
     completed_statuses = {"Evaluated", "Shortlisted", "Rejected"}
 

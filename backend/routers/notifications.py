@@ -5,10 +5,12 @@ from datetime import datetime
 from backend.core.database import get_db
 from backend.models import models
 from backend.schemas import schemas
+from backend.services.auth_service import require_recruiter
 
 router = APIRouter(
     prefix="/api/notifications",
-    tags=["notifications"]
+    tags=["notifications"],
+    dependencies=[Depends(require_recruiter)],
 )
 
 @router.get("/", response_model=List[schemas.NotificationResponse])

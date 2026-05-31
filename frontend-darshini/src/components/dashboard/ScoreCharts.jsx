@@ -8,6 +8,11 @@ import { Loader2, AlertCircle, BarChart2, Activity, UserCircle } from 'lucide-re
 
 const CANDIDATES_LIST_BASE = (import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api").replace(/\/$/, "");
 
+const authHeaders = () => {
+  const token = localStorage.getItem("access_token") || localStorage.getItem("authToken") || localStorage.getItem("token");
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
 const normalizeScore = (score) => {
   if (score == null) return 0;
   return score > 10 ? score / 10 : score;
@@ -87,7 +92,7 @@ export default function ScoreCharts() {
       setLoading(true);
       try {
         const res = await fetch(`${CANDIDATES_LIST_BASE}/candidates/`, {
-          headers: { Accept: "application/json" },
+          headers: { Accept: "application/json", ...authHeaders() },
         });
         if (!res.ok) throw new Error("Failed to load candidates");
         const data = await res.json();

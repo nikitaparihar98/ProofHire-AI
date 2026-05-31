@@ -75,6 +75,29 @@ def require_role(user: models.User, role: str) -> None:
         raise HTTPException(status_code=403, detail=f"{role.title()} access required")
 
 
+def require_recruiter(current_user: models.User = Depends(get_current_user)) -> models.User:
+    require_role(current_user, "recruiter")
+    return current_user
+
+
+def require_candidate(current_user: models.User = Depends(get_current_user)) -> models.User:
+    require_role(current_user, "candidate")
+    return current_user
+
+
+def require_recruiter_or_own_candidate(
+    current_user: models.User,
+    candidate_id: int,
+) -> None:
+    if current_user.role.lower() == "recruiter":
+        return
+
+    if current_user.role.lower() == "candidate" and current_user.candidate_id == candidate_id:
+        return
+
+    raise HTTPException(status_code=403, detail="Access denied")
+
+
 def _decode_token(token: str) -> Dict:
     try:
         payload_value, signature = token.split(".", 1)

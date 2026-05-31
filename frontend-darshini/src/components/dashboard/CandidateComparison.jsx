@@ -11,6 +11,11 @@ const CANDIDATES_LIST_BASE = (
   import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api"
 ).replace(/\/$/, "");
 
+const authHeaders = () => {
+  const token = localStorage.getItem("access_token") || localStorage.getItem("authToken") || localStorage.getItem("token");
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
 function normalizeRoleSlug(role) {
   const r = String(role || "")
     .toLowerCase()
@@ -57,7 +62,7 @@ export default function CandidateComparison() {
       try {
         const res = await fetch(`${CANDIDATES_LIST_BASE}/candidates/`, {
           method: "GET",
-          headers: { Accept: "application/json" },
+          headers: { Accept: "application/json", ...authHeaders() },
         });
         if (!res.ok) {
           throw new Error(`Failed to load candidates (${res.status})`);
@@ -96,7 +101,7 @@ export default function CandidateComparison() {
     try {
       const res = await fetch(`${CANDIDATES_LIST_BASE}/candidates/compare?candidate1_id=${candidateA.id}&candidate2_id=${candidateB.id}`, {
         method: "GET",
-        headers: { Accept: "application/json" }
+        headers: { Accept: "application/json", ...authHeaders() }
       });
       const text = await res.text();
       let data = text ? JSON.parse(text) : null;

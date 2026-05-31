@@ -6,6 +6,11 @@ from datetime import datetime
 from backend.core.database import get_db
 from backend.models import models
 from backend.schemas import schemas
+from backend.services.auth_service import (
+    get_current_user,
+    require_recruiter,
+    require_recruiter_or_own_candidate,
+)
 
 router = APIRouter(
     prefix="/api/interviews",
@@ -59,7 +64,11 @@ def _sync_interview_malpractice(interview: models.Interview, candidate: models.C
 
 
 @router.post("/schedule", response_model=schemas.InterviewResponse)
-def schedule_interview(request: schemas.InterviewScheduleRequest, db: Session = Depends(get_db)):
+def schedule_interview(
+    request: schemas.InterviewScheduleRequest,
+    _recruiter: models.User = Depends(require_recruiter),
+    db: Session = Depends(get_db),
+):
     # 1. Verify candidate exists
     candidate = db.query(models.Candidate).filter(models.Candidate.id == request.candidate_id).first()
     if not candidate:
@@ -100,7 +109,10 @@ def schedule_interview(request: schemas.InterviewScheduleRequest, db: Session = 
     return response
 
 @router.get("/", response_model=List[schemas.InterviewResponse])
-def get_all_interviews(db: Session = Depends(get_db)):
+def get_all_interviews(
+    _recruiter: models.User = Depends(require_recruiter),
+    db: Session = Depends(get_db),
+):
     interviews = db.query(models.Interview).all()
     results = []
     for interview in interviews:
@@ -113,7 +125,12 @@ def get_all_interviews(db: Session = Depends(get_db)):
     return results
 
 @router.patch("/{id}", response_model=schemas.InterviewResponse)
-def update_interview(id: int, status: str, db: Session = Depends(get_db)):
+def update_interview(
+    id: int,
+    status: str,
+    _recruiter: models.User = Depends(require_recruiter),
+    db: Session = Depends(get_db),
+):
     interview = db.query(models.Interview).filter(models.Interview.id == id).first()
     if not interview:
         raise HTTPException(status_code=404, detail="Interview not found")
@@ -138,7 +155,11 @@ def update_interview(id: int, status: str, db: Session = Depends(get_db)):
     return response
 
 @router.get("/detail/{interview_id}", response_model=schemas.InterviewResponse)
-def get_interview_by_id(interview_id: int, db: Session = Depends(get_db)):
+def get_interview_by_id(
+    interview_id: int,
+    _recruiter: models.User = Depends(require_recruiter),
+    db: Session = Depends(get_db),
+):
     interview = db.query(models.Interview).filter(models.Interview.id == interview_id).first()
     if not interview:
         raise HTTPException(status_code=404, detail="Interview not found")
@@ -154,6 +175,7 @@ def get_interview_by_id(interview_id: int, db: Session = Depends(get_db)):
 def update_interview_simulation(
     id: int,
     request: schemas.InterviewSimulationUpdate,
+    _recruiter: models.User = Depends(require_recruiter),
     db: Session = Depends(get_db),
 ):
     interview = db.query(models.Interview).filter(models.Interview.id == id).first()
@@ -180,7 +202,12 @@ def update_interview_simulation(
     return response
 
 @router.get("/{candidate_id}", response_model=List[schemas.InterviewResponse])
-def get_interviews_by_candidate(candidate_id: int, db: Session = Depends(get_db)):
+def get_interviews_by_candidate(
+    candidate_id: int,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    require_recruiter_or_own_candidate(current_user, candidate_id)
     interviews = db.query(models.Interview).filter(models.Interview.candidate_id == candidate_id).all()
     results = []
     candidate = db.query(models.Candidate).filter(models.Candidate.id == candidate_id).first()

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Bell, AlertTriangle, CheckCircle, Info, X } from 'lucide-react';
-import axios from 'axios';
+import api from '../services/api';
 
 export default function NotificationCenter() {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,8 +9,7 @@ export default function NotificationCenter() {
 
   const fetchNotifications = async () => {
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001/api';
-      const res = await axios.get(`${API_URL}/notifications/`);
+      const res = await api.get('/notifications/');
       setNotifications(res.data);
       setUnreadCount(res.data.filter(n => n.is_read === 0).length);
     } catch (err) {
@@ -26,8 +25,7 @@ export default function NotificationCenter() {
 
   const markAsRead = async (id) => {
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001/api';
-      await axios.post(`${API_URL}/notifications/read/${id}`);
+      await api.post(`/notifications/read/${id}`);
       fetchNotifications();
     } catch (err) {
       console.error(err);
@@ -36,8 +34,7 @@ export default function NotificationCenter() {
 
   const clearAll = async () => {
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8001/api';
-      await axios.post(`${API_URL}/notifications/clear-all`);
+      await api.post('/notifications/clear-all');
       fetchNotifications();
     } catch (err) {
       console.error(err);

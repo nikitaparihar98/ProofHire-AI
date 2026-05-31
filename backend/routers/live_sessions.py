@@ -7,6 +7,7 @@ import uuid
 from backend.core.database import get_db
 from backend.models import models
 from backend.routers.notifications import create_notification
+from backend.services.auth_service import get_current_user, require_recruiter
 
 router = APIRouter(
     prefix="/api/live",
@@ -18,7 +19,11 @@ router = APIRouter(
 active_sessions: Dict[str, Any] = {}
 
 @router.post("/start")
-def start_session(data: Dict[str, str], db: Session = Depends(get_db)):
+def start_session(
+    data: Dict[str, str],
+    _user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
     session_id = str(uuid.uuid4())
     
     candidate_name = data.get("name", "Unknown")
@@ -55,17 +60,25 @@ def start_session(data: Dict[str, str], db: Session = Depends(get_db)):
     return {"session_id": session_id}
 
 @router.get("/active")
-def get_active_sessions():
+def get_active_sessions(_recruiter: models.User = Depends(require_recruiter)):
     return [session for session in active_sessions.values() if session["status"] == "in_progress"]
 
 @router.get("/{session_id}")
-def get_session(session_id: str):
+def get_session(
+    session_id: str,
+    _recruiter: models.User = Depends(require_recruiter),
+):
     if session_id not in active_sessions:
         raise HTTPException(status_code=404, detail="Session not found")
     return active_sessions[session_id]
 
 @router.post("/{session_id}/event")
-async def log_event(session_id: str, event: Dict[str, Any], db: Session = Depends(get_db)):
+async def log_event(
+    session_id: str,
+    event: Dict[str, Any],
+    _user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
     if session_id not in active_sessions:
         raise HTTPException(status_code=404, detail="Session not found")
     
@@ -155,7 +168,11 @@ async def log_event(session_id: str, event: Dict[str, Any], db: Session = Depend
     return {"status": "success"}
 
 @router.post("/{session_id}/complete")
-def complete_session(session_id: str, db: Session = Depends(get_db)):
+def complete_session(
+    session_id: str,
+    _user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
     if session_id not in active_sessions:
         raise HTTPException(status_code=404, detail="Session not found")
     
@@ -174,7 +191,11 @@ def complete_session(session_id: str, db: Session = Depends(get_db)):
     return {"status": "success", "malpractice_flags": flags}
 
 @router.patch("/{session_id}/validate")
-def validate_session(session_id: str, db: Session = Depends(get_db)):
+def validate_session(
+    session_id: str,
+    _recruiter: models.User = Depends(require_recruiter),
+    db: Session = Depends(get_db),
+):
     if session_id not in active_sessions:
         raise HTTPException(status_code=404, detail="Session not found")
     
@@ -196,7 +217,11 @@ def validate_session(session_id: str, db: Session = Depends(get_db)):
     return {"status": "success"}
 
 @router.patch("/{session_id}/terminate")
-def terminate_session(session_id: str, db: Session = Depends(get_db)):
+def terminate_session(
+    session_id: str,
+    _recruiter: models.User = Depends(require_recruiter),
+    db: Session = Depends(get_db),
+):
     if session_id not in active_sessions:
         raise HTTPException(status_code=404, detail="Session not found")
     
