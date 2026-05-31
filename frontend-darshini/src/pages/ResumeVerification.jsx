@@ -1,8 +1,36 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { uploadResumeSkills } from '../services/api';
+
+const getExtractedSkillsForRole = (role) => {
+  const roleLower = String(role || '').toLowerCase();
+  if (roleLower.includes('backend') || roleLower.includes('data') || roleLower.includes('python')) {
+    return { SQL: 'Advanced', FastAPI: 'Intermediate', Python: 'Advanced' };
+  }
+  if (roleLower.includes('frontend') || roleLower.includes('react') || roleLower.includes('ui')) {
+    return { React: 'Advanced', CSS: 'Intermediate', JavaScript: 'Advanced' };
+  }
+  return { 'Problem Solving': 'Advanced', 'System Design': 'Intermediate', Communication: 'Advanced' };
+};
+
+const buildLocalResumeComparison = (resumeSkills) => {
+  const provenSkills = Object.fromEntries(Object.keys(resumeSkills).map((skill) => [skill, 'Not proven yet']));
+  return {
+    resume_skills: resumeSkills,
+    proven_skills: provenSkills,
+    skill_authenticity_score: 0,
+    authenticity_gaps: Object.entries(resumeSkills).map(
+      ([skill, level]) => `${skill}: claimed ${level}, waiting for assessment evidence`
+    ),
+    growth_nudges: ['Complete the assigned coding assessment to turn resume claims into proof signals.'],
+  };
+};
 
 export default function ResumeVerification() {
   const [step, setStep] = useState(1);
+  const [skills, setSkills] = useState({});
+  const [targetRole, setTargetRole] = useState('Senior Frontend Engineer');
+  const [saving, setSaving] = useState(false);
   const navigate = useNavigate();
 
   const handleUpload = (e) => {
@@ -10,12 +38,23 @@ export default function ResumeVerification() {
     setStep(2);
     // Simulate AI parsing
     setTimeout(() => {
+      setSkills(getExtractedSkillsForRole(targetRole));
       setStep(3);
     }, 2000);
   };
 
-  const handleConfirm = () => {
-    navigate('/candidate-dashboard');
+  const handleConfirm = async () => {
+    setSaving(true);
+    const fallback = buildLocalResumeComparison(skills);
+    try {
+      const savedCandidate = await uploadResumeSkills({ resume_skills: skills });
+      localStorage.setItem('resumeVerificationResult', JSON.stringify(savedCandidate || fallback));
+    } catch (err) {
+      localStorage.setItem('resumeVerificationResult', JSON.stringify(fallback));
+    } finally {
+      setSaving(false);
+      navigate('/candidate-profile');
+    }
   };
 
   return (
@@ -72,24 +111,47 @@ export default function ResumeVerification() {
               <div>
                 <label className="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Primary Skills</label>
                 <div className="flex gap-sm flex-wrap">
-                  <span className="px-md py-xs bg-surface-container-low text-on-surface-variant font-label-md text-label-md rounded-full border border-outline-variant">React.js</span>
-                  <span className="px-md py-xs bg-surface-container-low text-on-surface-variant font-label-md text-label-md rounded-full border border-outline-variant">TypeScript</span>
-                  <span className="px-md py-xs bg-surface-container-low text-on-surface-variant font-label-md text-label-md rounded-full border border-outline-variant">Tailwind CSS</span>
+                  {Object.keys(skills).map((skill) => (
+                    <span key={skill} className="px-md py-xs bg-surface-container-low text-on-surface-variant font-label-md text-label-md rounded-full border border-outline-variant">
+                      {skill}: {skills[skill]}
+                    </span>
+                  ))}
                 </div>
               </div>
 
               <div>
                 <label className="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Suggested Target Role</label>
-                <select className="w-full p-md border border-secondary rounded-lg font-body-md bg-surface-container-lowest text-primary shadow-sm outline-none ring-2 ring-secondary/20">
+                <select
+                  value={targetRole}
+                  onChange={(event) => {
+                    setTargetRole(event.target.value);
+                    setSkills(getExtractedSkillsForRole(event.target.value));
+                  }}
+                  className="w-full p-md border border-secondary rounded-lg font-body-md bg-surface-container-lowest text-primary shadow-sm outline-none ring-2 ring-secondary/20"
+                >
                   <option>Senior Frontend Engineer</option>
+                  <option>Backend Engineer</option>
                   <option>Fullstack Developer</option>
                   <option>UI/UX Engineer</option>
                 </select>
               </div>
+
+              <div className="bg-surface-container-lowest border border-outline-variant rounded-lg p-md">
+                <label className="block font-label-sm text-label-sm text-on-surface-variant mb-sm">Proof comparison preview</label>
+                <div className="space-y-xs">
+                  {Object.entries(skills).map(([skill, level]) => (
+                    <div key={skill} className="grid grid-cols-3 gap-sm font-body-sm text-body-sm">
+                      <span className="font-bold text-primary">{skill}</span>
+                      <span className="text-on-surface-variant">Resume: {level}</span>
+                      <span className="text-on-surface-variant">Proof: pending</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
 
-            <button onClick={handleConfirm} className="w-full bg-primary text-on-primary py-md rounded-xl font-headline-sm text-headline-sm hover:opacity-90 transition-opacity">
-              Confirm & Create Dashboard
+            <button disabled={saving} onClick={handleConfirm} className="w-full bg-primary text-on-primary py-md rounded-xl font-headline-sm text-headline-sm hover:opacity-90 transition-opacity disabled:opacity-60">
+              {saving ? 'Saving Resume Context...' : 'Confirm & View Skill Match'}
             </button>
           </div>
         )}

@@ -118,27 +118,49 @@ def upload_candidate_resume(
         if isinstance(sub_dict, dict) and sub_dict.get("answer"):
             has_answer = True
 
-    if has_answer:
-        from backend.services.llama_service import evaluate_candidate_mock
-        # Ensure we have a dict for the evaluator
-        sub_dict = candidate.submission_data
-        if isinstance(sub_dict, str):
-            try:
-                sub_dict = json.loads(sub_dict)
-            except Exception:
-                sub_dict = {}
-        ai_result = evaluate_candidate_mock(
-            name=candidate.name,
-            role=candidate.role,
-            submission_data=sub_dict,
-            resume_skills=candidate.resume_skills,
-        )
-        candidate.resume_skills = ai_result.get("resume_skills", {})
-        candidate.proven_skills = ai_result.get("proven_skills", {})
-        candidate.skill_authenticity_score = ai_result.get("skill_authenticity_score", 0.0)
-        candidate.authenticity_gaps = ai_result.get("authenticity_gaps", [])
-        candidate.growth_nudges = ai_result.get("growth_nudges", [])
+    from backend.services.llama_service import evaluate_candidate_mock
+    sub_dict = candidate.submission_data if has_answer else {
+        "answer": "",
+        "live_malpractice_flags": [],
+    }
+    if isinstance(sub_dict, str):
+        try:
+            sub_dict = json.loads(sub_dict)
+        except Exception:
+            sub_dict = {}
 
+    ai_result = evaluate_candidate_mock(
+        name=candidate.name,
+        role=candidate.role,
+        submission_data=sub_dict,
+        resume_skills=candidate.resume_skills,
+    )
+    candidate.resume_skills = ai_result.get("resume_skills", {})
+    candidate.proven_skills = ai_result.get("proven_skills", {})
+    candidate.skill_authenticity_score = ai_result.get("skill_authenticity_score", 0.0)
+    candidate.authenticity_gaps = ai_result.get("authenticity_gaps", [])
+    candidate.growth_nudges = ai_result.get("growth_nudges", [])
+    candidate.authenticity_summary = (
+        "Resume skills saved. Complete the assigned assessment to strengthen proof signals."
+        if not has_answer
+        else ai_result.get("authenticity_summary", candidate.authenticity_summary)
+    )
+
+    db.commit()
+    db.refresh(candidate)
+    return candidate
+
+# ---------------------------------------------------------------------------
+# Verification endpoint
+@router.patch("/verification", response_model=schemas.CandidateResponse)
+def verify_candidate(
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Toggle verification status for the candidate profile."""
+    require_role(current_user, "candidate")
+    candidate = _get_candidate_for_user(current_user, db)
+    candidate.is_verified = not bool(candidate.is_verified)
     db.commit()
     db.refresh(candidate)
     return candidate

@@ -277,8 +277,15 @@ class RecruiterTaskAssignRequest(BaseModel):
 
 
 class CandidateResponse(CandidateCreate):
+    is_verified: Optional[bool] = None
     id: int
     status: Optional[str] = None
+    resume_skills: Dict[str, Any] = Field(default_factory=dict)
+    proven_skills: Dict[str, Any] = Field(default_factory=dict)
+    skill_authenticity_score: float = 0.0
+    authenticity_gaps: List[str] = Field(default_factory=list)
+    growth_nudges: List[str] = Field(default_factory=list)
+    authenticity_summary: Optional[str] = None
     class Config:
         from_attributes = True
 

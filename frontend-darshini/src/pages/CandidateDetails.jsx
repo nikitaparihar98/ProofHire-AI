@@ -17,10 +17,11 @@ import {
   Info,
   MessageSquare
 } from 'lucide-react';
-import { getCandidateById, updateCandidateDecision } from '../services/api';
-import ScoreBadge from '../components/ScoreBadge';
+
+import { getCandidateById, updateCandidateDecision, verifyCandidate } from '../services/api';
 import ScoreChart from '../components/ScoreChart';
 import AuthenticityBadge from '../components/AuthenticityBadge';
+import ScoreBadge from '../components/ScoreBadge';
 import StrengthWeaknessSection from '../components/StrengthWeaknessSection';
 import ScheduleInterviewModal from '../components/ScheduleInterviewModal';
 
@@ -53,6 +54,19 @@ export default function CandidateDetails() {
       fetchCandidate();
     }
   }, [id]);
+
+  const handleVerify = async () => {
+    try {
+      setUpdating(true);
+      await verifyCandidate(id);
+      await fetchCandidate();
+    } catch (err) {
+      console.error(err);
+      alert('Failed to toggle verification');
+    } finally {
+      setUpdating(false);
+    }
+  };
 
   const handleDecision = async (status) => {
     try {
@@ -117,6 +131,17 @@ export default function CandidateDetails() {
                     <div className="flex items-center gap-1.5 text-sm font-bold px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl shadow-sm text-slate-700">
                       <Activity className="w-4 h-4 text-emerald-500" />
                       {candidate?.overall_score || 0}% Score
+                    </div>
+                    <div className="flex items-center gap-2 text-sm font-bold px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl shadow-sm text-slate-700">
+                      <CheckCircle className={`w-4 h-4 ${candidate?.is_verified ? 'text-emerald-500' : 'text-slate-400'}`} />
+                      <span>{candidate?.is_verified ? 'Verified' : 'Unverified'}</span>
+                      <button
+                        onClick={handleVerify}
+                        disabled={updating}
+                        className="ml-1 rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-bold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        {candidate?.is_verified ? 'Unverify' : 'Verify'}
+                      </button>
                     </div>
                   </div>
                 </div>

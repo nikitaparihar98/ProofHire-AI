@@ -5,6 +5,7 @@ from backend.core.database import Base, engine
 
 SQLITE_DEFAULTS = {
     "candidates": {
+        "is_verified": "0",
         "strengths": "'[]'",
         "weaknesses": "'[]'",
         "hiring_recommendation": "'Pending'",

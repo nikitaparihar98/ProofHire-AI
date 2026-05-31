@@ -153,6 +153,16 @@ export const compareCandidates = async (id1, id2) => {
   return response.data;
 };
 
+export const verifyCandidate = async (id) => {
+  const response = await api.patch(`/candidates/${id}/verification`);
+  return response.data;
+};
+
+export const verifyCurrentCandidate = async () => {
+  const response = await api.patch('/candidate/me/verification');
+  return response.data;
+};
+
 export const updateCandidateDecision = async (id, decisionData) => {
   const response = await api.patch(`/candidates/${id}/decision`, decisionData);
   return response.data;
@@ -160,6 +170,61 @@ export const updateCandidateDecision = async (id, decisionData) => {
 
 export const evaluateCandidate = async (data) => {
   const response = await api.post('/evaluate/', data);
+  return response.data;
+};
+
+export const signup = async (data) => {
+  const response = await api.post('/auth/signup', data);
+  return response.data;
+};
+
+export const login = async (data) => {
+  const response = await api.post('/auth/login', data);
+  return response.data;
+};
+
+export const getCurrentUser = async () => {
+  const response = await api.get('/auth/me');
+  return response.data;
+};
+
+export const getCandidateDashboard = async () => {
+  try {
+    const response = await api.get('/candidate/me/dashboard');
+    return response.data;
+  } catch (error) {
+    if (error?.response?.status === 404) {
+      await api.post('/candidate/me/profile');
+      const retry = await api.get('/candidate/me/dashboard');
+      return retry.data;
+    }
+    throw error;
+  }
+};
+
+export const uploadResumeSkills = async (data) => {
+  const response = await api.post('/candidate/me/resume', data);
+  return response.data;
+};
+
+export const getAllTasks = async () => {
+  const response = await api.get('/tasks/');
+  return response.data;
+};
+
+export const getTasksForRole = async (role) => {
+  const sanitizedRole = String(role || '').replace(/\//g, '-');
+  const response = await api.get(`/tasks/${encodeURIComponent(sanitizedRole)}`);
+  return response.data;
+};
+
+export const assignTaskToCandidate = async (candidateId, data) => {
+  const response = await api.post(`/candidates/${candidateId}/assign-task`, data);
+  return response.data;
+};
+
+export const generateAiTask = async (data) => {
+  const response = await api.post('/tasks/generate-ai', data);
   return response.data;
 };
 
