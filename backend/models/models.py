@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, Text, JSON, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, Text, JSON, ForeignKey, Boolean
 from backend.core.database import Base
 
 class Candidate(Base):
@@ -9,6 +9,7 @@ class Candidate(Base):
     email = Column(String, index=True, unique=True)
     role = Column(String, index=True) # e.g., "Frontend Developer", "Backend Developer"
     experience_level = Column(String, default="Junior") # Junior, Mid, Senior, Lead
+    is_verified = Column(Boolean, default=False, nullable=True)
     assessment_type = Column(String, default="General") # e.g., "Full Stack", "Data Analyst"
     resume_url = Column(String, nullable=True)
     

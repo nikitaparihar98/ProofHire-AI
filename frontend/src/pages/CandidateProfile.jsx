@@ -60,6 +60,10 @@ export default function CandidateProfile() {
 
   const candidate = dashboard?.candidate;
   const task = dashboard?.assigned_task;
+  const resumeSkillEntries = Object.entries(candidate?.resume_skills || {});
+  const provenSkills = candidate?.proven_skills || {};
+  const authenticityGaps = candidate?.authenticity_gaps || [];
+  const growthNudges = candidate?.growth_nudges || [];
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-5xl">
@@ -141,6 +145,60 @@ export default function CandidateProfile() {
             </div>
           </section>
         </div>
+
+        <section className="mt-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+            <div>
+              <h2 className="text-xl font-semibold text-[#071b3a]">Resume claims vs coding proof</h2>
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                Resume verification compares the skill level you claimed with what your assessment evidence proves.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-[#f8faff] px-5 py-4 text-[#071b3a]">
+              <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Authenticity match</p>
+              <p className="mt-1 text-3xl font-semibold">{candidate?.skill_authenticity_score ?? 0}%</p>
+            </div>
+          </div>
+
+          {resumeSkillEntries.length > 0 ? (
+            <div className="mt-6 overflow-hidden rounded-2xl border border-slate-200">
+              <div className="grid grid-cols-3 bg-[#f8faff] px-4 py-3 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                <span>Skill</span>
+                <span>Resume claim</span>
+                <span>Coding proof</span>
+              </div>
+              {resumeSkillEntries.map(([skill, claimed]) => (
+                <div key={skill} className="grid grid-cols-3 gap-3 border-t border-slate-100 px-4 py-4 text-sm">
+                  <span className="font-semibold text-[#071b3a]">{skill}</span>
+                  <span className="text-slate-600">{claimed}</span>
+                  <span className="font-semibold text-teal-800">{provenSkills[skill] || 'Not proven yet'}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="mt-6 rounded-2xl border border-dashed border-slate-200 bg-[#f8faff] p-6 text-sm font-medium text-slate-500">
+              Upload and save your resume context to compare claimed skills against assessment evidence.
+            </div>
+          )}
+
+          {authenticityGaps.length > 0 && (
+            <div className="mt-6 rounded-2xl border border-amber-100 bg-amber-50 p-5">
+              <p className="font-semibold text-amber-900">Detected differences</p>
+              <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-amber-800">
+                {authenticityGaps.map((gap) => <li key={gap}>{gap}</li>)}
+              </ul>
+            </div>
+          )}
+
+          {growthNudges.length > 0 && (
+            <div className="mt-4 rounded-2xl border border-teal-100 bg-teal-50 p-5">
+              <p className="font-semibold text-teal-900">How to close the gap</p>
+              <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-teal-800">
+                {growthNudges.map((nudge) => <li key={nudge}>{nudge}</li>)}
+              </ul>
+            </div>
+          )}
+        </section>
       </div>
     </div>
   );

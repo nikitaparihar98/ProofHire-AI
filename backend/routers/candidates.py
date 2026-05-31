@@ -197,6 +197,31 @@ def decide_candidate(candidate_id: int, request: schemas.DecisionRequest, db: Se
 
 
 # -----------------------------
+# VERIFICATION
+# -----------------------------
+@router.patch("/{candidate_id}/verification", response_model=schemas.CandidateResponse)
+def toggle_candidate_verification(candidate_id: int, db: Session = Depends(get_db)):
+
+    candidate = db.query(models.Candidate).filter(models.Candidate.id == candidate_id).first()
+
+    if not candidate:
+        raise HTTPException(status_code=404, detail="Candidate not found")
+
+    candidate.is_verified = not bool(candidate.is_verified)
+    db.commit()
+    db.refresh(candidate)
+
+    create_notification(
+        db,
+        "Candidate Verification Updated",
+        f"{candidate.name} is now {'verified' if candidate.is_verified else 'unverified'}.",
+        "success" if candidate.is_verified else "info",
+    )
+
+    return normalize_candidate(candidate)
+
+
+# -----------------------------
 # COMPARE CANDIDATES
 # -----------------------------
 @router.get("/compare", response_model=schemas.CandidateComparisonResponse)
@@ -250,7 +275,17 @@ def assign_task_to_candidate(
         raise HTTPException(status_code=404, detail="Candidate not found")
 
     # Resolve task definition
-    if request.task_id:
+    if request.custom_title or request.custom_prompt:
+        task_def = {
+            "id": request.task_id or "custom",
+            "role": candidate.role or "Candidate",
+            "title": request.custom_title or "Custom Assessment",
+            "task_type": "coding",
+            "prompt": request.custom_prompt or "",
+            "evaluation_focus": ["Recruiter Requirements", "Task Completion"],
+            "time_limit_minutes": request.duration,
+        }
+    elif request.task_id:
         task_def = get_task_by_id(request.task_id)
     else:
         # fallback to first task if none provided
@@ -264,12 +299,21 @@ def assign_task_to_candidate(
         duration=request.duration,
         custom_prompt=request.custom_prompt,
         custom_title=request.custom_title,
-        status="ASSIGNED",
+        status="Assigned",
         assigned_at=datetime.datetime.utcnow().isoformat()
     )
     db.add(task_assignment)
+    candidate.status = "Assigned"
     db.commit()
     db.refresh(task_assignment)
+    db.refresh(candidate)
+
+    create_notification(
+        db,
+        "Assessment Task Assigned",
+        f"{candidate.name} was assigned {task_def['title']}.",
+        "success",
+    )
 
     # Return the task definition as TaskResponse schema
     return schemas.TaskResponse(**task_def)

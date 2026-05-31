@@ -2,6 +2,17 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 export default function CandidateProfile() {
+  let resumeComparison = null;
+  try {
+    resumeComparison = JSON.parse(localStorage.getItem('resumeVerificationResult') || 'null');
+  } catch {
+    resumeComparison = null;
+  }
+  const resumeSkills = resumeComparison?.resume_skills || {};
+  const provenSkills = resumeComparison?.proven_skills || {};
+  const authenticityGaps = resumeComparison?.authenticity_gaps || [];
+  const growthNudges = resumeComparison?.growth_nudges || [];
+
   return (
     <>
       
@@ -151,6 +162,78 @@ export default function CandidateProfile() {
 <span className="px-md py-xs bg-surface-container-low text-on-surface-variant font-label-md text-label-md rounded-full border border-outline-variant">System Design</span>
 <span className="px-md py-xs bg-surface-container-low text-on-surface-variant font-label-md text-label-md rounded-full border border-outline-variant">GraphQL</span>
 </div>
+</section>
+{/* Coding Score Card */}
+<section className="bg-surface-container-lowest border border-outline-variant p-xl rounded-xl">
+  <h3 className="font-headline-md text-headline-md text-primary mb-md">Coding Score</h3>
+  <div className="flex items-center gap-sm">
+    <span className="text-headline-lg font-bold text-primary">948 / 1000</span>
+    <span className="font-label-md text-label-md text-on-surface-variant">Top 10% Global</span>
+  </div>
+</section>
+{/* Assessment Evaluation */}
+<section className="bg-surface-container-lowest border border-outline-variant p-xl rounded-xl">
+  <h3 className="font-headline-md text-headline-md text-primary mb-md">Assessment Evaluation</h3>
+  <div className="space-y-sm">
+    <div className="flex justify-between items-center">
+      <span className="font-label-md text-label-md text-on-surface-variant">Overall Score</span>
+      <span className="font-headline-lg font-bold text-primary">77/100</span>
+    </div>
+    <div className="flex justify-between items-center">
+      <span className="font-label-md text-label-md text-on-surface-variant">Recommendation</span>
+      <span className="font-label-md font-bold text-success">Hire</span>
+    </div>
+  </div>
+  <hr className="my-md border-outline-variant" />
+  <div className="space-y-sm">
+    <h4 className="font-label-md text-label-md text-primary">Performance Metrics</h4>
+    <ul className="list-disc list-inside space-y-1">
+      <li>Technical competency: 73.1/100</li>
+      <li>Problem solving: 74.7/100</li>
+      <li>Communication & explanation: 70.8/100</li>
+    </ul>
+  </div>
+  <hr className="my-md border-outline-variant" />
+  <div className="space-y-sm">
+    <h4 className="font-label-md text-label-md text-primary">Key Strengths</h4>
+    <ul className="list-disc list-inside space-y-1">
+      <li>Clear API design</li>
+      <li>Strong validation approach</li>
+    </ul>
+    <h4 className="font-label-md text-label-md text-primary mt-sm">Areas for Improvement</h4>
+    <ul className="list-disc list-inside space-y-1">
+      <li>Could improve failure handling</li>
+      <li>Integrity warnings need recruiter review</li>
+    </ul>
+  </div>
+  <hr className="my-md border-outline-variant" />
+  <div className="space-y-sm">
+    <h4 className="font-label-md text-label-md text-primary">Resume Claims vs. Coding Proof</h4>
+    <p className="font-label-md text-label-md text-on-surface-variant">Authenticity match: {resumeComparison?.skill_authenticity_score ?? 0}%</p>
+    {Object.keys(resumeSkills).length > 0 ? (
+      <div className="space-y-xs">
+        {Object.entries(resumeSkills).map(([skill, level]) => (
+          <div key={skill} className="rounded-lg border border-outline-variant bg-surface-container-low p-sm">
+            <p className="font-label-md text-label-md text-primary">{skill}</p>
+            <p className="font-body-sm text-body-sm text-on-surface-variant">Resume claim: {level}</p>
+            <p className="font-body-sm text-body-sm text-on-surface-variant">Coding proof: {provenSkills[skill] || 'Not proven yet'}</p>
+          </div>
+        ))}
+        {authenticityGaps.length > 0 && (
+          <ul className="list-disc list-inside space-y-1 text-on-surface-variant">
+            {authenticityGaps.map((gap) => <li key={gap}>{gap}</li>)}
+          </ul>
+        )}
+        {growthNudges.length > 0 && (
+          <div className="rounded-lg bg-secondary-fixed/30 p-sm">
+            {growthNudges.map((nudge) => <p key={nudge} className="font-body-sm text-body-sm text-on-surface-variant">{nudge}</p>)}
+          </div>
+        )}
+      </div>
+    ) : (
+      <p className="font-label-md text-label-md text-on-surface-variant">No skills verified yet. Update your resume to cross-reference coding tasks.</p>
+    )}
+  </div>
 </section>
 {/* Platform Assessment Badges */}
 <section className="bg-surface-container-lowest border border-outline-variant p-xl rounded-xl">

@@ -11,6 +11,7 @@ import InterviewSchedule from './pages/InterviewSchedule';
 import RecruitAiLandingPage from './pages/RecruitAiLandingPage';
 import ResumeVerification from './pages/ResumeVerification';
 import TasksManagement from './pages/TasksManagement';
+import AssignTasks from './pages/AssignTasks';
 
 import Dashboard from './pages/Dashboard';
 import Layout from './components/Layout';
@@ -62,6 +63,7 @@ function AppRoutes() {
       {/* Recruiter */}
       <Route path="/recruiter-dashboard" element={<Layout><Dashboard /></Layout>} />
       <Route path="/assessments" element={<Layout><Assessments /></Layout>} />
+      <Route path="/assign-tasks" element={<Layout><AssignTasks /></Layout>} />
       <Route path="/candidates" element={<Layout><Candidates /></Layout>} />
       <Route path="/shortlisted" element={<Layout><Shortlisted /></Layout>} />
       <Route path="/rejected" element={<Layout><Rejected /></Layout>} />
