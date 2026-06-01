@@ -1,71 +1,106 @@
 # ProofHire AI 🚀
 
-### *"Hire on proof. Not on paper."*
+**"Hire on Proof. Not on Paper."**
 
-ProofHire AI is an AI-powered technical assessment, candidate authenticity verification, and malpractice proctoring platform. By combining interactive coding evaluations, resume claim verification, recruiter analytics, and proctoring telemetry, it helps organizations identify top engineering talent based on demonstrated skills rather than credentials alone.
+ProofHire AI is an AI-powered technical assessment, candidate authenticity verification, and malpractice proctoring platform. By combining interactive coding evaluations, resume claim verification, recruiter analytics, AI-powered interviews, and live monitoring, it helps organizations identify top engineering talent based on demonstrated skills rather than credentials alone.
 
 ---
 
-## 🌟 Key Features
+# 🌟 Key Features
 
-### Skill-Over-Pedigree Verification
+## Skill-Over-Pedigree Verification
 
 * Extracts technical claims from uploaded resumes.
 * Cross-references claims against actual coding performance and assessment results.
 * Detects potential overclaims and underrepresented skills.
 
-### Hidden Talent Spotlight
+## Hidden Talent Spotlight
 
 * Highlights candidates with strong technical performance despite modest resume credentials.
 * Helps recruiters identify capable developers from non-traditional backgrounds.
 
-### Explainable Hiring Decisions
+## Explainable Hiring Decisions
 
 * Generates transparent AI-powered feedback.
 * Provides reasoning behind candidate evaluations and recommendations.
 
-### Malpractice Detection & Proctoring
+## Malpractice Detection & Proctoring
 
 * Tab-switch monitoring.
-* Copy-paste detection.
+* Activity tracking.
+* Webcam monitoring.
 * Proctoring event logs and malpractice scoring.
 
-### Recruiter Dashboard
+## Interview Scheduling & AI Interviews
+
+* Schedule and manage candidate interviews.
+* Track interview status and outcomes.
+* Conduct AI-powered interviews with automated evaluation and feedback.
+
+## Recruiter Dashboard
 
 * Candidate pipeline management.
 * Technical evaluation analytics.
-* Candidate messaging and communication tools.
+* Candidate comparison tools.
+* Candidate messaging and communication.
 
 ---
 
-## 🛠️ Technology Stack
+# 🛠️ Technology Stack
 
-### Frontend
+## Frontend
 
-* React (Vite)
+* React
+* Vite
 * Tailwind CSS
-* Chart.js
-* Lucide Icons
+* Axios
+* React Router DOM
+* Lucide React
+* Recharts
 
-### Backend
+## Backend
 
+* Python
 * FastAPI
-* SQLAlchemy
-* SQLite
+* Uvicorn
 * Pydantic
-* WatchFiles
-* Llama API Integration
+* SQLAlchemy
 
-### Testing
+## AI / Evaluation Engine
 
-* Pytest
+* OpenAI API
+* GPT-4o-mini
+* AI-powered candidate evaluation
+* Candidate scoring
+* Feedback generation
+* Candidate comparison
+
+## Database
+
+* SQLite (Current Implementation)
+* SQLAlchemy ORM
+* Supabase / PostgreSQL Support
+
+## Live Monitoring
+
+* WebSockets
+* Browser Activity Tracking
+* Webcam Access (getUserMedia)
+* In-Memory Session Tracking
+
+## Authentication & API Security
+
+* JWT-style Authentication
+* Protected FastAPI Routes
+* Role-Based Access Control
+* Axios Interceptors
 
 ---
 
-## 📂 Project Structure
+# 📂 Project Structure
 
 ```text
-RecruitAi-main/
+ProofHireAI/
 ├── backend/
 │   ├── core/
 │   ├── database/
@@ -94,59 +129,59 @@ RecruitAi-main/
 
 Ensure the following are installed:
 
-* Python 3.10 or later
-* Node.js 18 or later
+* Python 3.10+
+* Node.js 18+
 * npm
 
 ---
 
-## Backend Setup
+# Backend Setup
 
-**Important:** Run all backend commands from the project root directory (`RecruitAi-main`).
+Run all backend commands from the project root directory.
 
-### 1. Navigate to Project Root
+## 1. Navigate to Project Root
 
 ```bash
-cd RecruitAi-main
+cd ProofHireAI
 ```
 
-### 2. Create Virtual Environment
+## 2. Create Virtual Environment
 
 ```bash
 python3 -m venv backend/venv
 ```
 
-### 3. Activate Virtual Environment
+## 3. Activate Virtual Environment
 
-#### macOS/Linux
+### macOS/Linux
 
 ```bash
 source backend/venv/bin/activate
 ```
 
-#### Windows
+### Windows
 
 ```bash
 backend\venv\Scripts\activate
 ```
 
-### 4. Install Dependencies
+## 4. Install Dependencies
 
 ```bash
 pip install -r backend/requirements.txt
 ```
 
-### 5. Create Environment File
+## 5. Create Environment File
 
 Create a `.env` file in the project root:
 
 ```env
 DATABASE_URL=sqlite:///./proofhire.db
-LLAMA_API_KEY=your-llama-api-key
+OPENAI_API_KEY=your-openai-api-key
 AUTH_SECRET=proofhire-local-dev-secret
 ```
 
-### 6. Initialize Database
+## 6. Initialize Database
 
 ```bash
 python -m backend.init_db
@@ -154,7 +189,7 @@ python -m backend.init_db
 
 This command creates and seeds the SQLite database.
 
-### 7. Start Backend Server
+## 7. Start Backend Server
 
 ```bash
 python -m uvicorn backend.main:app --reload
@@ -180,23 +215,23 @@ http://127.0.0.1:8000/health
 
 ---
 
-## Frontend Setup
+# Frontend Setup
 
 Open a new terminal window.
 
-### 1. Navigate to Frontend
+## 1. Navigate to Frontend
 
 ```bash
 cd frontend
 ```
 
-### 2. Install Dependencies
+## 2. Install Dependencies
 
 ```bash
 npm install
 ```
 
-### 3. Start Development Server
+## 3. Start Development Server
 
 ```bash
 npm run dev
@@ -210,7 +245,7 @@ http://localhost:5173
 
 ---
 
-## 🧪 Running Tests
+# 🧪 Running Tests
 
 From the project root:
 
@@ -220,31 +255,33 @@ PYTHONPATH=. pytest backend/tests
 
 ---
 
-## 🔒 Security
+# 🔒 Security
 
-* Token-based authentication.
-* CORS support for local development environments.
-* SQLite database with automatic schema synchronization.
+* JWT-based authentication.
+* Protected API routes.
+* Role-based access control.
+* CORS support for development environments.
+* Secure candidate and recruiter access management.
 
 ---
 
-## ⚠️ Common Issue
+# ⚠️ Common Issue
 
 ### ModuleNotFoundError: No module named 'backend'
 
-This occurs when the backend is started from inside the `backend` folder.
+This occurs when the backend is started from inside the backend folder.
 
-❌ Incorrect:
+❌ Incorrect
 
 ```bash
 cd backend
 uvicorn backend.main:app --reload
 ```
 
-✅ Correct:
+✅ Correct
 
 ```bash
-cd RecruitAi-main
+cd ProofHireAI
 python -m uvicorn backend.main:app --reload
 ```
 
@@ -252,18 +289,26 @@ Always start the backend from the project root directory.
 
 ---
 
-## 💡 Features to Explore
+# 💡 Features to Explore
 
 * Resume Verification
+* Technical Assessments
+* Coding Challenges
 * Candidate Skill Analysis
+* Candidate Comparison
 * Hidden Talent Detection
+* AI Interviews
+* Interview Scheduling
 * Recruiter Dashboard
 * Explainable AI Evaluations
-* Proctoring & Malpractice Monitoring
+* Live Monitoring
+* Proctoring & Malpractice Detection
 * Candidate Messaging System
 
 ---
 
-## 📄 License
+# 📄 License
 
 This project is intended for educational, research, and recruitment technology demonstrations.
+
+**ProofHire AI — Hire on Proof, Not Paper.**
