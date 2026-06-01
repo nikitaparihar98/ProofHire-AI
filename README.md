@@ -1,4 +1,4 @@
-# ProofHire AI 🚀
+# ProofHire AI 
 
 **"Hire on Proof. Not on Paper."**
 
@@ -6,7 +6,7 @@ ProofHire AI is an AI-powered technical assessment, candidate authenticity verif
 
 ---
 
-# 🌟 Key Features
+# Key Features
 
 ## Skill-Over-Pedigree Verification
 
@@ -77,9 +77,9 @@ ProofHire AI is an AI-powered technical assessment, candidate authenticity verif
 
 ## Database
 
-* SQLite (Current Implementation)
+* SQLite(local dev only)
 * SQLAlchemy ORM
-* Supabase / PostgreSQL Support
+* Supabase / PostgreSQL Support(Current Implementation)
 
 ## Live Monitoring
 
@@ -97,7 +97,7 @@ ProofHire AI is an AI-powered technical assessment, candidate authenticity verif
 
 ---
 
-# 📂 Project Structure
+# Project Structure
 
 ```text
 ProofHireAI/
@@ -123,7 +123,7 @@ ProofHireAI/
 
 ---
 
-# 🚀 Installation & Setup
+#  Installation & Setup
 
 ## Prerequisites
 
@@ -245,7 +245,11 @@ http://localhost:5173
 
 ---
 
-# 🧪 Running Tests
+# LINK OF THIS WEBSITE
+
+https://proofhire-ai.vercel.app/
+
+#  Running Tests
 
 From the project root:
 
@@ -255,7 +259,7 @@ PYTHONPATH=. pytest backend/tests
 
 ---
 
-# 🔒 Security
+#  Security
 
 * JWT-based authentication.
 * Protected API routes.
@@ -265,20 +269,20 @@ PYTHONPATH=. pytest backend/tests
 
 ---
 
-# ⚠️ Common Issue
+#  Common Issue
 
 ### ModuleNotFoundError: No module named 'backend'
 
 This occurs when the backend is started from inside the backend folder.
 
-❌ Incorrect
+Incorrect
 
 ```bash
 cd backend
 uvicorn backend.main:app --reload
 ```
 
-✅ Correct
+Correct
 
 ```bash
 cd ProofHireAI
@@ -289,7 +293,7 @@ Always start the backend from the project root directory.
 
 ---
 
-# 💡 Features to Explore
+# Features to Explore
 
 * Resume Verification
 * Technical Assessments
@@ -307,7 +311,7 @@ Always start the backend from the project root directory.
 
 ---
 
-# 📄 License
+# License
 
 This project is intended for educational, research, and recruitment technology demonstrations.
 
