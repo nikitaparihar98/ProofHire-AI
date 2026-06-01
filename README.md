@@ -249,6 +249,8 @@ http://localhost:5173
 
 https://proofhire-ai.vercel.app/
 
+---
+
 #  Running Tests
 
 From the project root:
