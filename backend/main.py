@@ -1,6 +1,7 @@
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.core.config import settings
 from backend.core.schema_sync import sync_sqlite_schema
 from backend.routers import (
     live_ws,
@@ -27,7 +28,7 @@ app = FastAPI(
 
 frontend_origins = [
     origin.strip()
-    for origin in settings.FRONTEND_ORIGINS.split(",")
+    for origin in os.getenv("FRONTEND_ORIGINS", "").split(",")
     if origin.strip()
 ]
 

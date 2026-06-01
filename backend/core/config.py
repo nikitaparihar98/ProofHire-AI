@@ -12,6 +12,10 @@ class Settings(BaseSettings):
     # Local auth token signing secret
     AUTH_SECRET: str = os.getenv("AUTH_SECRET", "proofhire-local-dev-secret")
 
+    # Comma-separated list of deployed frontend origins, for example:
+    # https://your-app.vercel.app,https://your-custom-domain.com
+    FRONTEND_ORIGINS: str = os.getenv("FRONTEND_ORIGINS", "")
+
     class Config:
         env_file = ".env"
 
