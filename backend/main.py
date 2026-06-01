@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from backend.core.config import settings
 from backend.core.schema_sync import sync_sqlite_schema
 from backend.routers import (
     live_ws,
@@ -24,10 +25,17 @@ app = FastAPI(
     description="Live malpractice monitoring and candidate management",
 )
 
-# Allow the frontend development server
+frontend_origins = [
+    origin.strip()
+    for origin in settings.FRONTEND_ORIGINS.split(",")
+    if origin.strip()
+]
+
+# Allow the frontend development server and configured deployed frontend origins.
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"http://(localhost|127\.0\.0\.1):517[0-9]",
+    allow_origins=frontend_origins,
+    allow_origin_regex=r"(http://(localhost|127\.0\.0\.1):517[0-9]|https://.*\.vercel\.app)",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
